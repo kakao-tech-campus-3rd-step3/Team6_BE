@@ -7,12 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -20,48 +22,30 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: false
+          gradle-home-cache-cleanup: true
 
       - name: Set execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build and Test with Gradle
+        run: ./gradlew build test --parallel --build-cache
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          java-version: '21'
-          distribution: 'corretto'
+          name: test-results-${{ github.run_number }}
+          path: build/reports/tests/
+          retention-days: 7
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
+      - name: Upload build reports
+        uses: actions/upload-artifact@v4
+        if: failure()
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Set execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Run tests
-        run: ./gradlew test
+          name: build-reports-${{ github.run_number }}
+          path: build/reports/
+          retention-days: 3
