@@ -12,7 +12,11 @@ public class ApiResponseFactory {
         return SuccessApiResponse.of(message, data);
     }
 
-    public static ErrorApiResponse error(ErrorCode errorCode) {
+    public static ErrorApiResponse<Void> error(ErrorCode errorCode) {
         return ErrorApiResponse.of(errorCode.getMessage(), errorCode.name());
+    }
+
+    public static <T> ErrorApiResponse<T> error(ErrorCode errorCode, T data) {
+        return ErrorApiResponse.of(errorCode.getMessage(), errorCode.name(), data);
     }
 }
