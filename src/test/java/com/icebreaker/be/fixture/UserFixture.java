@@ -3,14 +3,12 @@ package com.icebreaker.be.fixture;
 import com.icebreaker.be.domain.user.MbtiType;
 import com.icebreaker.be.domain.user.User;
 import java.lang.reflect.Field;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class UserFixture {
 
     public static final String DEFAULT_NAME = "홍길동";
     public static final String DEFAULT_PHONE = "01012345678";
     public static final MbtiType DEFAULT_MBTI = MbtiType.INTJ;
-    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
 
     public static User defaultUser() {
         return buildUser(DEFAULT_NAME, DEFAULT_PHONE, 25, MbtiType.INTJ, "안녕하세요");
@@ -18,7 +16,7 @@ public class UserFixture {
 
     public static User userWithId(Long id, String name, String phone) {
         User user = buildUser(name, phone, 25, MbtiType.INTJ, "안녕하세요");
-        setId(user, ID_GENERATOR.getAndIncrement());
+        setId(user, id);
         return user;
     }
 

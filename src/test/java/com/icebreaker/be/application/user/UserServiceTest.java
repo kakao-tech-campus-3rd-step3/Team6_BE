@@ -102,7 +102,7 @@ class UserServiceTest {
 
         Long result = userService.createUserIfNotExists(command);
 
-        assertThat(result).isEqualTo(6L);
+        assertThat(result).isEqualTo(2L);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(times(1)).save(any(User.class));
     }
@@ -118,7 +118,7 @@ class UserServiceTest {
 
         Long result = userService.createUserIfNotExists(command);
 
-        assertThat(result).isEqualTo(4L);
+        assertThat(result).isEqualTo(3L);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(never()).save(any(User.class));
     }
