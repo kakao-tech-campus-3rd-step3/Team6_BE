@@ -3,7 +3,7 @@ name: Build and Deploy to EC2
 on:
   push:
     branches:
-      - config/#7
+      - develop
 
 jobs:
   build-and-deploy:
