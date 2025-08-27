@@ -5,7 +5,7 @@
 # ------------------------------
 
 # 변수 정의
-APP_NAME=ice_breaker
+APP_NAME=ice-breaker
 IMAGE_TAG=${1:-latest}
 CONTAINER_NAME=$APP_NAME
 APP_PORT=8080
