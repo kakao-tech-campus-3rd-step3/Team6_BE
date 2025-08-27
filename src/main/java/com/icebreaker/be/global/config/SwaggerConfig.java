@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     private final List<Server> servers = List.of(
-            new Server().url("http://localhost:8080").description("로컬 개발 서버")
+            new Server().url("http://localhost:8080").description("로컬 개발 서버"),
+            new Server().url("http://3.37.95.91").description("EC2 배포 서버")
     );
 
     @Bean
