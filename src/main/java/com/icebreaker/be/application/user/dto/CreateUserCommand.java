@@ -32,8 +32,8 @@ public record CreateUserCommand(
         String mbtiValue,
 
         @NotBlank
-        @Size(max = 500)
-        @Schema(description = "한줄 소개", example = "안녕하세요, 백엔드 개발자입니다.", maxLength = 500)
+        @Size(max = 100)
+        @Schema(description = "한줄 소개", example = "안녕하세요, 백엔드 개발자입니다.", maxLength = 100)
         String introduction
 ) {
 

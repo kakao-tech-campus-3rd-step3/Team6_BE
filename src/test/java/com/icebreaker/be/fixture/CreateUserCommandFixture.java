@@ -25,7 +25,7 @@ public class CreateUserCommandFixture {
     }
 
     public static CreateUserCommand tooLongIntroductionCommand() {
-        return buildCommand("홍길동", "01012345678", 25, "INTJ", "안녕하세요".repeat(101));
+        return buildCommand("홍길동", "01012345678", 25, "INTJ", "안녕하세요".repeat(21));
     }
 
     private static CreateUserCommand buildCommand(String name, String phone, int age, String mbti,
