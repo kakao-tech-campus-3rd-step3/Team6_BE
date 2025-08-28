@@ -163,7 +163,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("소개가 500자를 초과하면 400 에러가 발생한다")
+    @DisplayName("소개가 100자를 초과하면 400 에러가 발생한다")
     void createUser_IntroductionTooLong() throws Exception {
         CreateUserCommand command = CreateUserCommandFixture.tooLongIntroductionCommand();
 
