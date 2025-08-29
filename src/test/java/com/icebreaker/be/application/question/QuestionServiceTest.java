@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.icebreaker.be.application.question.dto.CreateQuestionDto;
+import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
 import com.icebreaker.be.application.question.dto.QuestionResponseDto;
 import com.icebreaker.be.domain.question.Question;
 import com.icebreaker.be.domain.question.QuestionRepository;
@@ -85,11 +85,11 @@ class QuestionServiceTest {
     Long id = 3L;
     Question saved = new Question("content", QuestionType.COMMON);
     ReflectionTestUtils.setField(saved, "id", id);
-    CreateQuestionDto createDto = new CreateQuestionDto("content", "common");
+    CreateQuestionCommand command = new CreateQuestionCommand("content", "common");
 
     when(questionRepository.save(any(Question.class))).thenReturn(saved);
 
-    Long actual = questionService.createQuestion(createDto);
+    Long actual = questionService.createQuestion(command);
 
     assertThat(actual).isNotNull();
     assertThat(actual).isEqualTo(id);
