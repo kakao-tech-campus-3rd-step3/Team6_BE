@@ -13,6 +13,9 @@ public enum ErrorCode {
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MBTI_TYPE("유효하지 않은 MBTI 타입입니다.", HttpStatus.BAD_REQUEST),
 
+    // INTEREST ERROR
+    INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
+
     INVALID_REQUEST("유효하지 않은 요청입니다.", HttpStatus.BAD_REQUEST),
     ;
 
