@@ -1,28 +1,31 @@
 package com.icebreaker.be.domain.interest;
 
+import com.icebreaker.be.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table(name = "interests")
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@Table(name = "user_interest")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 @Getter
 public class Interest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "interest_id")
+    @Column(name = "user_interest_id")
     private Long id;
 
-    @Column(name = "interest_name", length = 255, nullable = false, unique = true)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interest_type", length = 255, nullable = false)
+    private InterestType interestType;
 
     @Builder
-    public Interest(String name) {
-        this.name = name;
+    public Interest(User user, InterestType interestType) {
+        this.user = user;
+        this.interestType = interestType;
     }
 }
