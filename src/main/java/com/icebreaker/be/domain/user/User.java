@@ -64,8 +64,8 @@ public class User {
                 .collect(Collectors.toSet());
     }
 
-    public void addInterest(Interest interests) {
-        UserInterest userInterest = new UserInterest(this, interests);
+    public void addInterest(Interest interest) {
+        UserInterest userInterest = new UserInterest(this, interest);
         this.interests.add(userInterest);
     }
 
