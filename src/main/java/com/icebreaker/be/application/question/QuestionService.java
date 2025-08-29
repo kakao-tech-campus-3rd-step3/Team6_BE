@@ -3,6 +3,7 @@ package com.icebreaker.be.application.question;
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
 import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.application.question.mapper.QuestionMapper;
+import com.icebreaker.be.domain.question.Question;
 import com.icebreaker.be.domain.question.QuestionRepository;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
@@ -43,6 +44,8 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(Long id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
         questionRepository.deleteById(id);
     }
 }
