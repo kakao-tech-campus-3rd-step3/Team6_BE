@@ -41,8 +41,8 @@ public class UserInterest {
     private User user;
 
     @Builder
-    public UserInterest(User user, Interest interestType) {
+    public UserInterest(User user, Interest interest) {
         this.user = user;
-        this.interest = interestType;
+        this.interest = interest;
     }
 }
