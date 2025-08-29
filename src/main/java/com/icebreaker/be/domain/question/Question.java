@@ -20,21 +20,21 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Question {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "question_id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "question_id")
+    private Long id;
 
-  @Column(name = "question_content", length = 255, nullable = false)
-  private String content;
+    @Column(name = "question_content", length = 255, nullable = false)
+    private String content;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "question_type", length = 50, nullable = false)
-  private QuestionType type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "question_type", length = 50, nullable = false)
+    private QuestionType type;
 
-  @Builder
-  public Question(String content, QuestionType type) {
-    this.content = content;
-    this.type = type;
-  }
+    @Builder
+    public Question(String content, QuestionType type) {
+        this.content = content;
+        this.type = type;
+    }
 }

@@ -7,11 +7,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class QuestionMapper {
 
-  public static QuestionResponse toResponse(Question question) {
-    return new QuestionResponse(
-        question.getId(),
-        question.getContent(),
-        question.getType()
-    );
-  }
+    public static QuestionResponse toResponse(Question question) {
+        return new QuestionResponse(
+                question.getId(),
+                question.getContent(),
+                question.getType()
+        );
+    }
 }

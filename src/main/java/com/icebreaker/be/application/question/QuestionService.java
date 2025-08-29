@@ -17,32 +17,32 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuestionService {
 
-  private final QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
-  @Transactional(readOnly = true)
-  public QuestionResponse getQuestionById(Long id) {
-    return questionRepository
-        .findById(id)
-        .map(QuestionMapper::toResponse)
-        .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
-  }
+    @Transactional(readOnly = true)
+    public QuestionResponse getQuestionById(Long id) {
+        return questionRepository
+                .findById(id)
+                .map(QuestionMapper::toResponse)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+    }
 
-  @Transactional(readOnly = true)
-  public List<QuestionResponse> getAllQuestions() {
-    return questionRepository
-        .findAll()
-        .stream()
-        .map(QuestionMapper::toResponse)
-        .toList();
-  }
+    @Transactional(readOnly = true)
+    public List<QuestionResponse> getAllQuestions() {
+        return questionRepository
+                .findAll()
+                .stream()
+                .map(QuestionMapper::toResponse)
+                .toList();
+    }
 
-  @Transactional
-  public Long createQuestion(CreateQuestionCommand createQuestionCommand) {
-    return questionRepository.save(createQuestionCommand.toEntity()).getId();
-  }
+    @Transactional
+    public Long createQuestion(CreateQuestionCommand createQuestionCommand) {
+        return questionRepository.save(createQuestionCommand.toEntity()).getId();
+    }
 
-  @Transactional
-  public void deleteQuestion(Long id) {
-    questionRepository.deleteById(id);
-  }
+    @Transactional
+    public void deleteQuestion(Long id) {
+        questionRepository.deleteById(id);
+    }
 }

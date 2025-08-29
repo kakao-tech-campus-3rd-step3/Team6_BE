@@ -27,81 +27,81 @@ import org.springframework.test.util.ReflectionTestUtils;
 @DisplayName("QuestionService 테스트")
 class QuestionServiceTest {
 
-  @Mock
-  private QuestionRepository questionRepository;
+    @Mock
+    private QuestionRepository questionRepository;
 
-  @InjectMocks
-  private QuestionService questionService;
+    @InjectMocks
+    private QuestionService questionService;
 
-  @Test
-  @DisplayName("단건 질문 조회")
-  void 단건질문_조회() {
-    Long id = 3L;
-    Question saved = new Question("content", QuestionType.COMMON);
-    ReflectionTestUtils.setField(saved, "id", id);
+    @Test
+    @DisplayName("단건 질문 조회")
+    void 단건질문_조회() {
+        Long id = 3L;
+        Question saved = new Question("content", QuestionType.COMMON);
+        ReflectionTestUtils.setField(saved, "id", id);
 
-    when(questionRepository.findById(id)).thenReturn(Optional.of(saved));
+        when(questionRepository.findById(id)).thenReturn(Optional.of(saved));
 
-    QuestionResponse questionResponse = questionService.getQuestionById(id);
+        QuestionResponse questionResponse = questionService.getQuestionById(id);
 
-    assertThat(questionResponse.id()).isEqualTo(id);
-    assertThat(questionResponse.content()).isEqualTo(saved.getContent());
-    assertThat(questionResponse.type()).isEqualTo(saved.getType());
-  }
+        assertThat(questionResponse.id()).isEqualTo(id);
+        assertThat(questionResponse.content()).isEqualTo(saved.getContent());
+        assertThat(questionResponse.type()).isEqualTo(saved.getType());
+    }
 
-  @Test
-  @DisplayName("존재하지 않는 id로 질문 조회 시 오류")
-  void 존재하지않는_ID로_질문_조회시_오류발생() {
-    Long id = 1L;
-    when(questionRepository.findById(id)).thenReturn(Optional.empty());
+    @Test
+    @DisplayName("존재하지 않는 id로 질문 조회 시 오류")
+    void 존재하지않는_ID로_질문_조회시_오류발생() {
+        Long id = 1L;
+        when(questionRepository.findById(id)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> questionService.getQuestionById(id))
-        .isInstanceOf(BusinessException.class)
-        .hasMessage(ErrorCode.QUESTION_NOT_FOUND.getMessage());
-  }
+        assertThatThrownBy(() -> questionService.getQuestionById(id))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(ErrorCode.QUESTION_NOT_FOUND.getMessage());
+    }
 
-  @Test
-  @DisplayName("모든 질문 조회")
-  void 전체_질문_조회() {
-    Question saved1 = new Question("content1", QuestionType.COMMON);
-    ReflectionTestUtils.setField(saved1, "id", 1L);
-    Question saved2 = new Question("content2", QuestionType.PERSONAL);
-    ReflectionTestUtils.setField(saved2, "id", 2L);
+    @Test
+    @DisplayName("모든 질문 조회")
+    void 전체_질문_조회() {
+        Question saved1 = new Question("content1", QuestionType.COMMON);
+        ReflectionTestUtils.setField(saved1, "id", 1L);
+        Question saved2 = new Question("content2", QuestionType.PERSONAL);
+        ReflectionTestUtils.setField(saved2, "id", 2L);
 
-    when(questionRepository.findAll()).thenReturn(List.of(saved1, saved2));
+        when(questionRepository.findAll()).thenReturn(List.of(saved1, saved2));
 
-    List<QuestionResponse> questionResponseList = questionService.getAllQuestions();
+        List<QuestionResponse> questionResponseList = questionService.getAllQuestions();
 
-    assertThat(questionResponseList.size()).isEqualTo(2);
-    assertThat(questionResponseList.get(0).content()).isEqualTo(saved1.getContent());
-    assertThat(questionResponseList.get(0).type()).isEqualTo(saved1.getType());
-    assertThat(questionResponseList.get(1).content()).isEqualTo(saved2.getContent());
-    assertThat(questionResponseList.get(1).type()).isEqualTo(saved2.getType());
-  }
+        assertThat(questionResponseList.size()).isEqualTo(2);
+        assertThat(questionResponseList.get(0).content()).isEqualTo(saved1.getContent());
+        assertThat(questionResponseList.get(0).type()).isEqualTo(saved1.getType());
+        assertThat(questionResponseList.get(1).content()).isEqualTo(saved2.getContent());
+        assertThat(questionResponseList.get(1).type()).isEqualTo(saved2.getType());
+    }
 
-  @Test
-  @DisplayName("질문 생성")
-  void 질문생성() {
-    Long id = 3L;
-    Question saved = new Question("content", QuestionType.COMMON);
-    ReflectionTestUtils.setField(saved, "id", id);
-    CreateQuestionCommand command = new CreateQuestionCommand("content", "common");
+    @Test
+    @DisplayName("질문 생성")
+    void 질문생성() {
+        Long id = 3L;
+        Question saved = new Question("content", QuestionType.COMMON);
+        ReflectionTestUtils.setField(saved, "id", id);
+        CreateQuestionCommand command = new CreateQuestionCommand("content", "common");
 
-    when(questionRepository.save(any(Question.class))).thenReturn(saved);
+        when(questionRepository.save(any(Question.class))).thenReturn(saved);
 
-    Long actual = questionService.createQuestion(command);
+        Long actual = questionService.createQuestion(command);
 
-    assertThat(actual).isNotNull();
-    assertThat(actual).isEqualTo(id);
-  }
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo(id);
+    }
 
-  @Test
-  @DisplayName("service삭제 호출 시 repository의 삭제 호출")
-  void 질문_삭제() {
-    Long id = 1L;
+    @Test
+    @DisplayName("service삭제 호출 시 repository의 삭제 호출")
+    void 질문_삭제() {
+        Long id = 1L;
 
-    questionService.deleteQuestion(id);
+        questionService.deleteQuestion(id);
 
-    verify(questionRepository).deleteById(id);
-  }
+        verify(questionRepository).deleteById(id);
+    }
 }
