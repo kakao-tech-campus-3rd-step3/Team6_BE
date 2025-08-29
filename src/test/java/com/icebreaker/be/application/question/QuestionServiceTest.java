@@ -3,7 +3,8 @@ package com.icebreaker.be.application.question;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
@@ -96,12 +97,17 @@ class QuestionServiceTest {
     }
 
     @Test
-    @DisplayName("service삭제 호출 시 repository의 삭제 호출")
+    @DisplayName("service삭제 호출 시 repository의 조회,삭제 호출")
     void 질문_삭제() {
-        Long id = 1L;
+        Long id = 3L;
+        Question question = new Question("content", QuestionType.COMMON);
+        ReflectionTestUtils.setField(question, "id", id);
+
+        when(questionRepository.findById(id)).thenReturn(Optional.of(question));
 
         questionService.deleteQuestion(id);
 
-        verify(questionRepository).deleteById(id);
+        then(questionRepository).should(times(1)).findById(id);
+        then(questionRepository).should(times(1)).deleteById(id);
     }
 }
