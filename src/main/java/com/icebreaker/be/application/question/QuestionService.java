@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.question;
 
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
-import com.icebreaker.be.application.question.dto.QuestionResponseDto;
+import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.application.question.mapper.QuestionMapper;
 import com.icebreaker.be.domain.question.QuestionRepository;
 import com.icebreaker.be.global.exception.BusinessException;
@@ -20,7 +20,7 @@ public class QuestionService {
   private final QuestionRepository questionRepository;
 
   @Transactional(readOnly = true)
-  public QuestionResponseDto getQuestionById(Long id) {
+  public QuestionResponse getQuestionById(Long id) {
     return questionRepository
         .findById(id)
         .map(QuestionMapper::toResponse)
@@ -28,7 +28,7 @@ public class QuestionService {
   }
 
   @Transactional(readOnly = true)
-  public List<QuestionResponseDto> getAllQuestions() {
+  public List<QuestionResponse> getAllQuestions() {
     return questionRepository
         .findAll()
         .stream()

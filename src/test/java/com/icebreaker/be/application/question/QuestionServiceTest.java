@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
-import com.icebreaker.be.application.question.dto.QuestionResponseDto;
+import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.domain.question.Question;
 import com.icebreaker.be.domain.question.QuestionRepository;
 import com.icebreaker.be.domain.question.QuestionType;
@@ -42,11 +42,11 @@ class QuestionServiceTest {
 
     when(questionRepository.findById(id)).thenReturn(Optional.of(saved));
 
-    QuestionResponseDto questionResponseDto = questionService.getQuestionById(id);
+    QuestionResponse questionResponse = questionService.getQuestionById(id);
 
-    assertThat(questionResponseDto.id()).isEqualTo(id);
-    assertThat(questionResponseDto.content()).isEqualTo(saved.getContent());
-    assertThat(questionResponseDto.type()).isEqualTo(saved.getType());
+    assertThat(questionResponse.id()).isEqualTo(id);
+    assertThat(questionResponse.content()).isEqualTo(saved.getContent());
+    assertThat(questionResponse.type()).isEqualTo(saved.getType());
   }
 
   @Test
@@ -70,13 +70,13 @@ class QuestionServiceTest {
 
     when(questionRepository.findAll()).thenReturn(List.of(saved1, saved2));
 
-    List<QuestionResponseDto> questionResponseDtoList = questionService.getAllQuestions();
+    List<QuestionResponse> questionResponseList = questionService.getAllQuestions();
 
-    assertThat(questionResponseDtoList.size()).isEqualTo(2);
-    assertThat(questionResponseDtoList.get(0).content()).isEqualTo(saved1.getContent());
-    assertThat(questionResponseDtoList.get(0).type()).isEqualTo(saved1.getType());
-    assertThat(questionResponseDtoList.get(1).content()).isEqualTo(saved2.getContent());
-    assertThat(questionResponseDtoList.get(1).type()).isEqualTo(saved2.getType());
+    assertThat(questionResponseList.size()).isEqualTo(2);
+    assertThat(questionResponseList.get(0).content()).isEqualTo(saved1.getContent());
+    assertThat(questionResponseList.get(0).type()).isEqualTo(saved1.getType());
+    assertThat(questionResponseList.get(1).content()).isEqualTo(saved2.getContent());
+    assertThat(questionResponseList.get(1).type()).isEqualTo(saved2.getType());
   }
 
   @Test
