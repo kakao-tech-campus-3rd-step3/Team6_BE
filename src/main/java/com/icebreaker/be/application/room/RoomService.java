@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.room;
 
-import com.icebreaker.be.application.room.dto.CreateRoomDto;
-import com.icebreaker.be.application.room.dto.RoomResponseDto;
+import com.icebreaker.be.application.room.dto.CreateRoomCommand;
+import com.icebreaker.be.application.room.dto.RoomResponse;
 import com.icebreaker.be.application.room.mapper.RoomMapper;
 import com.icebreaker.be.domain.room.Room;
 import com.icebreaker.be.domain.room.RoomRepository;
@@ -22,7 +22,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     @Transactional(readOnly = true)
-    public RoomResponseDto getRoomById(Long id) {
+    public RoomResponse getRoomById(Long id) {
         return roomRepository
                 .findById(id)
                 .map(RoomMapper::toResponse)
@@ -30,7 +30,7 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomResponseDto> getAllRooms() {
+    public List<RoomResponse> getAllRooms() {
         return roomRepository
                 .findAll()
                 .stream()
@@ -39,8 +39,8 @@ public class RoomService {
     }
 
     @Transactional
-    public Long createRoom(CreateRoomDto createRoomDto) {
-        return roomRepository.save(createRoomDto.toEntity()).getId();
+    public Long createRoom(CreateRoomCommand createRoomCommand) {
+        return roomRepository.save(createRoomCommand.toEntity()).getId();
     }
 
     @Transactional
