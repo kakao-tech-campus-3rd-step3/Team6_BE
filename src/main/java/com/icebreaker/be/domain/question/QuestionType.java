@@ -16,7 +16,7 @@ public enum QuestionType {
 
     public static QuestionType fromString(String questionType) {
         return Arrays.stream(values())
-                .filter(t -> t.value != null && t.value.equals(questionType))
+                .filter(t -> t.value.equals(questionType))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_QUESTION_TYPE));
     }
