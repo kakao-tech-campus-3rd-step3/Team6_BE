@@ -1,14 +1,14 @@
 package com.icebreaker.be.application.user.dto;
 
-import com.icebreaker.be.domain.interest.InterestType;
-import com.icebreaker.be.domain.user.MbtiType;
-import com.icebreaker.be.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import java.util.Set;
 
 public record CreateUserCommand(
         @NotBlank
@@ -29,7 +29,7 @@ public record CreateUserCommand(
 
         @NotEmpty
         @Schema(description = "관심사", example = "[\"음악\", \"영화\"]")
-        String[] interests,
+        Set<@NotBlank String> interests,
 
         @NotBlank
         @Schema(description = "MBTI 값", example = "INTJ")
@@ -41,16 +41,4 @@ public record CreateUserCommand(
         String introduction
 ) {
 
-    public User toEntity() {
-        return User.builder()
-                .name(name)
-                .phone(phone)
-                .age(age)
-                .interestTypes(Stream.of(interests)
-                        .map(InterestType::fromKoreanString)
-                        .collect(Collectors.toList()))
-                .mbti(MbtiType.fromString(mbtiValue))
-                .introduction(introduction)
-                .build();
-    }
 }
