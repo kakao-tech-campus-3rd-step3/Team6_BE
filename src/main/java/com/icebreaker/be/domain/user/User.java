@@ -1,5 +1,6 @@
 package com.icebreaker.be.domain.user;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,7 +8,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +46,9 @@ public class User {
     @Column(name = "user_introduction", length = 255, nullable = false)
     private String introduction;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserInterest> interests = new HashSet<>();
+
     @Builder
     public User(String name, String phone, Integer age, MbtiType mbti, String introduction) {
         this.name = name;
@@ -49,4 +57,16 @@ public class User {
         this.mbti = mbti;
         this.introduction = introduction;
     }
+
+    public Set<Interest> getInterestsEnum() {
+        return interests.stream()
+                .map(UserInterest::getInterest)
+                .collect(Collectors.toSet());
+    }
+
+    public void addInterest(Interest interest) {
+        UserInterest userInterest = new UserInterest(this, interest);
+        this.interests.add(userInterest);
+    }
+
 }

@@ -1,14 +1,14 @@
 package com.icebreaker.be.application.user.dto;
 
-import com.icebreaker.be.domain.user.MbtiType;
-import com.icebreaker.be.domain.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.Set;
 
 public record CreateUserCommand(
         @NotBlank
@@ -27,6 +27,10 @@ public record CreateUserCommand(
         @Schema(description = "사용자 나이", example = "25", minimum = "0", maximum = "120")
         Integer age,
 
+        @NotEmpty
+        @Schema(description = "관심사", example = "[\"음악\", \"영화\"]")
+        Set<@NotBlank String> interests,
+
         @NotBlank
         @Schema(description = "MBTI 값", example = "INTJ")
         String mbtiValue,
@@ -37,13 +41,4 @@ public record CreateUserCommand(
         String introduction
 ) {
 
-    public User toEntity() {
-        return User.builder()
-                .name(name)
-                .phone(phone)
-                .age(age)
-                .mbti(MbtiType.fromString(mbtiValue))
-                .introduction(introduction)
-                .build();
-    }
 }

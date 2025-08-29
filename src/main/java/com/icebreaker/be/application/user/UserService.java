@@ -40,7 +40,7 @@ public class UserService {
     public Long createUserIfNotExists(CreateUserCommand cmd) {
         return userRepository.findByPhone(cmd.phone())
                 .map(User::getId)
-                .orElseGet(() -> createUser(cmd.toEntity()));
+                .orElseGet(() -> createUser(UserMapper.toEntity(cmd)));
     }
 
     @Transactional
