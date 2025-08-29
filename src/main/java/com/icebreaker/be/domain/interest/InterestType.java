@@ -33,10 +33,14 @@ public enum InterestType {
 
     private final String displayName;
 
+    private static final java.util.Map<String, InterestType> KOREAN_STRING_TO_ENUM =
+            Stream.of(values()).collect(java.util.stream.Collectors.toMap(InterestType::getDisplayName, e -> e));
+
     public static InterestType fromKoreanString(String value) {
-        return Stream.of(InterestType.values())
-                .filter(t -> t.getDisplayName().equals(value))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INTEREST_TYPE));
+        InterestType interestType = KOREAN_STRING_TO_ENUM.get(value);
+        if (interestType == null) {
+            throw new BusinessException(ErrorCode.INVALID_INTEREST_TYPE);
+        }
+        return interestType;
     }
 }
