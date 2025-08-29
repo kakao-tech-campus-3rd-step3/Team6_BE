@@ -66,7 +66,7 @@ class QuestionServiceTest {
     Question saved1 = new Question("content1", QuestionType.COMMON);
     ReflectionTestUtils.setField(saved1, "id", 1L);
     Question saved2 = new Question("content2", QuestionType.PERSONAL);
-    ReflectionTestUtils.setField(saved1, "id", 2L);
+    ReflectionTestUtils.setField(saved2, "id", 2L);
 
     when(questionRepository.findAll()).thenReturn(List.of(saved1, saved2));
 
