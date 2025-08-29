@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(columnNames = {"user_id", "interest"})
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class UserInterest {
 
@@ -41,7 +41,7 @@ public class UserInterest {
     private User user;
 
     @Builder
-    public UserInterest(User user, Interest interest) {
+    UserInterest(User user, Interest interest) {
         this.user = user;
         this.interest = interest;
     }
