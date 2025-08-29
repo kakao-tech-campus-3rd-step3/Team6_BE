@@ -26,11 +26,13 @@ class QuestionRepositoryTest {
         Question question = new Question("content", QuestionType.COMMON);
         Question savedQuestion = entityManager.persistAndFlush(question);
 
-        Question actual = questionRepository.findById(savedQuestion.getId()).get();
+        Optional<Question> actualOptional = questionRepository.findById(savedQuestion.getId());
 
-        assertThat(actual.getId()).isEqualTo(question.getId());
-        assertThat(actual.getContent()).isEqualTo(question.getContent());
-        assertThat(actual.getType()).isEqualTo(question.getType());
+        assertThat(actualOptional).hasValueSatisfying(actual -> {
+            assertThat(actual.getId()).isEqualTo(question.getId());
+            assertThat(actual.getContent()).isEqualTo(question.getContent());
+            assertThat(actual.getType()).isEqualTo(question.getType());
+        });
     }
 
     @Test
