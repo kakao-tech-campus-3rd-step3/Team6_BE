@@ -41,6 +41,8 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11"
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'dev.langchain4j:langchain4j:1.4.0'
+    implementation 'dev.langchain4j:langchain4j-google-ai-gemini:1.4.0'
 }
 
 configurations.configureEach {
