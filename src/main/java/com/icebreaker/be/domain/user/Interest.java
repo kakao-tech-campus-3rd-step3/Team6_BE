@@ -1,10 +1,10 @@
 package com.icebreaker.be.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.icebreaker.be.global.common.util.CollectorsUtils;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
@@ -34,11 +34,8 @@ public enum Interest {
     private static final Map<String, Interest> KOREAN_TO_ENUM;
 
     static {
-        Map<String, Interest> map = new HashMap<>();
-        for (Interest type : values()) {
-            map.put(type.getDisplayName(), type);
-        }
-        KOREAN_TO_ENUM = Collections.unmodifiableMap(map);
+        KOREAN_TO_ENUM = Arrays.stream(values())
+                .collect(CollectorsUtils.toMapByKey(Interest::getDisplayName));
     }
 
     private final String displayName;
