@@ -30,13 +30,6 @@ public class InterestService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public InterestResponse getInterestById(Long id) {
-        return interestRepository.findById(id)
-                .map(interest -> new InterestResponse(interest.getId(), interest.getName()))
-                .orElseThrow(() -> new BusinessException(ErrorCode.INTEREST_NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<InterestResponse> getAllInterests() {
         return interestRepository.findAll()
                 .stream()
@@ -46,15 +39,14 @@ public class InterestService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Long> getInterestIdsByNames(List<String> names) {
-        return names.stream()
-                .map(this::getInterestIdByName)
-                .toList();
-    }
+        List<Interest> interests = interestRepository.findAllByNameIn(names);
 
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Long getInterestIdByName(String name) {
-        return interestRepository.findByName(name)
+        if (interests.size() != names.size()) {
+            throw new BusinessException(ErrorCode.INTEREST_NOT_FOUND);
+        }
+
+        return interests.stream()
                 .map(Interest::getId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.INTEREST_NOT_FOUND));
+                .toList();
     }
 }
