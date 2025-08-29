@@ -108,6 +108,6 @@ class QuestionServiceTest {
         questionService.deleteQuestion(id);
 
         then(questionRepository).should(times(1)).findById(id);
-        then(questionRepository).should(times(1)).deleteById(id);
+        then(questionRepository).should(times(1)).delete(question);
     }
 }

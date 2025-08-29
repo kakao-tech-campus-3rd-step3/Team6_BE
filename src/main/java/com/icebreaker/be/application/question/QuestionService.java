@@ -46,6 +46,6 @@ public class QuestionService {
     public void deleteQuestion(Long id) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
-        questionRepository.deleteById(id);
+        questionRepository.delete(question);
     }
 }
