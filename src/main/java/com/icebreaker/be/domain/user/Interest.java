@@ -6,6 +6,7 @@ import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -41,11 +42,8 @@ public enum Interest {
     private final String displayName;
 
     public static Interest fromKoreanString(String value) {
-        Interest interest = KOREAN_TO_ENUM.get(value);
-        if (interest == null) {
-            throw new BusinessException(ErrorCode.INVALID_INTEREST_TYPE);
-        }
-        return interest;
+        return Optional.ofNullable(KOREAN_TO_ENUM.get(value))
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INTEREST_TYPE));
     }
 
     @JsonValue
