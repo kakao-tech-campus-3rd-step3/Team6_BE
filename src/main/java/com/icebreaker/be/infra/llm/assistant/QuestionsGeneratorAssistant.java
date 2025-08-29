@@ -1,4 +1,4 @@
-package com.icebreaker.be.infra.llm.assisstant;
+package com.icebreaker.be.infra.llm.assistant;
 
 public interface QuestionsGeneratorAssistant {
 

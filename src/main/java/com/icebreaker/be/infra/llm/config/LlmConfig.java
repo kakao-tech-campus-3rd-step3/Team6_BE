@@ -1,7 +1,7 @@
 package com.icebreaker.be.infra.llm.config;
 
-import com.icebreaker.be.infra.llm.assisstant.KeywordsExtractorAssistant;
-import com.icebreaker.be.infra.llm.assisstant.QuestionsGeneratorAssistant;
+import com.icebreaker.be.infra.llm.assistant.KeywordsExtractorAssistant;
+import com.icebreaker.be.infra.llm.assistant.QuestionsGeneratorAssistant;
 import dev.langchain4j.model.chat.Capability;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ResponseFormat;

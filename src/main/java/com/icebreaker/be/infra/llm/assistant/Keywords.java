@@ -1,4 +1,4 @@
-package com.icebreaker.be.infra.llm.assisstant;
+package com.icebreaker.be.infra.llm.assistant;
 
 import dev.langchain4j.model.output.structured.Description;
 import java.util.List;
