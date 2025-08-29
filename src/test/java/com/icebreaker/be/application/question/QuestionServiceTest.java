@@ -85,7 +85,7 @@ class QuestionServiceTest {
     Long id = 3L;
     Question saved = new Question("content", QuestionType.COMMON);
     ReflectionTestUtils.setField(saved, "id", id);
-    CreateQuestionDto createDto = new CreateQuestionDto("content", QuestionType.COMMON);
+    CreateQuestionDto createDto = new CreateQuestionDto("content", "common");
 
     when(questionRepository.save(any(Question.class))).thenReturn(saved);
 

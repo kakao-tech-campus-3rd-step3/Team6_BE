@@ -14,13 +14,13 @@ public record CreateQuestionDto(
 
     @NotBlank
     @Schema(description = "질문 유형", example = "공통")
-    QuestionType type
+    String questionType
 ) {
 
   public Question toEntity() {
     return Question.builder()
         .content(content)
-        .type(type)
+        .type(QuestionType.fromString(questionType))
         .build();
   }
 }
