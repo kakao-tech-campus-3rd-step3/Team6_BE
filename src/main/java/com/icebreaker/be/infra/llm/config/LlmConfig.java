@@ -14,14 +14,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LlmConfig {
 
-    @Value("${gemini.api-key}")
-    private String apiKey;
-
-    @Value("${gemini.model}")
-    private String modelName;
-
     @Bean
-    public ChatModel chatModel() {
+    public ChatModel chatModel(
+            @Value("${gemini.api-key}") String apiKey,
+            @Value("${gemini.model}") String modelName
+    ) {
         return GoogleAiGeminiChatModel.builder()
                 .apiKey(apiKey)
                 .supportedCapabilities(Capability.RESPONSE_FORMAT_JSON_SCHEMA)
@@ -29,7 +26,6 @@ public class LlmConfig {
                 .modelName(modelName)
                 .build();
     }
-
 
     @Bean
     public KeywordsExtractorAssistant keywordsExtractorAssistant(ChatModel chatModel) {
