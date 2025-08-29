@@ -13,6 +13,7 @@ public class UserMapper {
                 user.getName(),
                 user.getPhone(),
                 user.getAge(),
+                user.getInterests().stream().map(interest -> interest.getInterestType().getDisplayName()).toArray(String[]::new),
                 user.getMbti(),
                 user.getIntroduction()
         );
