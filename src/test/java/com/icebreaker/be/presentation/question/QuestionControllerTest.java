@@ -111,7 +111,6 @@ class QuestionControllerTest {
     @DisplayName("질문 타입을 한글로 작성하지 않으면 400 에러가 발생한다")
     void createQuestion_notKoreanQuestionType() throws Exception {
         CreateQuestionCommand questionCommand = new CreateQuestionCommand("content", "PERSONAL");
-        Long questionId = 1L;
 
         mockMvc.perform(post("/api/v1/questions")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +122,6 @@ class QuestionControllerTest {
     @DisplayName("질문 내용을 작성하지 않으면 400 에러가 발생한다")
     void createQuestion_noQuestionContent() throws Exception {
         CreateQuestionCommand questionCommand = new CreateQuestionCommand(null, "공통");
-        Long questionId = 1L;
 
         mockMvc.perform(post("/api/v1/questions")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -136,7 +134,6 @@ class QuestionControllerTest {
     void createQuestion_longQuestionContent() throws Exception {
         CreateQuestionCommand questionCommand = new CreateQuestionCommand("a".repeat(256),
                 "공통");
-        Long questionId = 1L;
 
         mockMvc.perform(post("/api/v1/questions")
                         .contentType(MediaType.APPLICATION_JSON)
