@@ -16,6 +16,14 @@ public enum ErrorCode {
     //ROOM ERROR
     ROOM_NOT_FOUND("방을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    // QUESTION ERROR
+    QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    INVALID_QUESTION_TYPE("유효하지 않은 질문 타입입니다.", HttpStatus.BAD_REQUEST),
+
+    // INTEREST ERROR
+    INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
+
+    // DEFAULT ERROR
     INVALID_REQUEST("유효하지 않은 요청입니다.", HttpStatus.BAD_REQUEST),
     ;
 
