@@ -151,7 +151,7 @@ class QuestionControllerTest {
         Long questionId = 1L;
 
         mockMvc.perform(delete("/api/v1/questions/{id}", questionId))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("질문 삭제 성공"));
     }

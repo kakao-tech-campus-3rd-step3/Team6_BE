@@ -60,7 +60,7 @@ public final class QuestionController implements QuestionApiDocs {
     ) {
         questionService.deleteQuestion(id);
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .status(HttpStatus.OK)
                 .body(ApiResponseFactory.success("질문 삭제 성공"));
     }
 }
