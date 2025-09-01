@@ -1,5 +1,7 @@
 package com.icebreaker.be.global.interceptor;
 
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import com.icebreaker.be.infra.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,7 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
                     accessor.getSessionAttributes().put("userId", userId);
                 }
             } else {
-                throw new IllegalArgumentException("JWT가 없거나 잘못됨");
+                throw new BusinessException(ErrorCode.INVALID_JWT_TOKEN);
             }
         }
         return message;
