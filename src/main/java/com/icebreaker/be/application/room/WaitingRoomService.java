@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,7 +64,7 @@ public class WaitingRoomService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.WAITING_ROOM_NOT_FOUND));
 
         List<User> users = userRepository.findAllById(waitingRoom.getParticipants());
-        Room room = new Room(waitingRoom.getName(), users.size(), new java.util.ArrayList<>());
+        Room room = new Room(waitingRoom.getName(), users.size(), new ArrayList<>());
 
         List<Participant> participants = users.stream()
                 .map(user -> new Participant(room, user))
