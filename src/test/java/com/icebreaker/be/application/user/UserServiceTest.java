@@ -1,14 +1,7 @@
 package com.icebreaker.be.application.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
+import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
@@ -16,9 +9,7 @@ import com.icebreaker.be.fixture.CreateUserCommandFixture;
 import com.icebreaker.be.fixture.UserFixture;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import com.icebreaker.be.infra.jwt.JwtProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,12 +17,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserService 테스트")
 class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private JwtProvider jwtProvider;
 
     @InjectMocks
     private UserService userService;
@@ -93,34 +99,50 @@ class UserServiceTest {
     @Test
     @DisplayName("새로운 사용자를 생성할 수 있다")
     void createUserIfNotExists_NewUser() {
+        // given
         CreateUserCommand command = CreateUserCommandFixture.validCommand();
         User savedUser = UserFixture.userWithId(2L, UserFixture.DEFAULT_NAME,
                 UserFixture.DEFAULT_PHONE);
+        String mockToken = "mock.jwt.token";
 
         given(userRepository.findByPhone(command.phone())).willReturn(Optional.empty());
         given(userRepository.save(any(User.class))).willReturn(savedUser);
+        given(jwtProvider.generateToken(anyString(), anyLong())).willReturn(mockToken);
 
-        Long result = userService.createUserIfNotExists(command);
+        // when
+        UserIdWithTokenResponse result = userService.createUserIfNotExistsAndGenerateToken(command);
 
-        assertThat(result).isEqualTo(2L);
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.userId()).isEqualTo(savedUser.getId());
+        assertThat(result.token()).isEqualTo(mockToken);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(times(1)).save(any(User.class));
+        then(jwtProvider).should(times(1)).generateToken(anyString(), anyLong());
     }
 
     @Test
     @DisplayName("이미 존재하는 전화번호로 사용자 생성 시 기존 사용자 ID를 반환한다")
     void createUserIfNotExists_ExistingUser() {
+        // given
         CreateUserCommand command = CreateUserCommandFixture.validCommand();
         User existingUser = UserFixture.userWithId(3L, UserFixture.DEFAULT_NAME,
                 UserFixture.DEFAULT_PHONE);
+        String mockToken = "mock.jwt.token";
 
         given(userRepository.findByPhone(command.phone())).willReturn(Optional.of(existingUser));
+        given(jwtProvider.generateToken(anyString(), anyLong())).willReturn(mockToken);
 
-        Long result = userService.createUserIfNotExists(command);
+        // when
+        UserIdWithTokenResponse result = userService.createUserIfNotExistsAndGenerateToken(command);
 
-        assertThat(result).isEqualTo(3L);
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.userId()).isEqualTo(existingUser.getId());
+        assertThat(result.token()).isEqualTo(mockToken);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(never()).save(any(User.class));
+        then(jwtProvider).should(times(1)).generateToken(anyString(), anyLong());
     }
 
     @Test
