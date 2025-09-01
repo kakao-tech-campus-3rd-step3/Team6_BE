@@ -17,6 +17,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class JwtChannelInterceptor implements ChannelInterceptor {
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String USER_ID_ATTRIBUTE = "userId";
+
     private final JwtProvider jwtProvider;
 
     @Override
@@ -24,17 +28,16 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            String authHeader = accessor.getFirstNativeHeader("Authorization");
-            log.info("CONNECT Authorization Header: {}", authHeader);
+            String authHeader = accessor.getFirstNativeHeader(AUTHORIZATION_HEADER);
 
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String token = authHeader.substring(7);
+            if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+                String token = authHeader.substring(BEARER_PREFIX.length());
                 String userId = jwtProvider.getSubjectFromToken(token);
 
                 accessor.setUser(new StompPrincipal(userId));
 
                 if (accessor.getSessionAttributes() != null) {
-                    accessor.getSessionAttributes().put("userId", userId);
+                    accessor.getSessionAttributes().put(USER_ID_ATTRIBUTE, userId);
                 }
             } else {
                 throw new BusinessException(ErrorCode.INVALID_JWT_TOKEN);

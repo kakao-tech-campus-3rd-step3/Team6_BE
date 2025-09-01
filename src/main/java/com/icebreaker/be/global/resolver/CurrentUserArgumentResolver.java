@@ -16,6 +16,8 @@ import java.util.Map;
 @Slf4j
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private static final String USER_ID_ATTRIBUTE = "userId";
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(CurrentUser.class)
@@ -31,8 +33,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
-        if (sessionAttributes != null && sessionAttributes.get("userId") != null) {
-            return Long.parseLong(sessionAttributes.get("userId").toString());
+        if (sessionAttributes != null && sessionAttributes.get(USER_ID_ATTRIBUTE) != null) {
+            return Long.parseLong(sessionAttributes.get(USER_ID_ATTRIBUTE).toString());
         }
 
         throw new BusinessException(ErrorCode.USER_NOT_AUTHENTICATED);
