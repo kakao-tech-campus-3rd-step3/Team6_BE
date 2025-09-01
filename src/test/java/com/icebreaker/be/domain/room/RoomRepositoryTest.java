@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ class RoomRepositoryTest {
 
         // 리플렉션을 사용하여 id 설정 (테스트용)
         try {
-            java.lang.reflect.Field idField = testRoom.getClass().getDeclaredField("id");
+            Field idField = testRoom.getClass().getDeclaredField("id");
             idField.setAccessible(true);
             idField.set(testRoom, testRoomId);
         } catch (Exception e) {
