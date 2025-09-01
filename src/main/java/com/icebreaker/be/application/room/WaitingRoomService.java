@@ -70,7 +70,7 @@ public class WaitingRoomService {
                 .map(user -> new Participant(room, user))
                 .toList();
 
-        room.setParticipants(participants);
+        room.joinParticipants(participants);
 
         roomRepository.save(room);
         waitingRoomRepository.delete(waitingRoom.getRoomId());
