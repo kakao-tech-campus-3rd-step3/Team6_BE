@@ -14,6 +14,7 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     database-platform: ${DB_PLATFORM:org.hibernate.dialect.H2Dialect}
+    open-in-view: false
   h2:
     console:
       enabled: true
@@ -33,5 +34,8 @@ springdoc:
     operations-sorter: alpha
 
 gemini:
-  api-key: ${GEMINI_API_KEY}
-  model: ${GEMINI_MODEL:gemini-1.5-flash}
+  api-key: ${GEMINI_API_KEY:AIzaSyCEe8eG12SYYmsKGEM54I1TfqQWfugdn68}
+  model: ${GEMINI_MODEL:gemini-pro-1.5}
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY:NyIfV0Hd4XgDdNpRFdoxH/80ePM9LVN5851R2zfXp/EbrB/HYk0vaZikBK+pJs3mnA4fzWR4kYAdxHhXEgHUfQ==}
