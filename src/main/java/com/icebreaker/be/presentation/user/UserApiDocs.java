@@ -1,6 +1,7 @@
 package com.icebreaker.be.presentation.user;
 
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
+import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
 import com.icebreaker.be.global.common.response.SuccessApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,9 +32,9 @@ public sealed interface UserApiDocs permits UserController {
 
     @Operation(
             summary = "사용자 생성",
-            description = "새로운 사용자를 생성하며, 이미 존재하면 스킵합니다."
+            description = "새로운 사용자를 생성하며, 이미 존재하면 스킵합니다. (토큰 리턴)"
     )
-    ResponseEntity<SuccessApiResponse<Void>> createUser(
+    ResponseEntity<SuccessApiResponse<UserIdWithTokenResponse>> createUser(
             @Parameter(description = "사용자 생성 정보", required = true)
             @RequestBody CreateUserCommand cmd
     );

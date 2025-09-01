@@ -2,6 +2,7 @@ package com.icebreaker.be.presentation.user;
 
 import com.icebreaker.be.application.user.UserService;
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
+import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
 import com.icebreaker.be.global.common.response.ApiResponseFactory;
 import com.icebreaker.be.global.common.response.SuccessApiResponse;
@@ -45,13 +46,14 @@ public final class UserController implements UserApiDocs {
     }
 
     @PostMapping()
-    public ResponseEntity<SuccessApiResponse<Void>> createUser(
+    public ResponseEntity<SuccessApiResponse<UserIdWithTokenResponse>> createUser(
             @Valid @RequestBody CreateUserCommand cmd
     ) {
-        Long userId = userService.createUserIfNotExists(cmd);
+        UserIdWithTokenResponse response = userService.createUserIfNotExistsAndGenerateToken(cmd);
+
         return ResponseEntity
-                .created(UriUtils.buildLocationUri(userId))
-                .body(ApiResponseFactory.success("유저 생성 성공"));
+                .created(UriUtils.buildLocationUri(response.userId()))
+                .body(ApiResponseFactory.success(response, "유저 생성 성공"));
     }
 
     @DeleteMapping("/{id}")
