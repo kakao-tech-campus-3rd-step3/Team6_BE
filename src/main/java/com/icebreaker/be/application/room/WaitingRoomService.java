@@ -63,11 +63,13 @@ public class WaitingRoomService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.WAITING_ROOM_NOT_FOUND));
 
         List<User> users = userRepository.findAllById(waitingRoom.getParticipants());
+        Room room = new Room(waitingRoom.getName(), users.size(), new java.util.ArrayList<>());
+
         List<Participant> participants = users.stream()
-                .map(user -> new Participant(null, user))
+                .map(user -> new Participant(room, user))
                 .toList();
 
-        Room room = new Room(waitingRoom.getRoomId(), users.size(), participants);
+        room.setParticipants(participants);
 
         roomRepository.save(room);
         waitingRoomRepository.delete(waitingRoom.getRoomId());

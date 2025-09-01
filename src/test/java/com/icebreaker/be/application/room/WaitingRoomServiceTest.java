@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class WaitingRoomServiceTest {
 
-    private final String testRoomId = "test-room-id";
+    private final String testRoomId = "테스트 방";
     @Mock
     private WaitingRoomRepository waitingRoomRepository;
     @Mock
@@ -164,10 +164,7 @@ class WaitingRoomServiceTest {
         when(userRepository.findAllById(participants)).thenReturn(users);
 
         // Room 저장 모킹
-        when(roomRepository.save(any(Room.class))).thenAnswer(invocation -> {
-            Room room = invocation.getArgument(0);
-            return room;
-        });
+        when(roomRepository.save(any(Room.class))).thenAnswer(invocation -> invocation.<Room>getArgument(0));
 
         // when
         waitingRoomService.handleWaitingRoomFullEvent(event);
