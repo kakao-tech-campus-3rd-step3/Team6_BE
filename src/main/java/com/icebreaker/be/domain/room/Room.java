@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "rooms")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
@@ -22,9 +24,17 @@ public class Room {
     @Column(name = "room_max_participants", nullable = false)
     private Integer maxParticipants;
 
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participant> participants;
+
     @Builder
-    public Room(String name, Integer maxParticipants) {
+    public Room(String name, Integer maxParticipants, List<Participant> participants) {
         this.name = name;
         this.maxParticipants = maxParticipants;
+        this.participants = participants;
+    }
+
+    public void joinParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 }

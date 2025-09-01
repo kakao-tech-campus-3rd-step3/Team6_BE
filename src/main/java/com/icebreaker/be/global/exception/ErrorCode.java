@@ -12,9 +12,11 @@ public enum ErrorCode {
     // USER ERROR
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MBTI_TYPE("유효하지 않은 MBTI 타입입니다.", HttpStatus.BAD_REQUEST),
+    USER_NOT_AUTHENTICATED("사용자가 인증되지 않았습니다.", HttpStatus.UNAUTHORIZED),
 
     //ROOM ERROR
     ROOM_NOT_FOUND("방을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    WAITING_ROOM_NOT_FOUND("대기방을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
@@ -22,6 +24,11 @@ public enum ErrorCode {
 
     // INTEREST ERROR
     INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
+
+    INVALID_JWT_PAYLOAD("유효하지 않은 JWT 페이로드입니다.", HttpStatus.UNAUTHORIZED),
+    EXPIRED_JWT_TOKEN("만료된 JWT 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_JWT_TOKEN("유효하지 않은 JWT 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_JWT_SIGNATURE("유효하지 않은 JWT 서명입니다.", HttpStatus.UNAUTHORIZED),
 
     // DEFAULT ERROR
     INVALID_REQUEST("유효하지 않은 요청입니다.", HttpStatus.BAD_REQUEST),
