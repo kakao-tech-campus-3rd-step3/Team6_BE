@@ -1,12 +1,14 @@
 package com.icebreaker.be.application.user;
 
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
+import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
 import com.icebreaker.be.application.user.mapper.UserMapper;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
+import com.icebreaker.be.infra.jwt.JwtProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final JwtProvider jwtProvider;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public UserResponse getUserById(Long id) {
@@ -37,10 +41,14 @@ public class UserService {
     }
 
     @Transactional
-    public Long createUserIfNotExists(CreateUserCommand cmd) {
-        return userRepository.findByPhone(cmd.phone())
+    public UserIdWithTokenResponse createUserIfNotExistsAndGenerateToken(CreateUserCommand cmd) {
+        Long userId = userRepository.findByPhone(cmd.phone())
                 .map(User::getId)
                 .orElseGet(() -> createUser(UserMapper.toEntity(cmd)));
+
+        String token = jwtProvider.generateToken(String.valueOf(userId), 100_000_000L);
+
+        return new UserIdWithTokenResponse(userId, token);
     }
 
     @Transactional
