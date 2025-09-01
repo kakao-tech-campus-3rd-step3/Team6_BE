@@ -1,6 +1,8 @@
 package com.icebreaker.be.global.resolver;
 
 import com.icebreaker.be.global.annotation.CurrentUser;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.messaging.Message;
@@ -33,6 +35,6 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
             return Long.parseLong(sessionAttributes.get("userId").toString());
         }
 
-        throw new RuntimeException("JWT가 유효하지 않거나 userId가 없음");
+        throw new BusinessException(ErrorCode.USER_NOT_AUTHENTICATED);
     }
 }
