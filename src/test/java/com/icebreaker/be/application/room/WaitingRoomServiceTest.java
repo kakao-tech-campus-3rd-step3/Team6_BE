@@ -178,8 +178,8 @@ class WaitingRoomServiceTest {
         assertThat(savedRoom.getName()).isEqualTo(testRoomId);
         assertThat(savedRoom.getMaxParticipants()).isEqualTo(users.size());
 
-        // WaitingRoom 삭제 검증
-        verify(waitingRoomRepository).delete(testRoomId);
+        // WaitingRoom 삭제 검증 - 데이터베이스에서 조회된 인스턴스가 삭제되는지 확인
+        verify(waitingRoomRepository).delete(waitingRoom);
 
         // 방 시작 알림 검증
         verify(notifier).notifyRoomStart(any(Room.class));

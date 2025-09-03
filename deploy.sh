@@ -9,6 +9,7 @@ APP_NAME=ice-breaker
 IMAGE_TAG=${1:-latest}
 CONTAINER_NAME=$APP_NAME
 APP_PORT=8080
+NETWORK_NAME=backend
 
 echo "===== Deploying $APP_NAME:$IMAGE_TAG ====="
 
@@ -33,6 +34,7 @@ docker run -d \
   --name $CONTAINER_NAME \
   -p $APP_PORT:8080 \
   --env-file .env \
+  --network $NETWORK_NAME \
   kangtaehyun1107/$APP_NAME:"$IMAGE_TAG"
 
 # 4. 상태 확인

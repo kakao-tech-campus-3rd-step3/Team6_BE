@@ -22,9 +22,7 @@ import java.util.List;
 public class WaitingRoomService {
 
     private final WaitingRoomRepository waitingRoomRepository;
-
     private final RoomRepository roomRepository;
-
     private final UserRepository userRepository;
 
     private final WaitingRoomIdGenerator idGenerator;
@@ -73,7 +71,7 @@ public class WaitingRoomService {
         room.joinParticipants(participants);
 
         roomRepository.save(room);
-        waitingRoomRepository.delete(waitingRoom.getRoomId());
+        waitingRoomRepository.delete(waitingRoom);
         notifier.notifyRoomStart(room);
     }
 }

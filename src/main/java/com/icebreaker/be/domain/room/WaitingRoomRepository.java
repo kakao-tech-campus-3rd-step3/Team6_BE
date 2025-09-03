@@ -1,12 +1,7 @@
 package com.icebreaker.be.domain.room;
 
-import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 
-public interface WaitingRoomRepository {
+public interface WaitingRoomRepository extends CrudRepository<WaitingRoom, String>, WaitingRoomRepositoryCustom {
 
-    void save(WaitingRoom waitingRoom);
-
-    Optional<WaitingRoom> findById(String roomId);
-
-    void delete(String roomId);
 }
