@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - refactor/#30
 
 jobs:
   build-and-deploy:
