@@ -15,8 +15,8 @@ public class RedisConnectionCheckRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        try {
-            redisConnectionFactory.getConnection().ping();
+        try (var connection = redisConnectionFactory.getConnection()) {
+            connection.ping();
             log.info("✅ Redis 연결에 성공했습니다.");
         } catch (Exception e) {
             log.error("❌ Redis 연결에 실패했습니다: {}", e.getMessage());
