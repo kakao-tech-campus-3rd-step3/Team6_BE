@@ -71,7 +71,7 @@ public class WaitingRoomService {
         room.joinParticipants(participants);
 
         roomRepository.save(room);
-        waitingRoomRepository.delete(waitingRoom.getRoomId());
+        waitingRoomRepository.delete(waitingRoom);
         notifier.notifyRoomStart(room);
     }
 }
