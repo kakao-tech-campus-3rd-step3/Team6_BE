@@ -23,9 +23,9 @@ public class RoomService {
     @Transactional
     public void create(WaitingRoom waitingRoom, List<Long> participantIds) {
         Room room = new Room(waitingRoom.roomId(), waitingRoom.name(), waitingRoom.capacity());
-        List<User> user = userRepository.findAllById(participantIds);
+        List<User> users = userRepository.findAllById(participantIds);
 
-        List<RoomParticipant> participants = user.stream()
+        List<RoomParticipant> participants = users.stream()
                 .map(participant -> new RoomParticipant(room, participant))
                 .toList();
 
