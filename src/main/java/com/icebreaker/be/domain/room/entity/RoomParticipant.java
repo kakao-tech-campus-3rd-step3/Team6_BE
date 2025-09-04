@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain.room;
+package com.icebreaker.be.domain.room.entity;
 
 import com.icebreaker.be.domain.user.User;
 import jakarta.persistence.Entity;
@@ -15,11 +15,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "room_users")
+@Table(name = "room_participants")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class Participant {
+public class RoomParticipant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Participant {
     private User user;
 
     @Builder
-    public Participant(Room room, User user) {
+    public RoomParticipant(Room room, User user) {
         this.room = room;
         this.user = user;
     }
