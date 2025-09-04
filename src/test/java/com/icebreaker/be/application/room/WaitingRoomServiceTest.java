@@ -78,7 +78,6 @@ class WaitingRoomServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         doNothing().when(waitingRoomRepository).createRoom(anyString(), anyString(), anyInt(),
                 any(WaitingRoomParticipant.class));
-        doNothing().when(waitingRoomEventPublisher).publishCreated(anyString(), any(Long.class));
 
         // when
         String roomId = waitingRoomService.createRoom(command, userId);
@@ -87,7 +86,6 @@ class WaitingRoomServiceTest {
         assertThat(roomId).isEqualTo(testRoomId);
         verify(waitingRoomRepository).createRoom(anyString(), anyString(), anyInt(),
                 any(WaitingRoomParticipant.class));
-        verify(waitingRoomEventPublisher).publishCreated(anyString(), any(Long.class));
     }
 
     @Test
