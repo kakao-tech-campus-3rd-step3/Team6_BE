@@ -1,20 +1,20 @@
 package com.icebreaker.be.application.room;
 
 import com.icebreaker.be.application.room.dto.CreateRoomCommand;
-import com.icebreaker.be.domain.room.*;
+import com.icebreaker.be.application.room.event.WaitingRoomEventPublisher;
+import com.icebreaker.be.domain.room.repo.WaitingRoomRepository;
+import com.icebreaker.be.domain.room.service.WaitingRoomIdGenerator;
+import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
+import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,56 +22,47 @@ import java.util.List;
 public class WaitingRoomService {
 
     private final WaitingRoomRepository waitingRoomRepository;
-    private final RoomRepository roomRepository;
+    private final WaitingRoomIdGenerator waitingRoomIdGenerator;
+    private final WaitingRoomEventPublisher waitingRoomEventPublisher;
+
     private final UserRepository userRepository;
-
-    private final WaitingRoomIdGenerator idGenerator;
-
-    private final WaitingRoomNotifier notifier;
-    private final WaitingRoomEventPublisher eventPublisher;
 
     @Transactional
     public String createRoom(CreateRoomCommand cmd, Long userId) {
-        String roomId = idGenerator.generate();
-        waitingRoomRepository.save(
-                new WaitingRoom(roomId, cmd.name(), cmd.maxParticipants()));
-        joinRoom(roomId, userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        WaitingRoomParticipant creator = new WaitingRoomParticipant(
+                userId,
+                user.getName(),
+                LocalDateTime.now()
+        );
+
+        String roomId = waitingRoomIdGenerator.generate();
+        waitingRoomRepository.createRoom(roomId, cmd.name(), cmd.maxParticipants(), creator);
+        waitingRoomEventPublisher.publishCreated(roomId, userId);
+
         return roomId;
     }
 
     @Transactional
     public void joinRoom(String roomId, Long userId) {
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(roomId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.WAITING_ROOM_NOT_FOUND));
-
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        WaitingRoomStatus status = waitingRoom.join(userId);
-        waitingRoomRepository.save(waitingRoom);
+        WaitingRoomParticipant participant = new WaitingRoomParticipant(
+                userId,
+                user.getName(),
+                LocalDateTime.now()
+        );
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = waitingRoomRepository.joinRoom(
+                roomId, participant);
 
-        notifier.notifyStatus(waitingRoom, status);
-        if (status == WaitingRoomStatus.FULL) {
-            eventPublisher.publishRoomFullEvent(waitingRoom.getRoomId());
+        log.info("status : {}", waitingRoomWithParticipantIds.status());
+        waitingRoomEventPublisher.publishJoined(roomId, participant);
+        if (waitingRoomWithParticipantIds.status().isFull()) {
+            waitingRoomEventPublisher.publishFulled(waitingRoomWithParticipantIds);
         }
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleWaitingRoomFullEvent(WaitingRoomFullEvent event) {
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(event.roomId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.WAITING_ROOM_NOT_FOUND));
-
-        List<User> users = userRepository.findAllById(waitingRoom.getParticipants());
-        Room room = new Room(waitingRoom.getName(), users.size(), new ArrayList<>());
-
-        List<Participant> participants = users.stream()
-                .map(user -> new Participant(room, user))
-                .toList();
-
-        room.joinParticipants(participants);
-
-        roomRepository.save(room);
-        waitingRoomRepository.delete(waitingRoom);
-        notifier.notifyRoomStart(room);
-    }
 }
