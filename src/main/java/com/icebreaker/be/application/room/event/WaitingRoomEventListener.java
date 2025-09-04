@@ -18,7 +18,7 @@ public class WaitingRoomEventListener {
     private final WaitingRoomWebSocketNotifier notifier;
 
     private final RoomService roomService;
-
+    
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomParticipantJoinedEvent(WaitingRoomParticipantJoinedEvent event) {
         notifier.notifyParticipantJoined(event.roomId(), event.participant());
@@ -30,7 +30,7 @@ public class WaitingRoomEventListener {
 
         WaitingRoom waitingRoom = waitingRoomWithParticipants.room();
         List<Long> participantIds = waitingRoomWithParticipants.participants();
-        
+
         roomService.create(waitingRoom, participantIds);
 
         notifier.notifyRoomStarted(waitingRoom.roomId());

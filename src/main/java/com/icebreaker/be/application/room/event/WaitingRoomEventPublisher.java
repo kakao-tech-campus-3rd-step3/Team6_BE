@@ -17,10 +17,6 @@ public class WaitingRoomEventPublisher {
                 new WaitingRoomFullEvent(waitingRoomWithParticipantIds));
     }
 
-    public void publishCreated(String roomId, Long userId) {
-        applicationEventPublisher.publishEvent(new WaitingRoomCreatedEvent(roomId, userId));
-    }
-
     public void publishJoined(String roomId, WaitingRoomParticipant participant) {
         applicationEventPublisher.publishEvent(
                 new WaitingRoomParticipantJoinedEvent(roomId, participant));
