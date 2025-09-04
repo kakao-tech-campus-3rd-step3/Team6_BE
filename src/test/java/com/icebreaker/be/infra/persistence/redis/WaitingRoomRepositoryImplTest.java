@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.domain.room.vo.WaitingRoom;
 import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
 import java.time.LocalDateTime;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,14 +64,10 @@ class WaitingRoomRepositoryImplTest {
         String roomId = "test-room";
 
         when(executor.execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class)))
-                .thenReturn("{}"); // 최소한의 유효한 JSON
-
+                .thenReturn("");
         // when & then
-        try {
-            waitingRoomRepository.joinRoom(roomId, testParticipant);
-        } catch (Exception e) {
-            // JSON 파싱 오류가 발생할 수 있지만, Redis 스크립트 실행은 확인됨
-        }
+        Assertions.assertThatThrownBy(() -> waitingRoomRepository.joinRoom(roomId, testParticipant))
+                .isInstanceOf(Exception.class);
 
         verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class));
     }
