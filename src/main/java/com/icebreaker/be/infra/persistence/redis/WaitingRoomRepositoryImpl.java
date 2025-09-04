@@ -1,6 +1,7 @@
 package com.icebreaker.be.infra.persistence.redis;
 
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.domain.room.repo.WaitingRoomRepository;
@@ -42,6 +43,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
         JoinRoomArgs args = JoinRoomArgs.from(roomId, participant);
 
         String resultStr = executor.execute(RedisScriptEnum.JOIN_ROOM, keys, args);
+
         try {
             RedisResult<WaitingRoomResponseStatus, WaitingRoomWithParticipantIds> result = objectMapper.readValue(
                     resultStr,
@@ -53,8 +55,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
                 throwIfErrorResult(status);
             }
             return result.data();
-        } catch (Exception e) {
-            log.error("Failed to parse Redis script JSON", e);
+        } catch (JsonProcessingException ex) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -78,12 +79,15 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
     }
 
     private enum WaitingRoomResponseStatus {
-        CREATED,            // 방 생성 성공
-        ROOM_ALREADY_EXISTS, // 방 이미 존재
-        JOINED,             // 참가 성공
-        ALREADY_JOINED,     // 이미 참여한 경우
-        FULL,               // 방이 꽉 찬 경우
-        ROOM_NOT_FOUND,      // 방이 존재하지 않음,
+        //성공
+        CREATED,
+        JOINED,
+
+        //실패
+        ROOM_ALREADY_EXISTS,
+        ALREADY_JOINED,
+        FULL,
+        ROOM_NOT_FOUND,
         @JsonEnumDefaultValue
         UNKNOWN;
 
