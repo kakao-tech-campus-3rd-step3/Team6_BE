@@ -56,6 +56,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
             }
             return result.data();
         } catch (JsonProcessingException ex) {
+            log.error("Failed to parse Redis script result. result: {}", resultStr, ex);
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
