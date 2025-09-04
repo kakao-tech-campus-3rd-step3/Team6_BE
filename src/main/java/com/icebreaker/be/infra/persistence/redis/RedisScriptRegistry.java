@@ -13,14 +13,13 @@ public class RedisScriptRegistry {
 
     private final Map<RedisScriptEnum, RedisScript<String>> scriptMap = new EnumMap<>(
             RedisScriptEnum.class);
-    
+
     @PostConstruct
     public void init() {
         Arrays.stream(RedisScriptEnum.values())
                 .forEach(e -> {
                     RedisScript<String> script = loadScriptOrThrow(e.getClasspath(), e);
                     scriptMap.put(e, script);
-                    e.addRedisScript(script);
                 });
     }
 
