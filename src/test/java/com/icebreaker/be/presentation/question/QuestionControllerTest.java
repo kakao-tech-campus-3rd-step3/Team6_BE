@@ -1,5 +1,15 @@
 package com.icebreaker.be.presentation.question;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.application.question.QuestionService;
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
@@ -7,7 +17,8 @@ import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.domain.question.QuestionType;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import com.icebreaker.be.global.exception.GlobalExceptionAdvice;
+import com.icebreaker.be.global.exception.MvcGlobalExceptionAdvice;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,14 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("QuestionController 테스트")
@@ -45,7 +48,7 @@ class QuestionControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(questionController)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
-                .setControllerAdvice(new GlobalExceptionAdvice())
+                .setControllerAdvice(new MvcGlobalExceptionAdvice())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -111,7 +114,8 @@ class QuestionControllerTest {
     void getQuestionById_NotFound() throws Exception {
         // given
         Long questionId = 999L;
-        when(questionService.getQuestionById(questionId)).thenThrow(new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+        when(questionService.getQuestionById(questionId)).thenThrow(
+                new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
 
         // when & then
         mockMvc.perform(get("/api/v1/questions/{id}", questionId))
@@ -124,7 +128,8 @@ class QuestionControllerTest {
         // given
         CreateQuestionCommand command = new CreateQuestionCommand("새로운 질문입니다", "공통");
         Long createdQuestionId = 1L;
-        when(questionService.createQuestion(any(CreateQuestionCommand.class))).thenReturn(createdQuestionId);
+        when(questionService.createQuestion(any(CreateQuestionCommand.class))).thenReturn(
+                createdQuestionId);
 
         // when & then
         mockMvc.perform(post("/api/v1/questions")
