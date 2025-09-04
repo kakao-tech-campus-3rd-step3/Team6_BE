@@ -25,7 +25,8 @@ public class RedisScriptExecutor {
             RedisScript<String> script = registry.get(scriptEnum);
             return customStringRedisTemplate.execute(script, keys, args.toArray());
         } catch (Exception e) {
-            throw new RuntimeException("Redis script execution failed for " + scriptEnum.name(), e);
+            throw new IllegalStateException(
+                    "Redis script execution failed for " + scriptEnum.name(), e);
         }
     }
 }
