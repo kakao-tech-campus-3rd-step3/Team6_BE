@@ -40,7 +40,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
             WaitingRoomParticipant participant) {
 
         List<String> keys = List.of(participantsKey(roomId), metaKey(roomId));
-        JoinRoomArgs args = JoinRoomArgs.from(roomId, participant);
+        JoinRoomArgs args = JoinRoomArgs.from(participant);
 
         String resultStr = executor.execute(RedisScriptEnum.JOIN_ROOM, keys, args);
 

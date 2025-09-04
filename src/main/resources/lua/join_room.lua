@@ -1,9 +1,8 @@
 -- KEYS[1] = participantsKey
 -- KEYS[2] = metaKey
--- ARGV[1] = roomId (unused)
--- ARGV[2] = userId
--- ARGV[3] = userName
--- ARGV[4] = joinedAt (epoch seconds)
+-- ARGV[1] = userId
+-- ARGV[2] = userName
+-- ARGV[3] = joinedAt (epoch seconds)
 
 local clientStatus
 local roomStatus
@@ -12,7 +11,7 @@ local data = nil
 if redis.call("EXISTS", KEYS[2]) == 0 then
     clientStatus = "ROOM_NOT_FOUND"
 
-elseif redis.call("HEXISTS", KEYS[1], ARGV[2]) == 1 then
+elseif redis.call("HEXISTS", KEYS[1], ARGV[1]) == 1 then
     clientStatus = "ALREADY_JOINED"
 
 else
@@ -26,11 +25,11 @@ else
     else
         -- 참가 처리
         local participant = cjson.encode({
-            userId = tonumber(ARGV[2]),
-            userName = ARGV[3],
-            joinedAt = tonumber(ARGV[4])
+            userId = tonumber(ARGV[1]),
+            userName = ARGV[2],
+            joinedAt = tonumber(ARGV[3])
         })
-        redis.call("HSET", KEYS[1], ARGV[2], participant)
+        redis.call("HSET", KEYS[1], ARGV[1], participant)
         clientStatus = "JOINED"
 
         if participantsCount + 1 >= capacity then
