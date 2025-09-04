@@ -40,8 +40,7 @@ public class WaitingRoomService {
 
         String roomId = waitingRoomIdGenerator.generate();
         waitingRoomRepository.createRoom(roomId, cmd.name(), cmd.maxParticipants(), creator);
-        waitingRoomEventPublisher.publishCreated(roomId, userId);
-
+        
         return roomId;
     }
 
