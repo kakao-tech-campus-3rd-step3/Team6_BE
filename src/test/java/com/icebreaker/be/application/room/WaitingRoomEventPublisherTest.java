@@ -2,7 +2,6 @@ package com.icebreaker.be.application.room;
 
 import static org.mockito.Mockito.verify;
 
-import com.icebreaker.be.application.room.event.WaitingRoomCreatedEvent;
 import com.icebreaker.be.application.room.event.WaitingRoomEventPublisher;
 import com.icebreaker.be.application.room.event.WaitingRoomFullEvent;
 import com.icebreaker.be.application.room.event.WaitingRoomParticipantJoinedEvent;
@@ -46,20 +45,6 @@ class WaitingRoomEventPublisherTest {
         // then
         verify(applicationEventPublisher).publishEvent(
                 new WaitingRoomFullEvent(waitingRoomWithParticipantIds));
-    }
-
-    @Test
-    @DisplayName("WaitingRoomCreatedEvent를 발행한다")
-    void publishCreatedEvent() {
-        // given
-        String roomId = "test-room-id";
-        Long userId = 1L;
-
-        // when
-        waitingRoomEventPublisher.publishCreated(roomId, userId);
-
-        // then
-        verify(applicationEventPublisher).publishEvent(new WaitingRoomCreatedEvent(roomId, userId));
     }
 
     @Test
