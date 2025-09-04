@@ -16,7 +16,7 @@ public class WaitingRoomWebSocketNotifier {
     public void notifyParticipantJoined(String roomId,
             WaitingRoomParticipant newParticipant) {
 
-        ParticipantJoinedMessage message = new ParticipantJoinedMessage(
+        ParticipantJoinedPayload message = new ParticipantJoinedPayload(
                 WaitingRoomMessageType.PARTICIPANT_JOINED,
                 newParticipant
         );
@@ -28,7 +28,7 @@ public class WaitingRoomWebSocketNotifier {
     }
 
     public void notifyRoomStarted(String roomId) {
-        RoomStartedMessage message = new RoomStartedMessage(
+        RoomStartedPayload message = new RoomStartedPayload(
                 WaitingRoomMessageType.ROOM_STARTED,
                 roomId
         );
