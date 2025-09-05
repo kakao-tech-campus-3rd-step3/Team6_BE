@@ -1,8 +1,12 @@
 package com.icebreaker.be.application.room.dto;
 
-import com.icebreaker.be.domain.room.Room;
+import com.icebreaker.be.domain.room.entity.Room;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record CreateRoomCommand(
         @NotBlank

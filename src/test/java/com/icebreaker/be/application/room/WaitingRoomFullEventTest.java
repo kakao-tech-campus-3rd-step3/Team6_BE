@@ -1,34 +1,52 @@
 package com.icebreaker.be.application.room;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.icebreaker.be.application.room.event.WaitingRoomFullEvent;
+import com.icebreaker.be.domain.room.vo.WaitingRoom;
+import com.icebreaker.be.domain.room.vo.WaitingRoomStatus;
+import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class WaitingRoomFullEventTest {
 
     @Test
-    @DisplayName("WaitingRoomFullEvent는 roomId를 포함한다")
-    void eventContainsRoomId() {
+    @DisplayName("WaitingRoomFullEvent는 WaitingRoomWithParticipantIds를 포함한다")
+    void eventContainsWaitingRoomWithParticipantIds() {
         // given
-        String roomId = "test-room-id";
+        WaitingRoom room = new WaitingRoom("test-room-id", "테스트 방", 3);
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = new WaitingRoomWithParticipantIds(
+                WaitingRoomStatus.FULL,
+                room,
+                List.of(1L, 2L, 3L)
+        );
 
         // when
-        WaitingRoomFullEvent event = new WaitingRoomFullEvent(roomId);
+        WaitingRoomFullEvent event = new WaitingRoomFullEvent(waitingRoomWithParticipantIds);
 
         // then
-        assertThat(event.roomId()).isEqualTo(roomId);
+        assertThat(event.waitingRoomWithParticipantIds()).isEqualTo(waitingRoomWithParticipantIds);
+        assertThat(event.waitingRoomWithParticipantIds().room().roomId()).isEqualTo("test-room-id");
+        assertThat(event.waitingRoomWithParticipantIds().status()).isEqualTo(
+                WaitingRoomStatus.FULL);
     }
 
     @Test
-    @DisplayName("같은 roomId를 가진 두 이벤트는 동등하다")
-    void eventsWithSameRoomIdAreEqual() {
+    @DisplayName("같은 WaitingRoomWithParticipantIds를 가진 두 이벤트는 동등하다")
+    void eventsWithSameDataAreEqual() {
         // given
-        String roomId = "test-room-id";
+        WaitingRoom room = new WaitingRoom("test-room-id", "테스트 방", 3);
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = new WaitingRoomWithParticipantIds(
+                WaitingRoomStatus.FULL,
+                room,
+                List.of(1L, 2L, 3L)
+        );
 
         // when
-        WaitingRoomFullEvent event1 = new WaitingRoomFullEvent(roomId);
-        WaitingRoomFullEvent event2 = new WaitingRoomFullEvent(roomId);
+        WaitingRoomFullEvent event1 = new WaitingRoomFullEvent(waitingRoomWithParticipantIds);
+        WaitingRoomFullEvent event2 = new WaitingRoomFullEvent(waitingRoomWithParticipantIds);
 
         // then
         assertThat(event1).isEqualTo(event2);
@@ -36,15 +54,27 @@ class WaitingRoomFullEventTest {
     }
 
     @Test
-    @DisplayName("다른 roomId를 가진 두 이벤트는 동등하지 않다")
-    void eventsWithDifferentRoomIdAreNotEqual() {
+    @DisplayName("다른 데이터를 가진 두 이벤트는 동등하지 않다")
+    void eventsWithDifferentDataAreNotEqual() {
         // given
-        String roomId1 = "test-room-id-1";
-        String roomId2 = "test-room-id-2";
+        WaitingRoom room1 = new WaitingRoom("test-room-id-1", "테스트 방1", 3);
+        WaitingRoom room2 = new WaitingRoom("test-room-id-2", "테스트 방2", 3);
+
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds1 = new WaitingRoomWithParticipantIds(
+                WaitingRoomStatus.FULL,
+                room1,
+                List.of(1L, 2L, 3L)
+        );
+
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds2 = new WaitingRoomWithParticipantIds(
+                WaitingRoomStatus.FULL,
+                room2,
+                List.of(1L, 2L, 3L)
+        );
 
         // when
-        WaitingRoomFullEvent event1 = new WaitingRoomFullEvent(roomId1);
-        WaitingRoomFullEvent event2 = new WaitingRoomFullEvent(roomId2);
+        WaitingRoomFullEvent event1 = new WaitingRoomFullEvent(waitingRoomWithParticipantIds1);
+        WaitingRoomFullEvent event2 = new WaitingRoomFullEvent(waitingRoomWithParticipantIds2);
 
         // then
         assertThat(event1).isNotEqualTo(event2);

@@ -1,5 +1,15 @@
 package com.icebreaker.be.presentation.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.application.user.UserService;
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
@@ -9,7 +19,8 @@ import com.icebreaker.be.fixture.CreateUserCommandFixture;
 import com.icebreaker.be.fixture.UserResponseFixture;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import com.icebreaker.be.global.exception.GlobalExceptionAdvice;
+import com.icebreaker.be.global.exception.MvcGlobalExceptionAdvice;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,14 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserController 테스트")
@@ -47,7 +50,7 @@ class UserControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
-                .setControllerAdvice(new GlobalExceptionAdvice())
+                .setControllerAdvice(new MvcGlobalExceptionAdvice())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -111,7 +114,8 @@ class UserControllerTest {
     void getUserById_NotFound() throws Exception {
         // given
         Long userId = 999L;
-        when(userService.getUserById(userId)).thenThrow(new BusinessException(ErrorCode.USER_NOT_FOUND));
+        when(userService.getUserById(userId)).thenThrow(
+                new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         // when & then
         mockMvc.perform(get("/api/v1/users/{id}", userId))
@@ -124,7 +128,8 @@ class UserControllerTest {
         // given
         CreateUserCommand command = CreateUserCommandFixture.validCommand();
         UserIdWithTokenResponse response = new UserIdWithTokenResponse(1L, "test.jwt.token");
-        when(userService.createUserIfNotExistsAndGenerateToken(any(CreateUserCommand.class))).thenReturn(response);
+        when(userService.createUserIfNotExistsAndGenerateToken(
+                any(CreateUserCommand.class))).thenReturn(response);
 
         // when & then
         mockMvc.perform(post("/api/v1/users")

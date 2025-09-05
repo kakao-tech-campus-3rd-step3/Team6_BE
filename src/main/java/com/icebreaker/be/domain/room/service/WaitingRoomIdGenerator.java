@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain.room;
+package com.icebreaker.be.domain.room.service;
 
 public interface WaitingRoomIdGenerator {
 

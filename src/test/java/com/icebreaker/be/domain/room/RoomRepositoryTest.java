@@ -1,19 +1,20 @@
 package com.icebreaker.be.domain.room;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import com.icebreaker.be.domain.room.entity.Room;
+import com.icebreaker.be.domain.room.repo.RoomRepository;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RoomRepositoryTest {
@@ -49,7 +50,7 @@ class RoomRepositoryTest {
         when(roomRepository.findById(testRoomId)).thenReturn(Optional.of(testRoom));
 
         // when
-        Room savedRoom = roomRepository.save(new Room("새 방", 5, null));
+        Room savedRoom = roomRepository.save(new Room("ROOM001", "새 방", 5));
         Room foundRoom = roomRepository.findById(savedRoom.getId()).orElseThrow();
 
         // then

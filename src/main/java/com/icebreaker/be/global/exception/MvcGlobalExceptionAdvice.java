@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Slf4j
 @ControllerAdvice
-public class GlobalExceptionAdvice {
+public class MvcGlobalExceptionAdvice {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorApiResponse<Void>> handleBusinessException(BusinessException ex) {
@@ -31,7 +31,7 @@ public class GlobalExceptionAdvice {
         log.error("Unhandled exception occurred: ", ex);
         return buildErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
     }
-    
+
     private List<ValidationError> extractValidationErrors(MethodArgumentNotValidException ex) {
         return ex.getBindingResult()
                 .getFieldErrors()
