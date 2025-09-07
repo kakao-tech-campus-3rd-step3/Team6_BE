@@ -1,6 +1,8 @@
 package com.icebreaker.be.domain.room.entity;
 
 import com.icebreaker.be.domain.user.User;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,8 +57,8 @@ public class Room {
 
     public void joinParticipants(List<RoomParticipant> roomParticipants) {
         if (this.roomParticipants.size() + roomParticipants.size() > capacity) {
-            throw new IllegalStateException("참가자 수가 방의 수용 인원을 초과합니다.");
+            throw new BusinessException(ErrorCode.ROOM_CAPACITY_EXCEEDED);
         }
-        this.roomParticipants = roomParticipants;
+        this.roomParticipants.addAll(roomParticipants);
     }
 }
