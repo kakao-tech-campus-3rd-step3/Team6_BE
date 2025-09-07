@@ -2,7 +2,6 @@ package com.icebreaker.be.application.room;
 
 
 import com.icebreaker.be.domain.room.entity.Room;
-import com.icebreaker.be.domain.room.entity.RoomParticipant;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.room.vo.WaitingRoom;
 import com.icebreaker.be.domain.user.User;
@@ -21,15 +20,10 @@ public class RoomService {
 
 
     @Transactional
-    public void create(WaitingRoom waitingRoom, List<Long> participantIds) {
+    public Room create(WaitingRoom waitingRoom, List<Long> participantIds) {
         Room room = new Room(waitingRoom.roomId(), waitingRoom.name(), waitingRoom.capacity());
         List<User> users = userRepository.findAllById(participantIds);
-
-        List<RoomParticipant> participants = users.stream()
-                .map(participant -> new RoomParticipant(room, participant))
-                .toList();
-
-        room.joinParticipants(participants);
-        roomRepository.save(room);
+        room.joinUsers(users);
+        return roomRepository.save(room);
     }
 }
