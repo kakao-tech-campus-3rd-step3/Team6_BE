@@ -2,6 +2,7 @@ package com.icebreaker.be.presentation.question;
 
 import com.icebreaker.be.application.question.QuestionService;
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
+import com.icebreaker.be.application.question.dto.QuestionId;
 import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.global.common.response.ApiResponseFactory;
 import com.icebreaker.be.global.common.response.SuccessApiResponse;
@@ -48,9 +49,9 @@ public final class QuestionController implements QuestionApiDocs {
     public ResponseEntity<SuccessApiResponse<Void>> createQuestion(
             @Valid @RequestBody CreateQuestionCommand cmd
     ) {
-        Long questionId = questionService.createQuestion(cmd);
+        QuestionId questionId = questionService.createQuestion(cmd);
         return ResponseEntity
-                .created(UriUtils.buildLocationUri(questionId))
+                .created(UriUtils.buildLocationUri(questionId.id()))
                 .body(ApiResponseFactory.success("질문 생성 성공"));
     }
 

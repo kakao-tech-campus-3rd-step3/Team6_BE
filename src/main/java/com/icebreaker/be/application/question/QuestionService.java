@@ -1,6 +1,7 @@
 package com.icebreaker.be.application.question;
 
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
+import com.icebreaker.be.application.question.dto.QuestionId;
 import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.application.question.mapper.QuestionMapper;
 import com.icebreaker.be.domain.question.Question;
@@ -38,8 +39,10 @@ public class QuestionService {
     }
 
     @Transactional
-    public Long createQuestion(CreateQuestionCommand createQuestionCommand) {
-        return questionRepository.save(createQuestionCommand.toEntity()).getId();
+    public QuestionId createQuestion(CreateQuestionCommand createQuestionCommand) {
+        Question savedQuestion = questionRepository.save(createQuestionCommand.toEntity());
+
+        return QuestionId.of(savedQuestion.getId());
     }
 
     @Transactional
