@@ -1,5 +1,6 @@
 package com.icebreaker.be.domain.room.entity;
 
+import com.icebreaker.be.domain.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,20 +33,30 @@ public class Room {
     @Column(name = "room_name", nullable = false)
     private String name;
 
-    @Column(name = "room_max_participants", nullable = false)
-    private Integer maxParticipants;
+    @Column(name = "room_capacity", nullable = false)
+    private Integer capacity;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomParticipant> roomParticipants = new ArrayList<>();
 
     @Builder
-    public Room(String code, String name, int maxParticipants) {
+    public Room(String code, String name, int capacity) {
         this.code = code;
         this.name = name;
-        this.maxParticipants = maxParticipants;
+        this.capacity = capacity;
+    }
+
+    public void joinUsers(List<User> users) {
+        List<RoomParticipant> newParticipants = users.stream()
+                .map(user -> RoomParticipant.from(this, user))
+                .toList();
+        joinParticipants(newParticipants);
     }
 
     public void joinParticipants(List<RoomParticipant> roomParticipants) {
+        if (this.roomParticipants.size() + roomParticipants.size() > capacity) {
+            throw new IllegalStateException("참가자 수가 방의 수용 인원을 초과합니다.");
+        }
         this.roomParticipants = roomParticipants;
     }
 }

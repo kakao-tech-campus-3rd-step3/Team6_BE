@@ -1,5 +1,6 @@
 package com.icebreaker.be.domain.room.entity;
 
+import com.icebreaker.be.domain.room.vo.RoomParticipantRole;
 import com.icebreaker.be.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,10 +34,19 @@ public class RoomParticipant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private RoomParticipantRole role = RoomParticipantRole.GUEST;
+
     @Builder
     public RoomParticipant(Room room, User user) {
         this.room = room;
         this.user = user;
+    }
+
+    public static RoomParticipant from(Room room, User user) {
+        return RoomParticipant.builder()
+                .room(room)
+                .user(user)
+                .build();
     }
 
 }
