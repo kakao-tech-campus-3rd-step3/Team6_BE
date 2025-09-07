@@ -18,7 +18,7 @@ public class WaitingRoomEventListener {
     private final WaitingRoomWebSocketNotifier notifier;
 
     private final RoomService roomService;
-    
+
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomParticipantJoinedEvent(WaitingRoomParticipantJoinedEvent event) {
         notifier.notifyParticipantJoined(event.roomId(), event.participant());
@@ -27,7 +27,6 @@ public class WaitingRoomEventListener {
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomFullEvent(WaitingRoomFullEvent event) {
         var waitingRoomWithParticipants = event.waitingRoomWithParticipantIds();
-
         WaitingRoom waitingRoom = waitingRoomWithParticipants.room();
         List<Long> participantIds = waitingRoomWithParticipants.participants();
 
