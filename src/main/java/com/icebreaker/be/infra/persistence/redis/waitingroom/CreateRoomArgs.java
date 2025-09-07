@@ -1,6 +1,8 @@
-package com.icebreaker.be.infra.persistence.redis;
+package com.icebreaker.be.infra.persistence.redis.waitingroom;
 
+import com.icebreaker.be.domain.room.vo.WaitingRoom;
 import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
+import com.icebreaker.be.infra.persistence.redis.RedisArgs;
 import java.time.ZoneOffset;
 
 public record CreateRoomArgs(
@@ -13,15 +15,13 @@ public record CreateRoomArgs(
 ) implements RedisArgs {
 
     public static CreateRoomArgs from(
-            String roomId,
-            String roomName,
-            int capacity,
+            WaitingRoom waitingRoom,
             WaitingRoomParticipant creator
     ) {
         return new CreateRoomArgs(
-                roomId,
-                roomName,
-                capacity,
+                waitingRoom.roomId(),
+                waitingRoom.name(),
+                waitingRoom.capacity(),
                 creator.userId(),
                 creator.userName(),
                 creator.joinedAt().toEpochSecond(ZoneOffset.UTC)
