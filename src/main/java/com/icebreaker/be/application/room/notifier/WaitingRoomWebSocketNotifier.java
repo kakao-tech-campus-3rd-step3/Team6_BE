@@ -13,30 +13,19 @@ public class WaitingRoomWebSocketNotifier {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public void notifyParticipantJoined(String roomId,
-            WaitingRoomParticipant newParticipant) {
-
-        ParticipantJoinedPayload message = new ParticipantJoinedPayload(
-                WaitingRoomMessageType.PARTICIPANT_JOINED,
-                newParticipant
-        );
-
-        messagingTemplate.convertAndSend(
-                getWaitingRoomTopic(roomId),
-                message
-        );
+    public void notifyParticipantJoined(String roomId, WaitingRoomParticipant newParticipant) {
+        WaitingRoomMessage message = new ParticipantJoinedPayload(newParticipant);
+        sendToWaitingRoom(roomId, message);
     }
 
     public void notifyRoomStarted(String roomId) {
-        RoomStartedPayload message = new RoomStartedPayload(
-                WaitingRoomMessageType.ROOM_STARTED,
-                roomId
-        );
+        WaitingRoomMessage message = new RoomStartedPayload(roomId);
+        sendToWaitingRoom(roomId, message);
+    }
 
-        messagingTemplate.convertAndSend(
-                getWaitingRoomTopic(roomId),
-                message
-        );
+    private void sendToWaitingRoom(String roomId, WaitingRoomMessage message) {
+        String waitingRoomTopic = getWaitingRoomTopic(roomId);
+        messagingTemplate.convertAndSend(waitingRoomTopic, message);
     }
 
     private String getWaitingRoomTopic(String roomId) {
