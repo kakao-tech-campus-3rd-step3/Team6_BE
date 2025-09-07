@@ -1,9 +1,11 @@
 package com.icebreaker.be.application.room;
 
-import com.icebreaker.be.application.room.dto.CreateRoomCommand;
+import com.icebreaker.be.application.room.dto.CreateWaitingRoomCommand;
+import com.icebreaker.be.application.room.dto.WaitingRoomId;
 import com.icebreaker.be.application.room.event.WaitingRoomEventPublisher;
 import com.icebreaker.be.domain.room.repo.WaitingRoomRepository;
 import com.icebreaker.be.domain.room.service.WaitingRoomIdGenerator;
+import com.icebreaker.be.domain.room.vo.WaitingRoom;
 import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
 import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
 import com.icebreaker.be.domain.user.User;
@@ -28,7 +30,7 @@ public class WaitingRoomService {
     private final UserRepository userRepository;
 
     @Transactional
-    public String createRoom(CreateRoomCommand cmd, Long userId) {
+    public WaitingRoomId createRoom(CreateWaitingRoomCommand cmd, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
@@ -39,9 +41,11 @@ public class WaitingRoomService {
         );
 
         String roomId = waitingRoomIdGenerator.generate();
-        waitingRoomRepository.createRoom(roomId, cmd.name(), cmd.maxParticipants(), creator);
-        
-        return roomId;
+        WaitingRoom waitingRoom = new WaitingRoom(roomId, cmd.name(), cmd.capacity());
+
+        waitingRoomRepository.initWaitingRoom(waitingRoom, creator);
+
+        return WaitingRoomId.of(roomId);
     }
 
     @Transactional
@@ -54,10 +58,9 @@ public class WaitingRoomService {
                 user.getName(),
                 LocalDateTime.now()
         );
-        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = waitingRoomRepository.joinRoom(
+        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = waitingRoomRepository.joinWaitingRoom(
                 roomId, participant);
 
-        log.info("status : {}", waitingRoomWithParticipantIds.status());
         waitingRoomEventPublisher.publishJoined(roomId, participant);
         if (waitingRoomWithParticipantIds.status().isFull()) {
             waitingRoomEventPublisher.publishFulled(waitingRoomWithParticipantIds);
