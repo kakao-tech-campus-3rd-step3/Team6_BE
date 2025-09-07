@@ -1,7 +1,8 @@
 package com.icebreaker.be.presentation.room;
 
 import com.icebreaker.be.application.room.WaitingRoomService;
-import com.icebreaker.be.application.room.dto.CreateRoomCommand;
+import com.icebreaker.be.application.room.dto.CreateWaitingRoomCommand;
+import com.icebreaker.be.application.room.dto.WaitingRoomId;
 import com.icebreaker.be.global.annotation.CurrentUser;
 import com.icebreaker.be.global.common.response.ApiResponse;
 import com.icebreaker.be.global.common.response.ApiResponseFactory;
@@ -24,11 +25,11 @@ public class WaitingRoomController {
 
     @MessageMapping("/create")
     @SendToUser("/queue/waiting-room")
-    public ApiResponse<String> createRoom(
-            @Payload CreateRoomCommand command,
+    public ApiResponse<WaitingRoomId> createRoom(
+            @Payload CreateWaitingRoomCommand command,
             @CurrentUser Long userId
     ) {
-        String roomId = waitingRoomService.createRoom(command, userId);
+        WaitingRoomId roomId = waitingRoomService.createRoom(command, userId);
         return ApiResponseFactory.success(roomId, "대기방이 정상적으로 생성되었습니다.");
     }
 
