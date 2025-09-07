@@ -39,7 +39,7 @@ class RoomRepositoryIntegrationTest {
         Room room = Room.builder()
                 .code("TEST-ROOM")
                 .name("테스트 방")
-                .maxParticipants(4)
+                .capacity(4)
                 .build();
 
         // when
@@ -50,7 +50,7 @@ class RoomRepositoryIntegrationTest {
         assertThat(foundRoom).isPresent();
         assertThat(foundRoom.get().getCode()).isEqualTo("TEST-ROOM");
         assertThat(foundRoom.get().getName()).isEqualTo("테스트 방");
-        assertThat(foundRoom.get().getMaxParticipants()).isEqualTo(4);
+        assertThat(foundRoom.get().getCapacity()).isEqualTo(4);
     }
 
     @Test
@@ -80,7 +80,7 @@ class RoomRepositoryIntegrationTest {
         Room room = Room.builder()
                 .code("ROOM-WITH-USERS")
                 .name("사용자가 있는 방")
-                .maxParticipants(5)
+                .capacity(5)
                 .build();
 
         // Room을 저장
@@ -130,13 +130,13 @@ class RoomRepositoryIntegrationTest {
         Room room1 = Room.builder()
                 .code("ROOM-001")
                 .name("첫 번째 방")
-                .maxParticipants(3)
+                .capacity(3)
                 .build();
 
         Room room2 = Room.builder()
                 .code("ROOM-002")
                 .name("두 번째 방")
-                .maxParticipants(5)
+                .capacity(5)
                 .build();
 
         roomRepository.save(room1);
@@ -169,7 +169,7 @@ class RoomRepositoryIntegrationTest {
         Room room = Room.builder()
                 .code("DELETE-TEST")
                 .name("삭제 테스트 방")
-                .maxParticipants(4)
+                .capacity(4)
                 .build();
 
         // Room을 저장

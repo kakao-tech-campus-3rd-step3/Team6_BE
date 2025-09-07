@@ -3,13 +3,13 @@ package com.icebreaker.be.application.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.icebreaker.be.application.room.dto.CreateRoomCommand;
+import com.icebreaker.be.application.room.dto.CreateWaitingRoomCommand;
+import com.icebreaker.be.application.room.dto.WaitingRoomId;
 import com.icebreaker.be.application.room.event.WaitingRoomEventPublisher;
 import com.icebreaker.be.domain.room.repo.WaitingRoomRepository;
 import com.icebreaker.be.domain.room.service.WaitingRoomIdGenerator;
@@ -72,19 +72,19 @@ class WaitingRoomServiceTest {
     void createRoomAndJoinCreator() {
         // given
         Long userId = 1L;
-        CreateRoomCommand command = new CreateRoomCommand("테스트 방", 3);
+        CreateWaitingRoomCommand command = new CreateWaitingRoomCommand("테스트 방", 3);
 
         when(idGenerator.generate()).thenReturn(testRoomId);
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
-        doNothing().when(waitingRoomRepository).createRoom(anyString(), anyString(), anyInt(),
-                any(WaitingRoomParticipant.class));
+        doNothing().when(waitingRoomRepository)
+                .initWaitingRoom(any(WaitingRoom.class), any(WaitingRoomParticipant.class));
 
         // when
-        String roomId = waitingRoomService.createRoom(command, userId);
+        WaitingRoomId roomId = waitingRoomService.createRoom(command, userId);
 
         // then
-        assertThat(roomId).isEqualTo(testRoomId);
-        verify(waitingRoomRepository).createRoom(anyString(), anyString(), anyInt(),
+        assertThat(roomId).isEqualTo(WaitingRoomId.of(testRoomId));
+        verify(waitingRoomRepository).initWaitingRoom(any(WaitingRoom.class),
                 any(WaitingRoomParticipant.class));
     }
 
@@ -100,7 +100,7 @@ class WaitingRoomServiceTest {
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
-        when(waitingRoomRepository.joinRoom(anyString(), any(WaitingRoomParticipant.class)))
+        when(waitingRoomRepository.joinWaitingRoom(anyString(), any(WaitingRoomParticipant.class)))
                 .thenReturn(mockResult);
         doNothing().when(waitingRoomEventPublisher)
                 .publishJoined(anyString(), any(WaitingRoomParticipant.class));
@@ -109,7 +109,8 @@ class WaitingRoomServiceTest {
         waitingRoomService.joinRoom(testRoomId, userId);
 
         // then
-        verify(waitingRoomRepository).joinRoom(anyString(), any(WaitingRoomParticipant.class));
+        verify(waitingRoomRepository).joinWaitingRoom(anyString(),
+                any(WaitingRoomParticipant.class));
         verify(waitingRoomEventPublisher).publishJoined(anyString(),
                 any(WaitingRoomParticipant.class));
     }
@@ -139,7 +140,7 @@ class WaitingRoomServiceTest {
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
-        when(waitingRoomRepository.joinRoom(anyString(), any(WaitingRoomParticipant.class)))
+        when(waitingRoomRepository.joinWaitingRoom(anyString(), any(WaitingRoomParticipant.class)))
                 .thenReturn(fullRoomResult);
         doNothing().when(waitingRoomEventPublisher)
                 .publishJoined(anyString(), any(WaitingRoomParticipant.class));

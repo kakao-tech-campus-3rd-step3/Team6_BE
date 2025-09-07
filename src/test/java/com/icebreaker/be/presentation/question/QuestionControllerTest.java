@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.application.question.QuestionService;
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
+import com.icebreaker.be.application.question.dto.QuestionId;
 import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.domain.question.QuestionType;
 import com.icebreaker.be.global.exception.BusinessException;
@@ -127,7 +128,7 @@ class QuestionControllerTest {
     void createQuestion_Success() throws Exception {
         // given
         CreateQuestionCommand command = new CreateQuestionCommand("새로운 질문입니다", "공통");
-        Long createdQuestionId = 1L;
+        QuestionId createdQuestionId = QuestionId.of(1L);
         when(questionService.createQuestion(any(CreateQuestionCommand.class))).thenReturn(
                 createdQuestionId);
 

@@ -29,7 +29,7 @@ class RoomRepositoryTest {
     void setUp() {
         testRoom = Room.builder()
                 .name("테스트 방")
-                .maxParticipants(5)
+                .capacity(5)
                 .build();
 
         // 리플렉션을 사용하여 id 설정 (테스트용)
@@ -55,7 +55,7 @@ class RoomRepositoryTest {
 
         // then
         assertThat(foundRoom.getName()).isEqualTo("테스트 방");
-        assertThat(foundRoom.getMaxParticipants()).isEqualTo(5);
+        assertThat(foundRoom.getCapacity()).isEqualTo(5);
     }
 
     @Test
@@ -74,11 +74,11 @@ class RoomRepositoryTest {
         // given
         Room room1 = Room.builder()
                 .name("테스트 방 1")
-                .maxParticipants(5)
+                .capacity(5)
                 .build();
         Room room2 = Room.builder()
                 .name("테스트 방 2")
-                .maxParticipants(10)
+                .capacity(10)
                 .build();
 
         when(roomRepository.findAll()).thenReturn(List.of(room1, room2));
@@ -90,7 +90,7 @@ class RoomRepositoryTest {
         assertThat(rooms).hasSize(2);
         assertThat(rooms).extracting("name")
                 .containsExactlyInAnyOrder("테스트 방 1", "테스트 방 2");
-        assertThat(rooms).extracting("maxParticipants")
+        assertThat(rooms).extracting("capacity")
                 .containsExactlyInAnyOrder(5, 10);
     }
 }

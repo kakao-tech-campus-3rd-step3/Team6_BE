@@ -1,15 +1,21 @@
 package com.icebreaker.be.infra.persistence.redis;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.domain.room.vo.WaitingRoom;
 import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
+import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.infra.persistence.redis.waitingroom.CreateRoomArgs;
+import com.icebreaker.be.infra.persistence.redis.waitingroom.JoinRoomArgs;
+import com.icebreaker.be.infra.persistence.redis.waitingroom.WaitingRoomRepositoryImpl;
+import com.icebreaker.be.infra.persistence.redis.waitingroom.WaitingRoomStatusMapper;
 import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,10 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class WaitingRoomRepositoryImplTest {
 
     @Mock
-    private RedisScriptExecutor executor;
+    private ScriptExecutor executor;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private WaitingRoomStatusMapper statusMapper;
 
     @InjectMocks
     private WaitingRoomRepositoryImpl waitingRoomRepository;
@@ -43,18 +49,18 @@ class WaitingRoomRepositoryImplTest {
     @DisplayName("대기실 생성 시 Redis 스크립트가 실행된다")
     void createRoom_ExecutesRedisScript() {
         // given
-        String roomId = "test-room";
-        String roomName = "테스트 방";
-        int capacity = 3;
+        WaitingRoom waitingRoom = new WaitingRoom("test-room", "테스트 방", 3);
 
-        when(executor.execute(any(RedisScriptEnum.class), anyList(), any(CreateRoomArgs.class)))
-                .thenReturn(""); // 빈 문자열 반환
+        when(executor.execute(any(RedisScriptEnum.class), anyList(), any(CreateRoomArgs.class),
+                eq(Void.class), any(WaitingRoomStatusMapper.class)))
+                .thenReturn(null);
 
         // when
-        waitingRoomRepository.createRoom(roomId, roomName, capacity, testParticipant);
+        waitingRoomRepository.initWaitingRoom(waitingRoom, testParticipant);
 
         // then
-        verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(CreateRoomArgs.class));
+        verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(CreateRoomArgs.class),
+                eq(Void.class), any(WaitingRoomStatusMapper.class));
     }
 
     @Test
@@ -62,13 +68,21 @@ class WaitingRoomRepositoryImplTest {
     void joinRoom_ExecutesRedisScript() {
         // given
         String roomId = "test-room";
+        WaitingRoomWithParticipantIds mockResult = new WaitingRoomWithParticipantIds(null, null,
+                List.of());
 
-        when(executor.execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class)))
-                .thenReturn("");
-        // when & then
-        Assertions.assertThatThrownBy(() -> waitingRoomRepository.joinRoom(roomId, testParticipant))
-                .isInstanceOf(Exception.class);
+        when(executor.execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class),
+                eq(WaitingRoomWithParticipantIds.class), any(WaitingRoomStatusMapper.class)))
+                .thenReturn(mockResult);
 
-        verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class));
+        // when
+        WaitingRoomWithParticipantIds result = waitingRoomRepository.joinWaitingRoom(roomId,
+                testParticipant);
+
+        // then
+        verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class),
+                eq(WaitingRoomWithParticipantIds.class), any(WaitingRoomStatusMapper.class));
+
+        assertThat(result).isEqualTo(mockResult);
     }
 }

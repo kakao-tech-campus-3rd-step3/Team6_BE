@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import com.icebreaker.be.application.question.dto.CreateQuestionCommand;
+import com.icebreaker.be.application.question.dto.QuestionId;
 import com.icebreaker.be.application.question.dto.QuestionResponse;
 import com.icebreaker.be.domain.question.Question;
 import com.icebreaker.be.domain.question.QuestionRepository;
@@ -90,10 +91,10 @@ class QuestionServiceTest {
 
         when(questionRepository.save(any(Question.class))).thenReturn(saved);
 
-        Long actual = questionService.createQuestion(command);
+        QuestionId actual = questionService.createQuestion(command);
 
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(id);
+        assertThat(actual.id()).isEqualTo(id);
     }
 
     @Test
