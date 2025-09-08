@@ -1,4 +1,4 @@
-package com.icebreaker.be.presentation.room;
+package com.icebreaker.be.presentation.waitingroom;
 
 import com.icebreaker.be.application.waitingroom.WaitingRoomService;
 import com.icebreaker.be.application.waitingroom.dto.CreateWaitingRoomCommand;
