@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.room.notifier;
+package com.icebreaker.be.application.waitingroom.notifier;
 
 public enum WaitingRoomMessageType {
     PARTICIPANT_JOINED,

@@ -2,13 +2,13 @@ package com.icebreaker.be.application.room;
 
 import static org.mockito.Mockito.verify;
 
-import com.icebreaker.be.application.room.event.WaitingRoomEventPublisher;
-import com.icebreaker.be.application.room.event.WaitingRoomFullEvent;
-import com.icebreaker.be.application.room.event.WaitingRoomParticipantJoinedEvent;
-import com.icebreaker.be.domain.room.vo.WaitingRoom;
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
-import com.icebreaker.be.domain.room.vo.WaitingRoomStatus;
-import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.application.waitingroom.event.WaitingRoomEventPublisher;
+import com.icebreaker.be.application.waitingroom.event.WaitingRoomFullEvent;
+import com.icebreaker.be.application.waitingroom.event.WaitingRoomParticipantJoinedEvent;
+import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomStatus;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

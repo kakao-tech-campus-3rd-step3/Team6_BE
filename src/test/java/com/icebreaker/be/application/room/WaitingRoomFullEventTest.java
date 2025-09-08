@@ -2,10 +2,10 @@ package com.icebreaker.be.application.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.icebreaker.be.application.room.event.WaitingRoomFullEvent;
-import com.icebreaker.be.domain.room.vo.WaitingRoom;
-import com.icebreaker.be.domain.room.vo.WaitingRoomStatus;
-import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.application.waitingroom.event.WaitingRoomFullEvent;
+import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomStatus;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

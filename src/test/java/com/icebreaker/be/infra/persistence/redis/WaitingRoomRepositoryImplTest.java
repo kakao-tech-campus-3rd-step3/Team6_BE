@@ -7,9 +7,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.icebreaker.be.domain.room.vo.WaitingRoom;
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
-import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.CreateRoomArgs;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.JoinRoomArgs;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.WaitingRoomRepositoryImpl;

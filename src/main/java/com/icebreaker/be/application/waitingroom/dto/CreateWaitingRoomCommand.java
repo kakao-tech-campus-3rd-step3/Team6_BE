@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.room.dto;
+package com.icebreaker.be.application.waitingroom.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;

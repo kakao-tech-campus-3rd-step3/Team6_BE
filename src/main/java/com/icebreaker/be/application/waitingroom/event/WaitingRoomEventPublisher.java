@@ -1,7 +1,7 @@
-package com.icebreaker.be.application.room.event;
+package com.icebreaker.be.application.waitingroom.event;
 
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
-import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

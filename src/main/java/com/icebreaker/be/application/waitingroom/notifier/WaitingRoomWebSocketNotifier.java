@@ -1,6 +1,6 @@
-package com.icebreaker.be.application.room.notifier;
+package com.icebreaker.be.application.waitingroom.notifier;
 
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
