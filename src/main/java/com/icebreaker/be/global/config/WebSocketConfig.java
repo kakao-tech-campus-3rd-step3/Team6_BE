@@ -17,13 +17,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final CurrentUserArgumentResolver currentUserArgumentResolver;
+    private final static long[] HEARTBEAT_VALUE = {10_000, 10_000};
 
+    private final CurrentUserArgumentResolver currentUserArgumentResolver;
     private final JwtChannelInterceptor jwtChannelInterceptor;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic", "/queue");
+        registry.enableSimpleBroker("/topic", "/queue")
+                .setHeartbeatValue(HEARTBEAT_VALUE);
+
         registry.setApplicationDestinationPrefixes("/app");
     }
 
