@@ -14,6 +14,7 @@ import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -37,7 +38,7 @@ public class RoomService {
         return savedRoom;
     }
 
-    @Transactional
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public void changeStage(String roomCode, ChangeRoomStageCommand command) {
         if (!roomRepository.existsByCode(roomCode)) {
             throw new BusinessException(ErrorCode.ROOM_NOT_FOUND);
