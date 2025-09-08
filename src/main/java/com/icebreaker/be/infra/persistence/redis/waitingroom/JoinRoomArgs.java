@@ -1,6 +1,6 @@
 package com.icebreaker.be.infra.persistence.redis.waitingroom;
 
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
 import com.icebreaker.be.infra.persistence.redis.RedisArgs;
 import java.time.ZoneOffset;
 
