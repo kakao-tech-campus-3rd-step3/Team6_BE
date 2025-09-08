@@ -30,13 +30,15 @@ public class RoomStageRepositoryImpl implements RoomStageRepository {
     public Optional<RoomStage> findByRoomCode(String roomCode) {
         String key = getStageKey(roomCode);
         String stageStr = customStringRedisTemplate.opsForValue().get(key);
-        if (stageStr == null) {
+        try {
+            RoomStage stage = new RoomStage(roomCode, Stage.valueOf(stageStr));
+            log.debug("Found stage {} for room {}", stage.currentStage(), roomCode);
+            return Optional.of(stage);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid stage value '{}' found in Redis for roomCode '{}'", stageStr,
+                    roomCode, e);
             return Optional.empty();
         }
-
-        RoomStage stage = new RoomStage(roomCode, Stage.valueOf(stageStr));
-        log.debug("Found stage {} for room {}", stage.currentStage(), roomCode);
-        return Optional.of(stage);
     }
 
     @Override
