@@ -15,10 +15,10 @@ public class RoomStageWebSocketNotifier {
 
     public void notifyRoomStageChanged(String roomId, Stage stage) {
         RoomStageChangedPayload payload = new RoomStageChangedPayload(stage);
-        sendToWaitingRoom(roomId, payload);
+        sendToRoomStageTopic(roomId, payload);
     }
 
-    private void sendToWaitingRoom(String roomId, RoomStageChangedPayload payload) {
+    private void sendToRoomStageTopic(String roomId, RoomStageChangedPayload payload) {
         String waitingRoomTopic = getRoomStageTopic(roomId);
         messagingTemplate.convertAndSend(waitingRoomTopic, payload);
     }

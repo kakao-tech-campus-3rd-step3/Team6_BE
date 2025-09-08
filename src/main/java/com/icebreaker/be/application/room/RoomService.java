@@ -4,6 +4,7 @@ package com.icebreaker.be.application.room;
 import com.icebreaker.be.application.room.dto.ChangeRoomStageCommand;
 import com.icebreaker.be.application.room.event.RoomEventPublisher;
 import com.icebreaker.be.domain.room.entity.Room;
+import com.icebreaker.be.domain.room.entity.Stage;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
@@ -31,7 +32,7 @@ public class RoomService {
         room.joinUsers(users);
         Room savedRoom = roomRepository.save(room);
 
-        publisher.publishStageInitialized(room.getCode());
+        publisher.publishStageChanged(room.getCode(), Stage.STAGE_1);
 
         return savedRoom;
     }
@@ -40,7 +41,7 @@ public class RoomService {
     public void changeStage(String roomCode, ChangeRoomStageCommand command) {
         roomRepository.findByCode(roomCode)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND));
-        
+
         publisher.publishStageChanged(roomCode, command.getStageEnum());
     }
 }
