@@ -34,7 +34,7 @@ public class RoomStageRepositoryImpl implements RoomStageRepository {
             RoomStage stage = new RoomStage(roomCode, Stage.valueOf(stageStr));
             log.debug("Found stage {} for room {}", stage.currentStage(), roomCode);
             return Optional.of(stage);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             log.error("Invalid stage value '{}' found in Redis for roomCode '{}'", stageStr,
                     roomCode, e);
             return Optional.empty();

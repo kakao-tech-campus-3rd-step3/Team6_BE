@@ -16,8 +16,4 @@ public class RoomEventPublisher {
                 RoomStageChangeEvent.of(roomCode, stage)
         );
     }
-
-    public void publishStageInitialized(String roomCode) {
-        applicationEventPublisher.publishEvent(roomCode);
-    }
 }

@@ -39,8 +39,9 @@ public class RoomService {
 
     @Transactional
     public void changeStage(String roomCode, ChangeRoomStageCommand command) {
-        roomRepository.findByCode(roomCode)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND));
+        if (!roomRepository.existsByCode(roomCode)) {
+            throw new BusinessException(ErrorCode.ROOM_NOT_FOUND);
+        }
 
         publisher.publishStageChanged(roomCode, command.getStageEnum());
     }
