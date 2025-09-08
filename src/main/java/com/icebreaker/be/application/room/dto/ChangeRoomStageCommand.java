@@ -11,7 +11,7 @@ public record ChangeRoomStageCommand(
     public Stage getStageEnum() {
         try {
             return Stage.valueOf(stage);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             throw new BusinessException(ErrorCode.INVALID_STAGE_VALUE);
         }
     }
