@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "websocket.heartbeat")
-public class WebSocketHeartbeatProperties {
+class WebSocketHeartbeatProperties {
 
-    private long serverInterval;
-    private long clientInterval;
+    private long serverInterval = 10_000;
+    private long clientInterval = 10_000;
 
     public long[] getHeartbeat() {
         return new long[]{serverInterval, clientInterval};
