@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.room.notifier;
+package com.icebreaker.be.application.waitingroom.notifier;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

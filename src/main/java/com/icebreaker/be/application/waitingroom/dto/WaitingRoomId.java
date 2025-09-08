@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.room.dto;
+package com.icebreaker.be.application.waitingroom.dto;
 
 public record WaitingRoomId(
         String roomId

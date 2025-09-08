@@ -1,8 +1,8 @@
-package com.icebreaker.be.application.room.event;
+package com.icebreaker.be.application.waitingroom.event;
 
 import com.icebreaker.be.application.room.RoomService;
-import com.icebreaker.be.application.room.notifier.WaitingRoomWebSocketNotifier;
-import com.icebreaker.be.domain.room.vo.WaitingRoom;
+import com.icebreaker.be.application.waitingroom.notifier.WaitingRoomWebSocketNotifier;
+import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,6 @@ public class WaitingRoomEventListener {
         List<Long> participantIds = waitingRoomWithParticipants.participants();
 
         roomService.create(waitingRoom, participantIds);
-
         notifier.notifyRoomStarted(waitingRoom.roomId());
     }
 }

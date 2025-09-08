@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain.room.vo;
+package com.icebreaker.be.domain.waitingroom;
 
 import java.time.LocalDateTime;
 
