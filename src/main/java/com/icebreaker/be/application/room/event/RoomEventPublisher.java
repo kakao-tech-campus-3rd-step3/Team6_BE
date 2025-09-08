@@ -13,6 +13,11 @@ public class RoomEventPublisher {
 
     public void publishStageChanged(String roomCode, Stage stage) {
         applicationEventPublisher.publishEvent(
-                new RoomStageChangeEvent(roomCode, stage));
+                RoomStageChangeEvent.of(roomCode, stage)
+        );
+    }
+
+    public void publishStageInitialized(String roomCode) {
+        applicationEventPublisher.publishEvent(roomCode);
     }
 }

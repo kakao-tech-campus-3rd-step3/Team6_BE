@@ -7,4 +7,7 @@ public record RoomStageChangeEvent(
         Stage stage
 ) {
 
+    public static RoomStageChangeEvent of(String roomCode, Stage stage) {
+        return new RoomStageChangeEvent(roomCode, stage);
+    }
 }
