@@ -7,7 +7,6 @@ import com.icebreaker.be.domain.room.entity.Stage;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 
@@ -19,7 +18,7 @@ public class RoomEventListener {
     private final RoomStageService roomStageService;
     private final RoomStageWebSocketNotifier notifier;
 
-    @EventListener
+    @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleRoomStageChangeEvent(RoomStageChangeEvent event) {
         roomStageService.changeStage(event.roomCode(), event.stage());
         notifier.notifyRoomStageChanged(event.roomCode(), event.stage());

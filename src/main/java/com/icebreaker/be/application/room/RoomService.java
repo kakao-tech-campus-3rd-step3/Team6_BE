@@ -8,6 +8,8 @@ import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,11 @@ public class RoomService {
         return savedRoom;
     }
 
+    @Transactional
     public void changeStage(String roomCode, ChangeRoomStageCommand command) {
+        roomRepository.findByCode(roomCode)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND));
+        
         publisher.publishStageChanged(roomCode, command.getStageEnum());
     }
 }
