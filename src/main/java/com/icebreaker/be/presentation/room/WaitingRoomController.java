@@ -1,8 +1,8 @@
 package com.icebreaker.be.presentation.room;
 
-import com.icebreaker.be.application.room.WaitingRoomService;
-import com.icebreaker.be.application.room.dto.CreateWaitingRoomCommand;
-import com.icebreaker.be.application.room.dto.WaitingRoomId;
+import com.icebreaker.be.application.waitingroom.WaitingRoomService;
+import com.icebreaker.be.application.waitingroom.dto.CreateWaitingRoomCommand;
+import com.icebreaker.be.application.waitingroom.dto.WaitingRoomId;
 import com.icebreaker.be.global.annotation.CurrentUser;
 import com.icebreaker.be.global.common.response.ApiResponse;
 import com.icebreaker.be.global.common.response.ApiResponseFactory;
@@ -13,17 +13,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/v1/waiting-room")
 @Slf4j
 @RequiredArgsConstructor
 public class WaitingRoomController {
 
     private final WaitingRoomService waitingRoomService;
 
-    @MessageMapping("/create")
+    @MessageMapping("/waiting-room/create")
     @SendToUser("/queue/waiting-room")
     public ApiResponse<WaitingRoomId> createRoom(
             @Payload CreateWaitingRoomCommand command,
@@ -33,7 +31,7 @@ public class WaitingRoomController {
         return ApiResponseFactory.success(roomId, "대기방이 정상적으로 생성되었습니다.");
     }
 
-    @MessageMapping("/{roomId}/join")
+    @MessageMapping("/waiting-room/{roomId}/join")
     public void joinRoom(
             @DestinationVariable String roomId,
             @CurrentUser Long userId
