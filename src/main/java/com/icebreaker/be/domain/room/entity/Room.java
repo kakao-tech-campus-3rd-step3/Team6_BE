@@ -61,4 +61,15 @@ public class Room {
         }
         this.roomParticipants.addAll(roomParticipants);
     }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", capacity=" + capacity +
+                ", roomParticipants=" + roomParticipants +
+                '}';
+    }
 }
