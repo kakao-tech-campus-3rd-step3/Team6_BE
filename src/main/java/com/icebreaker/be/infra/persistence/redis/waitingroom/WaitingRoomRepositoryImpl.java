@@ -3,7 +3,7 @@ package com.icebreaker.be.infra.persistence.redis.waitingroom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomRepository;
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 import com.icebreaker.be.infra.persistence.redis.RedisArgs;
 import com.icebreaker.be.infra.persistence.redis.RedisScriptEnum;
 import com.icebreaker.be.infra.persistence.redis.ScriptExecutor;
@@ -57,7 +57,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
      * @return WaitingRoomWithParticipantIds 최신 참가자 ID 목록 포함
      */
     @Override
-    public WaitingRoomWithParticipantIds joinWaitingRoom(String roomId,
+    public WaitingRoomWithParticipants joinWaitingRoom(String roomId,
             WaitingRoomParticipant participant) {
         List<String> keys = List.of(getParticipantsKey(roomId), getMetaKey(roomId));
         JoinRoomArgs args = JoinRoomArgs.from(participant);
@@ -68,7 +68,7 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
                 RedisScriptEnum.JOIN_ROOM,
                 keys,
                 args,
-                WaitingRoomWithParticipantIds.class
+                WaitingRoomWithParticipants.class
         );
     }
 

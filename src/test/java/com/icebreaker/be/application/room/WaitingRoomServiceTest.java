@@ -3,6 +3,7 @@ package com.icebreaker.be.application.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -20,7 +21,8 @@ import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomRepository;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomStatus;
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
 import com.icebreaker.be.global.exception.BusinessException;
 import java.util.List;
 import java.util.Optional;
@@ -94,17 +96,19 @@ class WaitingRoomServiceTest {
     void joinRoomWithValidRoomIdAndUserId() {
         // given
         Long userId = 1L;
-        WaitingRoomWithParticipantIds mockResult = new WaitingRoomWithParticipantIds(
+        Participant participant = new Participant(userId, testUser.getName());
+        List<Participant> participants = List.of(participant);
+        WaitingRoomWithParticipants mockResult = new WaitingRoomWithParticipants(
                 WaitingRoomStatus.AVAILABLE,
                 testWaitingRoom,
-                List.of(userId)
+                participants
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(waitingRoomRepository.joinWaitingRoom(anyString(), any(WaitingRoomParticipant.class)))
                 .thenReturn(mockResult);
         doNothing().when(waitingRoomEventPublisher)
-                .publishJoined(anyString(), any(WaitingRoomParticipant.class));
+                .publishJoined(anyString(), anyList());
 
         // when
         waitingRoomService.joinRoom(testRoomId, userId);
@@ -112,8 +116,7 @@ class WaitingRoomServiceTest {
         // then
         verify(waitingRoomRepository).joinWaitingRoom(anyString(),
                 any(WaitingRoomParticipant.class));
-        verify(waitingRoomEventPublisher).publishJoined(anyString(),
-                any(WaitingRoomParticipant.class));
+        verify(waitingRoomEventPublisher).publishJoined(anyString(), anyList());
     }
 
     @Test
@@ -134,24 +137,29 @@ class WaitingRoomServiceTest {
     void publishEventWhenRoomIsFull() {
         // given
         Long userId = 1L;
-        WaitingRoomWithParticipantIds fullRoomResult = new WaitingRoomWithParticipantIds(
+        Participant participant = new Participant(userId, testUser.getName());
+        List<Participant> participants = List.of(participant);
+        WaitingRoomWithParticipants fullRoomResult = new WaitingRoomWithParticipants(
                 WaitingRoomStatus.FULL,
                 testWaitingRoom,
-                List.of(userId)
+                participants
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(waitingRoomRepository.joinWaitingRoom(anyString(), any(WaitingRoomParticipant.class)))
                 .thenReturn(fullRoomResult);
         doNothing().when(waitingRoomEventPublisher)
-                .publishJoined(anyString(), any(WaitingRoomParticipant.class));
+                .publishJoined(anyString(), anyList());
         doNothing().when(waitingRoomEventPublisher)
-                .publishFulled(any(WaitingRoomWithParticipantIds.class));
+                .publishFulled(any(WaitingRoomWithParticipants.class));
 
         // when
         waitingRoomService.joinRoom(testRoomId, userId);
 
         // then
-        verify(waitingRoomEventPublisher).publishFulled(any(WaitingRoomWithParticipantIds.class));
+        verify(waitingRoomRepository).joinWaitingRoom(anyString(),
+                any(WaitingRoomParticipant.class));
+        verify(waitingRoomEventPublisher).publishJoined(anyString(), anyList());
+        verify(waitingRoomEventPublisher).publishFulled(any(WaitingRoomWithParticipants.class));
     }
 }

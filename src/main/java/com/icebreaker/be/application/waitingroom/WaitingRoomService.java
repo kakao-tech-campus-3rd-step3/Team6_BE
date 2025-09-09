@@ -9,7 +9,7 @@ import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomRepository;
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import java.time.LocalDateTime;
@@ -58,12 +58,12 @@ public class WaitingRoomService {
                 user.getName(),
                 LocalDateTime.now()
         );
-        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds = waitingRoomRepository.joinWaitingRoom(
+        WaitingRoomWithParticipants waitingRoomWithParticipants = waitingRoomRepository.joinWaitingRoom(
                 roomId, participant);
 
-        waitingRoomEventPublisher.publishJoined(roomId, participant);
-        if (waitingRoomWithParticipantIds.status().isFull()) {
-            waitingRoomEventPublisher.publishFulled(waitingRoomWithParticipantIds);
+        waitingRoomEventPublisher.publishJoined(roomId, waitingRoomWithParticipants.participants());
+        if (waitingRoomWithParticipants.status().isFull()) {
+            waitingRoomEventPublisher.publishFulled(waitingRoomWithParticipants);
         }
     }
 

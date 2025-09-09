@@ -1,9 +1,10 @@
 package com.icebreaker.be.application.waitingroom.notifier;
 
-import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
+import java.util.List;
 
 public record ParticipantJoinedPayload(
-        WaitingRoomParticipant newParticipant
+        List<Participant> newParticipant
 ) implements WaitingRoomMessage {
 
 }

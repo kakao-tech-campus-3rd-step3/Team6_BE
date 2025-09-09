@@ -48,16 +48,16 @@ else
 
         -- participants userId만 추출
         local rawParticipants = redis.call("HVALS", KEYS[1])
-        local participantIds = {}
+        local participantInfo = {}
         for i = 1, #rawParticipants do
             local p = cjson.decode(rawParticipants[i])
-            table.insert(participantIds, p.userId)
+            table.insert(participantInfo, { id = p.userId, name = p.userName })
         end
 
         data = {
             status = roomStatus,
             room = meta,
-            participants = participantIds
+            participants = participantInfo
         }
     end
 end

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.CreateRoomArgs;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.JoinRoomArgs;
 import com.icebreaker.be.infra.persistence.redis.waitingroom.WaitingRoomRepositoryImpl;
@@ -68,20 +68,20 @@ class WaitingRoomRepositoryImplTest {
     void joinRoom_ExecutesRedisScript() {
         // given
         String roomId = "test-room";
-        WaitingRoomWithParticipantIds mockResult = new WaitingRoomWithParticipantIds(null, null,
+        WaitingRoomWithParticipants mockResult = new WaitingRoomWithParticipants(null, null,
                 List.of());
 
         when(executor.execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class),
-                eq(WaitingRoomWithParticipantIds.class), any(WaitingRoomStatusMapper.class)))
+                eq(WaitingRoomWithParticipants.class), any(WaitingRoomStatusMapper.class)))
                 .thenReturn(mockResult);
 
         // when
-        WaitingRoomWithParticipantIds result = waitingRoomRepository.joinWaitingRoom(roomId,
+        WaitingRoomWithParticipants result = waitingRoomRepository.joinWaitingRoom(roomId,
                 testParticipant);
 
         // then
         verify(executor).execute(any(RedisScriptEnum.class), anyList(), any(JoinRoomArgs.class),
-                eq(WaitingRoomWithParticipantIds.class), any(WaitingRoomStatusMapper.class));
+                eq(WaitingRoomWithParticipants.class), any(WaitingRoomStatusMapper.class));
 
         assertThat(result).isEqualTo(mockResult);
     }

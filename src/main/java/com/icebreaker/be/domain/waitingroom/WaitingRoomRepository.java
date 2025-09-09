@@ -4,6 +4,6 @@ public interface WaitingRoomRepository {
 
     void initWaitingRoom(WaitingRoom waitingRoom, WaitingRoomParticipant creator);
 
-    WaitingRoomWithParticipantIds joinWaitingRoom(String roomId,
+    WaitingRoomWithParticipants joinWaitingRoom(String roomId,
             WaitingRoomParticipant participant);
 }
