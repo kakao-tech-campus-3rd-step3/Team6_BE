@@ -26,10 +26,10 @@ public class RoomService {
 
     private final RoomEventPublisher publisher;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Room create(WaitingRoom waitingRoom, List<Long> participantIds) {
-        Room room = new Room(waitingRoom.roomId(), waitingRoom.name(), waitingRoom.capacity());
         List<User> users = userRepository.findAllById(participantIds);
+        Room room = new Room(waitingRoom.roomId(), waitingRoom.name(), waitingRoom.capacity());
         room.joinUsers(users);
         Room savedRoom = roomRepository.save(room);
 
