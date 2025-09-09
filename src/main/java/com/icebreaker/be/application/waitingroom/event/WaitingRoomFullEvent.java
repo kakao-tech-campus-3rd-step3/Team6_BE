@@ -1,9 +1,9 @@
 package com.icebreaker.be.application.waitingroom.event;
 
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 
 public record WaitingRoomFullEvent(
-        WaitingRoomWithParticipantIds waitingRoomWithParticipantIds
+        WaitingRoomWithParticipants waitingRoomWithParticipants
 ) {
 
 }

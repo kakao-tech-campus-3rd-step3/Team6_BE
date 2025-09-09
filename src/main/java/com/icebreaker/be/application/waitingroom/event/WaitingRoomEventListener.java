@@ -3,6 +3,7 @@ package com.icebreaker.be.application.waitingroom.event;
 import com.icebreaker.be.application.room.RoomService;
 import com.icebreaker.be.application.waitingroom.notifier.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +22,19 @@ public class WaitingRoomEventListener {
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomParticipantJoinedEvent(WaitingRoomParticipantJoinedEvent event) {
-        notifier.notifyParticipantJoined(event.roomId(), event.participant());
+        notifier.notifyParticipantJoined(event.roomId(), event.participants());
     }
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomFullEvent(WaitingRoomFullEvent event) {
-        var waitingRoomWithParticipants = event.waitingRoomWithParticipantIds();
+        var waitingRoomWithParticipants = event.waitingRoomWithParticipants();
         WaitingRoom waitingRoom = waitingRoomWithParticipants.room();
-        List<Long> participantIds = waitingRoomWithParticipants.participants();
+        List<Long> participantIds = waitingRoomWithParticipants.participants().stream()
+                .map(Participant::id)
+                .toList();
 
         roomService.create(waitingRoom, participantIds);
+
         notifier.notifyRoomStarted(waitingRoom.roomId());
     }
 }
