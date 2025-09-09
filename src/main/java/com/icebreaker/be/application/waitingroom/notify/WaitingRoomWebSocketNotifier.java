@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.waitingroom.notifier;
+package com.icebreaker.be.application.waitingroom.notify;
 
 import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
 import java.util.List;

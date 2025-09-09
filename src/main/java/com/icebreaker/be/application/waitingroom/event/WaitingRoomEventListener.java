@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.waitingroom.event;
 
 import com.icebreaker.be.application.room.RoomService;
-import com.icebreaker.be.application.waitingroom.notifier.WaitingRoomWebSocketNotifier;
+import com.icebreaker.be.application.waitingroom.notify.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;

@@ -14,6 +14,7 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    //TODO: HOST 만 권한을 가질 수 있음.
     @MessageMapping("/room/{roomId}/change-stage")
     public void changeRoomStage(
             @DestinationVariable String roomId,

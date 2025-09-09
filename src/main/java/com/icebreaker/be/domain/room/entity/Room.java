@@ -1,6 +1,7 @@
 package com.icebreaker.be.domain.room.entity;
 
 import com.icebreaker.be.domain.user.User;
+import com.icebreaker.be.global.common.entity.BaseEntity;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import jakarta.persistence.CascadeType;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "rooms")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Getter
-public class Room {
+public class Room extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
