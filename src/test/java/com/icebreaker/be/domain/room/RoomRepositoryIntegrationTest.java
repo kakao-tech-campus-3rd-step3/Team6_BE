@@ -1,10 +1,11 @@
-package com.icebreaker.be.domain.room.repo;
+package com.icebreaker.be.domain.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.icebreaker.be.config.TestLlmConfig;
+import com.icebreaker.be.config.IntegrationTestSupport;
 import com.icebreaker.be.domain.room.entity.Room;
 import com.icebreaker.be.domain.room.entity.RoomParticipant;
+import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.user.MbtiType;
 import com.icebreaker.be.domain.user.User;
 import java.util.List;
@@ -12,22 +13,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 
-@DataJpaTest
-@Import(TestLlmConfig.class)
-@TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.datasource.url=jdbc:h2:mem:testdb"
-})
 @DisplayName("RoomRepository 통합 테스트")
-class RoomRepositoryIntegrationTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
+class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
 
     @Autowired
     private RoomRepository roomRepository;
