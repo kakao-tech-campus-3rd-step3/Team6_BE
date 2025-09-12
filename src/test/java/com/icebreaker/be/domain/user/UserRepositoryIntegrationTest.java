@@ -2,28 +2,14 @@ package com.icebreaker.be.domain.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.icebreaker.be.config.TestAuditingConfig;
-import com.icebreaker.be.config.TestLlmConfig;
+import com.icebreaker.be.config.IntegrationTestSupport;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 
-@DataJpaTest
-@Import({TestLlmConfig.class, TestAuditingConfig.class})
-@TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.datasource.url=jdbc:h2:mem:testdb"
-})
 @DisplayName("UserRepository 통합 테스트")
-class UserRepositoryIntegrationTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
+class UserRepositoryIntegrationTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
