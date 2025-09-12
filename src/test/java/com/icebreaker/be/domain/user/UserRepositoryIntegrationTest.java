@@ -2,6 +2,7 @@ package com.icebreaker.be.domain.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.icebreaker.be.config.TestAuditingConfig;
 import com.icebreaker.be.config.TestLlmConfig;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@Import(TestLlmConfig.class)
+@Import({TestLlmConfig.class, TestAuditingConfig.class})
 @DisplayName("UserRepository 통합 테스트")
 class UserRepositoryIntegrationTest {
 
