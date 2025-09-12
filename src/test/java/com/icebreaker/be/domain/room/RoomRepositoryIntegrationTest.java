@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain.room.repo;
+package com.icebreaker.be.domain.room;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,6 +6,7 @@ import com.icebreaker.be.config.TestAuditingConfig;
 import com.icebreaker.be.config.TestLlmConfig;
 import com.icebreaker.be.domain.room.entity.Room;
 import com.icebreaker.be.domain.room.entity.RoomParticipant;
+import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.user.MbtiType;
 import com.icebreaker.be.domain.user.User;
 import java.util.List;
