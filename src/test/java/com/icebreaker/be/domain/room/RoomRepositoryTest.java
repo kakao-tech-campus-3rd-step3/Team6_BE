@@ -50,7 +50,7 @@ class RoomRepositoryTest {
         when(roomRepository.findById(testRoomId)).thenReturn(Optional.of(testRoom));
 
         // when
-        Room savedRoom = roomRepository.save(new Room("ROOM001", "새 방", 5));
+        Room savedRoom = roomRepository.save(new Room("ROOM001", "새 방", 5, 1L));
         Room foundRoom = roomRepository.findById(savedRoom.getId()).orElseThrow();
 
         // then
