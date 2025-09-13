@@ -42,14 +42,14 @@ class WaitingRoomRepositoryImplTest {
     @BeforeEach
     void setUp() {
         testParticipant = new WaitingRoomParticipant(1L, "테스트 유저", LocalDateTime.now());
-        testRoom = new WaitingRoom("test-room", "테스트 방", 3);
+        testRoom = new WaitingRoom("test-room", "테스트 방", 3, 1L);
     }
 
     @Test
     @DisplayName("대기실 생성 시 Redis 스크립트가 실행된다")
     void createRoom_ExecutesRedisScript() {
         // given
-        WaitingRoom waitingRoom = new WaitingRoom("test-room", "테스트 방", 3);
+        WaitingRoom waitingRoom = new WaitingRoom("test-room", "테스트 방", 3, 1L);
 
         when(executor.execute(any(RedisScriptEnum.class), anyList(), any(CreateRoomArgs.class),
                 eq(Void.class), any(WaitingRoomStatusMapper.class)))
