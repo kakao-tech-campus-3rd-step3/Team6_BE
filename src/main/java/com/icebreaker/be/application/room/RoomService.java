@@ -44,7 +44,7 @@ public class RoomService {
         return savedRoom;
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Transactional(readOnly = true)
     public void changeRoomStage(String roomCode, ChangeRoomStageCommand command) {
         if (!roomRepository.existsByCode(roomCode)) {
             throw new BusinessException(ErrorCode.ROOM_NOT_FOUND);
