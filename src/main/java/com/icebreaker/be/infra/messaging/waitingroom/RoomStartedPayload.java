@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.waitingroom.notify;
+package com.icebreaker.be.infra.messaging.waitingroom;
 
 public record RoomStartedPayload(
         String roomId

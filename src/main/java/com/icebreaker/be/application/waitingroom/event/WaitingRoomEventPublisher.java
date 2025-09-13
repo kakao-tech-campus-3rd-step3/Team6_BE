@@ -1,8 +1,6 @@
 package com.icebreaker.be.application.waitingroom.event;
 
 import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,8 +18,9 @@ public class WaitingRoomEventPublisher {
                 new WaitingRoomFullEvent(waitingRoomWithParticipants));
     }
 
-    public void publishJoined(String roomId, List<Participant> participants) {
+    public void publishJoined(String roomId,
+            WaitingRoomWithParticipants waitingRoomWithParticipants) {
         applicationEventPublisher.publishEvent(
-                new WaitingRoomParticipantJoinedEvent(roomId, participants));
+                new WaitingRoomParticipantJoinedEvent(roomId, waitingRoomWithParticipants));
     }
 }

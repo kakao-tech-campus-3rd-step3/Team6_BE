@@ -6,6 +6,7 @@ import com.icebreaker.be.config.IntegrationTestSupport;
 import com.icebreaker.be.domain.room.entity.Room;
 import com.icebreaker.be.domain.room.entity.RoomParticipant;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
+import com.icebreaker.be.domain.room.vo.RoomParticipantRole;
 import com.icebreaker.be.domain.user.MbtiType;
 import com.icebreaker.be.domain.user.User;
 import java.util.List;
@@ -28,6 +29,7 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
                 .code("TEST-ROOM")
                 .name("테스트 방")
                 .capacity(4)
+                .hostId(1L)
                 .build();
 
         // when
@@ -69,6 +71,7 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
                 .code("ROOM-WITH-USERS")
                 .name("사용자가 있는 방")
                 .capacity(5)
+                .hostId(savedUser1.getId())
                 .build();
 
         // Room을 저장
@@ -77,11 +80,13 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
         RoomParticipant participant1 = RoomParticipant.builder()
                 .room(savedRoom)
                 .user(savedUser1)
+                .role(RoomParticipantRole.HOST)
                 .build();
 
         RoomParticipant participant2 = RoomParticipant.builder()
                 .room(savedRoom)
                 .user(savedUser2)
+                .role(RoomParticipantRole.MEMBER)
                 .build();
 
         // RoomParticipant들을 저장
@@ -119,12 +124,14 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
                 .code("ROOM-001")
                 .name("첫 번째 방")
                 .capacity(3)
+                .hostId(1L)
                 .build();
 
         Room room2 = Room.builder()
                 .code("ROOM-002")
                 .name("두 번째 방")
                 .capacity(5)
+                .hostId(2L)
                 .build();
 
         roomRepository.save(room1);
@@ -158,6 +165,7 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
                 .code("DELETE-TEST")
                 .name("삭제 테스트 방")
                 .capacity(4)
+                .hostId(savedUser.getId())
                 .build();
 
         // Room을 저장
@@ -166,6 +174,7 @@ class RoomRepositoryIntegrationTest extends IntegrationTestSupport {
         RoomParticipant participant = RoomParticipant.builder()
                 .room(savedRoom)
                 .user(savedUser)
+                .role(RoomParticipantRole.HOST)
                 .build();
 
         // Participant를 저장

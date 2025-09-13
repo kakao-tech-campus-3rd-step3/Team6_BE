@@ -1,11 +1,10 @@
 package com.icebreaker.be.application.waitingroom.event;
 
-import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants.Participant;
-import java.util.List;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 
 public record WaitingRoomParticipantJoinedEvent(
         String roomId,
-        List<Participant> participants
+        WaitingRoomWithParticipants waitingRoomWithParticipants
 ) {
 
 }
