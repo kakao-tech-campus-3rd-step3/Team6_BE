@@ -1,4 +1,4 @@
-package com.icebreaker.be.application.room.notify;
+package com.icebreaker.be.infra.messaging.room;
 
 import com.icebreaker.be.domain.room.entity.Stage;
 

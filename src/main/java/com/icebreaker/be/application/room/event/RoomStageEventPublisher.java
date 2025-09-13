@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RoomEventPublisher {
+public class RoomStageEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
