@@ -41,7 +41,7 @@ public class WaitingRoomService {
         );
 
         String roomId = waitingRoomIdGenerator.generate();
-        WaitingRoom waitingRoom = new WaitingRoom(roomId, cmd.name(), cmd.capacity());
+        WaitingRoom waitingRoom = new WaitingRoom(roomId, cmd.name(), cmd.capacity(), userId);
 
         waitingRoomRepository.initWaitingRoom(waitingRoom, creator);
 
@@ -61,7 +61,7 @@ public class WaitingRoomService {
         WaitingRoomWithParticipants waitingRoomWithParticipants = waitingRoomRepository.joinWaitingRoom(
                 roomId, participant);
 
-        waitingRoomEventPublisher.publishJoined(roomId, waitingRoomWithParticipants.participants());
+        waitingRoomEventPublisher.publishJoined(roomId, waitingRoomWithParticipants);
         if (waitingRoomWithParticipants.status().isFull()) {
             waitingRoomEventPublisher.publishFulled(waitingRoomWithParticipants);
         }
