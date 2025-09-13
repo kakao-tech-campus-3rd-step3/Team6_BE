@@ -17,8 +17,8 @@ public abstract class AbstractStompNotifier {
      * @param payload     전송할 실제 데이터
      * @param <T>         payload 타입
      */
-    protected <T> void send(String destination, T payload, String messsage) {
-        SuccessApiResponse<T> response = ApiResponseFactory.success(payload, messsage);
+    protected <T> void send(String destination, T payload, String message) {
+        SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
         messagingTemplate.convertAndSend(destination, response);
     }
 
