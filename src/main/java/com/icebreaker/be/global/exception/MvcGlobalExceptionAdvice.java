@@ -36,11 +36,7 @@ public class MvcGlobalExceptionAdvice {
         return ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> new ValidationError(
-                        error.getField(),
-                        error.getDefaultMessage(),
-                        error.getRejectedValue()
-                ))
+                .map(ValidationError::of)
                 .toList();
     }
 

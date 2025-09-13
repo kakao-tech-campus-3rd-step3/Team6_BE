@@ -2,7 +2,10 @@ package com.icebreaker.be.domain.room.entity;
 
 import com.icebreaker.be.domain.room.vo.RoomParticipantRole;
 import com.icebreaker.be.domain.user.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,18 +37,22 @@ public class RoomParticipant {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private RoomParticipantRole role = RoomParticipantRole.GUEST;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoomParticipantRole role = RoomParticipantRole.MEMBER;
 
     @Builder
-    public RoomParticipant(Room room, User user) {
+    public RoomParticipant(Room room, User user, RoomParticipantRole role) {
         this.room = room;
         this.user = user;
+        this.role = role;
     }
 
-    public static RoomParticipant from(Room room, User user) {
+    public static RoomParticipant from(Room room, User user, RoomParticipantRole role) {
         return RoomParticipant.builder()
                 .room(room)
                 .user(user)
+                .role(role)
                 .build();
     }
 

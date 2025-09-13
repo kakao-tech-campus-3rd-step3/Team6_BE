@@ -16,6 +16,7 @@ else
     -- 메타 저장
     redis.call("HSET", KEYS[2],
             "roomId", ARGV[1],
+            "hostId", ARGV[4],
             "name", ARGV[2],
             "capacity", ARGV[3]
     )
@@ -24,7 +25,8 @@ else
     local participant = cjson.encode({
         userId = tonumber(ARGV[4]),
         userName = ARGV[5],
-        joinedAt = tonumber(ARGV[6])
+        joinedAt = tonumber(ARGV[6]),
+        role = "HOST"
     })
     redis.call("HSET", KEYS[1], ARGV[4], participant)
 

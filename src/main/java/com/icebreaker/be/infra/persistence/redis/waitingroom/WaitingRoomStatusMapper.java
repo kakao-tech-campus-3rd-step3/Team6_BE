@@ -20,8 +20,7 @@ public class WaitingRoomStatusMapper implements StatusMapper<WaitingRoomResponse
 
     @Override
     public boolean isSuccess(WaitingRoomResponseStatus status) {
-        return status == WaitingRoomResponseStatus.CREATED
-                || status == WaitingRoomResponseStatus.JOINED;
+        return status.isSuccess();
     }
 
     @Override

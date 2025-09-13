@@ -1,5 +1,13 @@
 package com.icebreaker.be.application.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
 import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
@@ -10,24 +18,15 @@ import com.icebreaker.be.fixture.UserFixture;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import com.icebreaker.be.infra.jwt.JwtProvider;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserService 테스트")
@@ -107,7 +106,7 @@ class UserServiceTest {
 
         given(userRepository.findByPhone(command.phone())).willReturn(Optional.empty());
         given(userRepository.save(any(User.class))).willReturn(savedUser);
-        given(jwtProvider.generateToken(anyString(), anyLong())).willReturn(mockToken);
+        given(jwtProvider.generateToken(String.valueOf(savedUser.getId()))).willReturn(mockToken);
 
         // when
         UserIdWithTokenResponse result = userService.createUserIfNotExistsAndGenerateToken(command);
@@ -118,7 +117,6 @@ class UserServiceTest {
         assertThat(result.token()).isEqualTo(mockToken);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(times(1)).save(any(User.class));
-        then(jwtProvider).should(times(1)).generateToken(anyString(), anyLong());
     }
 
     @Test
@@ -131,7 +129,8 @@ class UserServiceTest {
         String mockToken = "mock.jwt.token";
 
         given(userRepository.findByPhone(command.phone())).willReturn(Optional.of(existingUser));
-        given(jwtProvider.generateToken(anyString(), anyLong())).willReturn(mockToken);
+        given(jwtProvider.generateToken(String.valueOf(existingUser.getId()))).willReturn(
+                mockToken);
 
         // when
         UserIdWithTokenResponse result = userService.createUserIfNotExistsAndGenerateToken(command);
@@ -142,7 +141,6 @@ class UserServiceTest {
         assertThat(result.token()).isEqualTo(mockToken);
         then(userRepository).should(times(1)).findByPhone(command.phone());
         then(userRepository).should(never()).save(any(User.class));
-        then(jwtProvider).should(times(1)).generateToken(anyString(), anyLong());
     }
 
     @Test
