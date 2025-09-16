@@ -21,5 +21,8 @@ public class RoomStageEventListener {
     public void handleRoomStageChangeEvent(RoomStageChangeEvent event) {
         roomStageService.changeStage(event.roomCode(), event.stage());
         notifier.notifyRoomStageChanged(event.roomCode(), event.stage());
+
+        log.info("Handled RoomStageChangeEvent for roomCode: {}, new stage: {}", event.roomCode(),
+                event.stage());
     }
 }

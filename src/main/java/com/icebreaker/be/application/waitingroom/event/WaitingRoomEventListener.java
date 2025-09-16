@@ -22,6 +22,9 @@ public class WaitingRoomEventListener {
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomParticipantJoinedEvent(WaitingRoomParticipantJoinedEvent event) {
         notifier.notifyParticipantJoined(event.roomId(), event.waitingRoomWithParticipants());
+
+        log.debug("Handled WaitingRoomParticipantJoinedEvent for roomId: {}, participants: {}",
+                event.roomId(), event.waitingRoomWithParticipants().participants());
     }
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
