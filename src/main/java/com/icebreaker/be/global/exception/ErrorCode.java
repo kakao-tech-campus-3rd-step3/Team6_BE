@@ -21,6 +21,8 @@ public enum ErrorCode {
     WAITING_ROOM_FULL("대기방이 가득 찼습니다.", HttpStatus.BAD_REQUEST),
     ALREADY_ROOM_JOIN("이미 방에 가입되어있습니다.", HttpStatus.CONFLICT),
     ROOM_CAPACITY_EXCEEDED("방 정원을 초과했습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_STAGE_VALUE("유효하지 않은 스테이지 값입니다.", HttpStatus.BAD_REQUEST),
+    USER_NOT_IN_ROOM("사용자가 방에 속해있지 않습니다.", HttpStatus.BAD_REQUEST),
     
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

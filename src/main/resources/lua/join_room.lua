@@ -27,7 +27,8 @@ else
         local participant = cjson.encode({
             userId = tonumber(ARGV[1]),
             userName = ARGV[2],
-            joinedAt = tonumber(ARGV[3])
+            joinedAt = tonumber(ARGV[3]),
+            role = "MEMBER"
         })
         redis.call("HSET", KEYS[1], ARGV[1], participant)
         clientStatus = "JOINED"
@@ -48,16 +49,21 @@ else
 
         -- participants userId만 추출
         local rawParticipants = redis.call("HVALS", KEYS[1])
-        local participantIds = {}
+        local participantInfo = {}
         for i = 1, #rawParticipants do
             local p = cjson.decode(rawParticipants[i])
-            table.insert(participantIds, p.userId)
+            table.insert(participantInfo, {
+                id = p.userId,
+                name = p.userName,
+                role = p.role,
+                joinedAt = p.joinedAt
+            })
         end
 
         data = {
             status = roomStatus,
             room = meta,
-            participants = participantIds
+            participants = participantInfo
         }
     end
 end

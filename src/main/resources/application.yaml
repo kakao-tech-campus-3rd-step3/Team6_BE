@@ -44,3 +44,8 @@ gemini:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
+  expiration-time: 86400000
+websocket:
+  heartbeat:
+    server-interval: 10000
+    client-interval: 10000

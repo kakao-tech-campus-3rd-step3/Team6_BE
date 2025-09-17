@@ -1,9 +1,10 @@
 package com.icebreaker.be.infra.persistence.redis.waitingroom;
 
-import com.icebreaker.be.domain.room.repo.WaitingRoomRepository;
-import com.icebreaker.be.domain.room.vo.WaitingRoom;
-import com.icebreaker.be.domain.room.vo.WaitingRoomParticipant;
-import com.icebreaker.be.domain.room.vo.WaitingRoomWithParticipantIds;
+import com.icebreaker.be.domain.waitingroom.WaitingRoom;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomParticipant;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomRepository;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
+import com.icebreaker.be.infra.persistence.redis.RedisArgs;
 import com.icebreaker.be.infra.persistence.redis.RedisScriptEnum;
 import com.icebreaker.be.infra.persistence.redis.ScriptExecutor;
 import java.util.List;
@@ -23,50 +24,64 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepository {
     private final ScriptExecutor executor;
     private final WaitingRoomStatusMapper statusMapper;
 
+    /**
+     * Redis에 WaitingRoom과 방장 정보를 초기화합니다. Lua Script CREATE_ROOM을 실행하며 반환값은 없습니다.
+     *
+     * @param waitingRoom 생성할 WaitingRoom 객체
+     * @param creator     방장 참가자 정보
+     */
     @Override
     public void initWaitingRoom(WaitingRoom waitingRoom, WaitingRoomParticipant creator) {
         List<String> keys = List.of(
-                participantsKey(waitingRoom.roomId()),
-                metaKey(waitingRoom.roomId())
+                getParticipantsKey(waitingRoom.roomId()),
+                getMetaKey(waitingRoom.roomId())
         );
 
         CreateRoomArgs args = CreateRoomArgs.from(waitingRoom, creator);
 
-        executor.execute(
+        log.debug("Initializing waiting room: {}", waitingRoom.roomId());
+
+        executeScript(
                 RedisScriptEnum.CREATE_ROOM,
                 keys,
                 args,
-                Void.class,
-                statusMapper
+                Void.class
         );
     }
 
     /**
+     * 참가자가 특정 WaitingRoom에 입장합니다. Lua Script JOIN_ROOM을 실행하고, 최신 참여자 정보를 반환합니다.
      *
-     * @param roomId      - WaitingRoom ID
-     * @param participant - 참가자 정보
-     * @return
+     * @param roomId      입장할 WaitingRoom ID
+     * @param participant 참가자 정보
+     * @return WaitingRoomWithParticipantIds 최신 참가자 ID 목록 포함
      */
     @Override
-    public WaitingRoomWithParticipantIds joinWaitingRoom(String roomId,
+    public WaitingRoomWithParticipants joinWaitingRoom(String roomId,
             WaitingRoomParticipant participant) {
-        List<String> keys = List.of(participantsKey(roomId), metaKey(roomId));
+        List<String> keys = List.of(getParticipantsKey(roomId), getMetaKey(roomId));
         JoinRoomArgs args = JoinRoomArgs.from(participant);
 
-        return executor.execute(
+        log.debug("Participant {} joining room {}", participant.userId(), roomId);
+
+        return executeScript(
                 RedisScriptEnum.JOIN_ROOM,
                 keys,
                 args,
-                WaitingRoomWithParticipantIds.class,
-                statusMapper
+                WaitingRoomWithParticipants.class
         );
     }
 
-    private String participantsKey(String roomId) {
+    private <T> T executeScript(RedisScriptEnum script, List<String> keys, RedisArgs args,
+            Class<T> clazz) {
+        return executor.execute(script, keys, args, clazz, statusMapper);
+    }
+
+    private String getParticipantsKey(String roomId) {
         return PREFIX + roomId + PARTICIPANTS_SUFFIX;
     }
 
-    private String metaKey(String roomId) {
+    private String getMetaKey(String roomId) {
         return PREFIX + roomId + META_SUFFIX;
     }
 }

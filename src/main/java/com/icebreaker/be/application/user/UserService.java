@@ -1,5 +1,6 @@
 package com.icebreaker.be.application.user;
 
+import com.icebreaker.be.application.jwt.JwtService;
 import com.icebreaker.be.application.user.dto.CreateUserCommand;
 import com.icebreaker.be.application.user.dto.UserIdWithTokenResponse;
 import com.icebreaker.be.application.user.dto.UserResponse;
@@ -8,7 +9,6 @@ import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import com.icebreaker.be.infra.jwt.JwtProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public UserResponse getUserById(Long id) {
@@ -46,7 +46,7 @@ public class UserService {
                 .map(User::getId)
                 .orElseGet(() -> createUser(UserMapper.toEntity(cmd)));
 
-        String token = jwtProvider.generateToken(String.valueOf(userId), 100_000_000L);
+        String token = jwtService.generateToken(String.valueOf(userId));
 
         return new UserIdWithTokenResponse(userId, token);
     }
