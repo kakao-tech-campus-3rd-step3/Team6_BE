@@ -2,10 +2,10 @@ package com.icebreaker.be.infra.persistence.redis.message;
 
 import com.icebreaker.be.domain.room.entity.Stage;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomStageChangeMessage {
