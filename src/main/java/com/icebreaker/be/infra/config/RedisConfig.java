@@ -33,7 +33,6 @@ public class RedisConfig {
 
     @Bean
     public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        // RedisSubscriber 클래스의 handleMessage 메서드가 메시지를 수신하도록 설정
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 
