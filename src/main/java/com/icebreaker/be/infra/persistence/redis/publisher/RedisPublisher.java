@@ -2,6 +2,7 @@ package com.icebreaker.be.infra.persistence.redis.publisher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,7 +18,7 @@ public class RedisPublisher {
     private final ObjectMapper objectMapper;
     private final ChannelTopic channelTopic;
 
-    public void publish(Object message) {
+    public void publish(RedisMessage<?> message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);
             customStringRedisTemplate.convertAndSend(channelTopic.getTopic(), jsonMessage);
