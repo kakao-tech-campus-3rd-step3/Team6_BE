@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
 import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
+import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RedisMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
-import com.icebreaker.be.infra.persistence.redis.message.redisMessage;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,8 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String jsonMessage = new String(message.getBody());
-            redisMessage<?> redisMessage = objectMapper.readValue(jsonMessage,
-                    redisMessage.class);
+            RedisMessage<?> redisMessage = objectMapper.readValue(jsonMessage,
+                    RedisMessage.class);
             log.info("Received redis message: {}", jsonMessage);
             switch (redisMessage.getType()) {
                 case RedisMessageType.PARTICIPANT_JOINED:
