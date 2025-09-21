@@ -1,9 +1,13 @@
 package com.icebreaker.be.infra.config;
 
+import com.icebreaker.be.infra.persistence.redis.subscriber.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -20,6 +24,29 @@ public class RedisConfig {
         template.setHashValueSerializer(new StringRedisSerializer());
         template.afterPropertiesSet();
         return template;
+    }
+
+    @Bean
+    public ChannelTopic channelTopic() {
+        return new ChannelTopic("iceBreak");
+    }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+        // RedisSubscriber 클래스의 handleMessage 메서드가 메시지를 수신하도록 설정
+        return new MessageListenerAdapter(subscriber, "onMessage");
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter listenerAdapter,
+            ChannelTopic channelTopic) {
+
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, channelTopic);
+        return container;
     }
 }
 
