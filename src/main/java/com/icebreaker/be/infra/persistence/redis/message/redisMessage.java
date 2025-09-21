@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class redisMessage<T> {
 
-    private String type;
+    private RedisMessageType type;
     private T message;
 }

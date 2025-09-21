@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
 import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
+import com.icebreaker.be.infra.persistence.redis.message.RedisMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.redisMessage;
@@ -32,7 +33,7 @@ public class RedisSubscriber implements MessageListener {
                     redisMessage.class);
             log.info("Received redis message: {}", jsonMessage);
             switch (redisMessage.getType()) {
-                case "PARTICIPANT_JOINED":
+                case RedisMessageType.PARTICIPANT_JOINED:
                     ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(
                             redisMessage.getMessage(), ParticipantJoinedMessage.class);
                     waitingRoomWebSocketNotifier.notifyParticipantJoined(
@@ -40,13 +41,13 @@ public class RedisSubscriber implements MessageListener {
                             joinedPayload.getWaitingRoomWithParticipants());
                     break;
 
-                case "ROOM_STARTED":
+                case RedisMessageType.ROOM_STARTED:
                     RoomStartedMessage startedPayload = objectMapper.convertValue(
                             redisMessage.getMessage(), RoomStartedMessage.class);
                     waitingRoomWebSocketNotifier.notifyRoomStarted(startedPayload.getRoomId());
                     break;
 
-                case "ROOM_STAGE_CHANGE":
+                case RedisMessageType.ROOM_STAGE_CHANGE:
                     RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(
                             redisMessage.getMessage(), RoomStageChangeMessage.class);
                     roomStageWebSocketNotifier.notifyRoomStageChanged(
