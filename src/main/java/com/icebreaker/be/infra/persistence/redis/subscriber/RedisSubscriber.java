@@ -56,7 +56,7 @@ public class RedisSubscriber implements MessageListener {
                 default:
                     log.info("Received unknown message type");
             }
-            log.info("Successfully published message for type: {}", redisMessage.getType());
+            log.info("Successfully processed message for type: {}", redisMessage.getType());
         } catch (IOException e) {
             log.error("Failed to parse Redis message", e);
         }
