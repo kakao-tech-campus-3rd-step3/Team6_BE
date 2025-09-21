@@ -5,7 +5,6 @@ import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
 import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
-import com.icebreaker.be.infra.persistence.redis.message.RedisMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import java.io.IOException;
@@ -33,28 +32,25 @@ public class RedisSubscriber implements MessageListener {
                     RedisMessage.class);
             log.info("Received redis message: {}", jsonMessage);
             switch (redisMessage.getType()) {
-                case RedisMessageType.PARTICIPANT_JOINED:
+                case PARTICIPANT_JOINED -> {
                     ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(
                             redisMessage.getMessage(), ParticipantJoinedMessage.class);
                     waitingRoomWebSocketNotifier.notifyParticipantJoined(
                             joinedPayload.getRoomId(),
                             joinedPayload.getWaitingRoomWithParticipants());
-                    break;
-
-                case RedisMessageType.ROOM_STARTED:
+                }
+                case ROOM_STARTED -> {
                     RoomStartedMessage startedPayload = objectMapper.convertValue(
                             redisMessage.getMessage(), RoomStartedMessage.class);
                     waitingRoomWebSocketNotifier.notifyRoomStarted(startedPayload.getRoomId());
-                    break;
-
-                case RedisMessageType.ROOM_STAGE_CHANGE:
+                }
+                case ROOM_STAGE_CHANGE -> {
                     RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(
                             redisMessage.getMessage(), RoomStageChangeMessage.class);
                     roomStageWebSocketNotifier.notifyRoomStageChanged(
                             stageChangePayload.getRoomCode(), stageChangePayload.getStage());
-                    break;
-                default:
-                    log.info("Received unknown message type");
+                }
+                default -> log.info("Received unknown message type");
             }
             log.info("Successfully processed message for type: {}", redisMessage.getType());
         } catch (IOException e) {
