@@ -29,7 +29,8 @@ public class WaitingRoomEventListener {
         redisMessage<ParticipantJoinedMessage> message = new redisMessage<>(
                 "PARTICIPANT_JOINED", payload);
         redisPublisher.publish(message);
-        log.info("PARTICIPANT_JOINED message publish to redis");
+        log.info("Publishing PARTICIPANT_JOINED message for roomId: {} publish to redis",
+                event.roomId());
     }
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -43,5 +44,7 @@ public class WaitingRoomEventListener {
         redisMessage<RoomStartedMessage> message = new redisMessage<>(
                 "ROOM_STARTED", payload);
         redisPublisher.publish(message);
+        log.info("Publishing ROOM_STARTED message, participantIds: {} publish to redis",
+                event.getParticipantIds());
     }
 }

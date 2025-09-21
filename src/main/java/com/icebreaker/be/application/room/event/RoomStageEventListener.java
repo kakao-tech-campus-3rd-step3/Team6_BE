@@ -22,12 +22,13 @@ public class RoomStageEventListener {
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleRoomStageChangeEvent(RoomStageChangeEvent event) {
         roomStageService.changeStage(event.roomCode(), event.stage());
-        
+
         RoomStageChangeMessage payload = new RoomStageChangeMessage(event.roomCode(),
                 event.stage());
         redisMessage<RoomStageChangeMessage> message = new redisMessage<>(
                 "ROOM_STAGE_CHANGE", payload);
         redisPublisher.publish(message);
-        log.info("ROOM_STAGE_CHANGE message publish to redis");
+        log.info("Publishing ROOM_STAGE_CHANGE message to redis for roomCode: {}, new stage: {}",
+                event.roomCode(), event.stage());
     }
 }
