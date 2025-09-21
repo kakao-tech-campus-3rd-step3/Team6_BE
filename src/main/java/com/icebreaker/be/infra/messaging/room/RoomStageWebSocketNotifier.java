@@ -21,5 +21,7 @@ public class RoomStageWebSocketNotifier extends AbstractStompNotifier implements
     public void notifyRoomStageChanged(String roomId, Stage stage) {
         String topic = buildTopic(ROOM_STAGE_TOPIC_PREFIX, roomId);
         send(topic, new RoomStageChangedPayload(stage), "룸 스테이지가 변경되었습니다.");
+
+        log.debug("Notified room stage change to topic {}: new stage {}", topic, stage);
     }
 }

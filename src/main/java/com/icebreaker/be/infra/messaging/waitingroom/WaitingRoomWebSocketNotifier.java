@@ -25,11 +25,16 @@ public class WaitingRoomWebSocketNotifier extends AbstractStompNotifier
     ) {
         String topic = buildTopic(WAITING_ROOM_TOPIC_PREFIX, roomId);
         send(topic, new ParticipantJoinedPayload(waitingRoomWithParticipants), "대기방에 참가자가 입장했습니다.");
+
+        log.debug("Notified participant joined to topic {}: participants {}", topic,
+                waitingRoomWithParticipants.participants());
     }
 
     @Override
     public void notifyRoomStarted(String roomId) {
         String topic = buildTopic(WAITING_ROOM_TOPIC_PREFIX, roomId);
         send(topic, new RoomStartedPayload(roomId), "대기방이 시작되었습니다.");
+
+        log.debug("Notified waiting room started to topic {}: roomId {}", topic, roomId);
     }
 }
