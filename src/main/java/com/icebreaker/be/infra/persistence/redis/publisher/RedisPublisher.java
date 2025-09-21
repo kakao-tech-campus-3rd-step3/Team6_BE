@@ -1,5 +1,6 @@
 package com.icebreaker.be.infra.persistence.redis.publisher;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class RedisPublisher {
             customStringRedisTemplate.convertAndSend(channelTopic.getTopic(), jsonMessage);
             log.info("Successfully published to topic '{}': {}", channelTopic.getTopic(),
                     jsonMessage);
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             log.error("Failed to publish message to Redis", e);
         }
     }

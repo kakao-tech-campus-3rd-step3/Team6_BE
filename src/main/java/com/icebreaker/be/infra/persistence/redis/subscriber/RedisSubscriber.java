@@ -7,6 +7,7 @@ import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessag
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.redisMessage;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -55,7 +56,7 @@ public class RedisSubscriber implements MessageListener {
                     log.info("Received unknown message type");
             }
             log.info("Successfully published message for type: {}", redisMessage.getType());
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("Failed to parse Redis message", e);
         }
 
