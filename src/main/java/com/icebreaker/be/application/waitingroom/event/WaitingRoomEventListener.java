@@ -3,7 +3,6 @@ package com.icebreaker.be.application.waitingroom.event;
 import com.icebreaker.be.application.room.RoomService;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
-import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.redisMessage;
@@ -19,7 +18,6 @@ import org.springframework.transaction.event.TransactionPhase;
 @Slf4j
 public class WaitingRoomEventListener {
 
-    private final WaitingRoomWebSocketNotifier notifier;
     private final RoomService roomService;
     private final RedisPublisher redisPublisher;
 
