@@ -1,6 +1,6 @@
 package com.icebreaker.be.infra.config;
 
-import com.icebreaker.be.infra.persistence.redis.subscriber.RedisSubscriber;
+import com.icebreaker.be.infra.persistence.redis.subscriber.RedisEventSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -32,7 +32,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+    public MessageListenerAdapter listenerAdapter(RedisEventSubscriber subscriber) {
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 

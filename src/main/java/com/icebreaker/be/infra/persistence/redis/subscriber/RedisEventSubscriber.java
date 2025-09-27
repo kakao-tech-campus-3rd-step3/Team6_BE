@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RedisSubscriber implements MessageListener {
+public class RedisEventSubscriber implements MessageListener {
 
     private final WaitingRoomWebSocketNotifier waitingRoomWebSocketNotifier;
     private final RoomStageWebSocketNotifier roomStageWebSocketNotifier;
