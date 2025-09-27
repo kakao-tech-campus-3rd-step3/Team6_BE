@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
 import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
-import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import java.io.IOException;
@@ -28,31 +28,31 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String jsonMessage = new String(message.getBody());
-            RedisMessage<?> redisMessage = objectMapper.readValue(jsonMessage,
-                    RedisMessage.class);
+            PubSubMessage<?> pubSubMessage = objectMapper.readValue(jsonMessage,
+                    PubSubMessage.class);
             log.info("Received redis message: {}", jsonMessage);
-            switch (redisMessage.getType()) {
+            switch (pubSubMessage.getType()) {
                 case PARTICIPANT_JOINED -> {
                     ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(
-                            redisMessage.getMessage(), ParticipantJoinedMessage.class);
+                            pubSubMessage.getMessage(), ParticipantJoinedMessage.class);
                     waitingRoomWebSocketNotifier.notifyParticipantJoined(
                             joinedPayload.getRoomId(),
                             joinedPayload.getWaitingRoomWithParticipants());
                 }
                 case ROOM_STARTED -> {
                     RoomStartedMessage startedPayload = objectMapper.convertValue(
-                            redisMessage.getMessage(), RoomStartedMessage.class);
+                            pubSubMessage.getMessage(), RoomStartedMessage.class);
                     waitingRoomWebSocketNotifier.notifyRoomStarted(startedPayload.getRoomId());
                 }
                 case ROOM_STAGE_CHANGE -> {
                     RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(
-                            redisMessage.getMessage(), RoomStageChangeMessage.class);
+                            pubSubMessage.getMessage(), RoomStageChangeMessage.class);
                     roomStageWebSocketNotifier.notifyRoomStageChanged(
                             stageChangePayload.getRoomCode(), stageChangePayload.getStage());
                 }
                 default -> log.info("Received unknown message type");
             }
-            log.info("Successfully processed message for type: {}", redisMessage.getType());
+            log.info("Successfully processed message for type: {}", pubSubMessage.getType());
         } catch (IOException e) {
             log.error("Failed to parse Redis message", e);
         }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RedisMessage<T> {
+public class PubSubMessage<T> {
 
     private RedisMessageType type;
     private T message;

@@ -1,8 +1,8 @@
 package com.icebreaker.be.domain;
 
-import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 
 public interface EventPublisher {
 
-    void publish(RedisMessage<?> message);
+    void publish(PubSubMessage<?> message);
 }
