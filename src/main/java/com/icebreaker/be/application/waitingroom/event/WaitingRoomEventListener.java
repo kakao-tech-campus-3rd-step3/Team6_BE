@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.waitingroom.event;
 
 import com.icebreaker.be.application.room.RoomService;
-import com.icebreaker.be.domain.EventPublisher;
+import com.icebreaker.be.domain.publisher.EventPublisher;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;

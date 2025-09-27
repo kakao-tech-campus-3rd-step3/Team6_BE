@@ -2,7 +2,7 @@ package com.icebreaker.be.infra.persistence.redis.publisher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.icebreaker.be.domain.EventPublisher;
+import com.icebreaker.be.domain.publisher.EventPublisher;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

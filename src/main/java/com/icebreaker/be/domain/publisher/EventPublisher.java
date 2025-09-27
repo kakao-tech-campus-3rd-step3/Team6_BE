@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain;
+package com.icebreaker.be.domain.publisher;
 
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 
