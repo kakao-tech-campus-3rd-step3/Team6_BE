@@ -1,13 +1,13 @@
 package com.icebreaker.be.application.waitingroom.event;
 
 import com.icebreaker.be.application.room.RoomService;
+import com.icebreaker.be.domain.EventPublisher;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RedisMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RedisMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
-import com.icebreaker.be.infra.persistence.redis.publisher.RedisPublisher;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import org.springframework.transaction.event.TransactionPhase;
 public class WaitingRoomEventListener {
 
     private final RoomService roomService;
-    private final RedisPublisher redisPublisher;
+    private final EventPublisher eventPublisher;
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleWaitingRoomParticipantJoinedEvent(WaitingRoomParticipantJoinedEvent event) {
@@ -29,7 +29,7 @@ public class WaitingRoomEventListener {
                 event.waitingRoomWithParticipants());
         RedisMessage<ParticipantJoinedMessage> message = new RedisMessage<>(
                 RedisMessageType.PARTICIPANT_JOINED, payload);
-        redisPublisher.publish(message);
+        eventPublisher.publish(message);
         log.info("Publishing PARTICIPANT_JOINED message for roomId: {} publish to redis",
                 event.roomId());
     }
@@ -44,7 +44,7 @@ public class WaitingRoomEventListener {
         RoomStartedMessage payload = new RoomStartedMessage(waitingRoom.roomId());
         RedisMessage<RoomStartedMessage> message = new RedisMessage<>(
                 RedisMessageType.ROOM_STARTED, payload);
-        redisPublisher.publish(message);
+        eventPublisher.publish(message);
         log.info("Publishing ROOM_STARTED message, participantIds: {} publish to redis",
                 event.getParticipantIds());
     }
