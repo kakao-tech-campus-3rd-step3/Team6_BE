@@ -2,8 +2,11 @@ package com.icebreaker.be.application.room.event;
 
 
 import com.icebreaker.be.application.room.RoomStageService;
+import com.icebreaker.be.domain.publisher.EventPublisher;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
-import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
+import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,14 +18,18 @@ import org.springframework.transaction.event.TransactionPhase;
 public class RoomStageEventListener {
 
     private final RoomStageService roomStageService;
-    private final RoomStageWebSocketNotifier notifier;
+    private final EventPublisher eventPublisher;
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleRoomStageChangeEvent(RoomStageChangeEvent event) {
         roomStageService.changeStage(event.roomCode(), event.stage());
-        notifier.notifyRoomStageChanged(event.roomCode(), event.stage());
 
-        log.info("Handled RoomStageChangeEvent for roomCode: {}, new stage: {}", event.roomCode(),
+        RoomStageChangeMessage payload = new RoomStageChangeMessage(event.roomCode(),
                 event.stage());
+        PubSubMessage<RoomStageChangeMessage> message = new PubSubMessage<>(
+                PubSubMessageType.ROOM_STAGE_CHANGE, payload);
+        eventPublisher.publish(message);
+        log.info("Publishing ROOM_STAGE_CHANGE message to redis for roomCode: {}, new stage: {}",
+                event.roomCode(), event.stage());
     }
 }
