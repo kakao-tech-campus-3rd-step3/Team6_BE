@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedisPublisher implements EventPublisher {
+public class RedisEventPublisher implements EventPublisher {
 
     private final RedisTemplate<String, String> customStringRedisTemplate;
     private final ObjectMapper objectMapper;
