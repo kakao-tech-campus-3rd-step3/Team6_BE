@@ -6,7 +6,7 @@ import com.icebreaker.be.domain.waitingroom.WaitingRoom;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
-import com.icebreaker.be.infra.persistence.redis.message.RedisMessageType;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class WaitingRoomEventListener {
         ParticipantJoinedMessage payload = new ParticipantJoinedMessage(event.roomId(),
                 event.waitingRoomWithParticipants());
         PubSubMessage<ParticipantJoinedMessage> message = new PubSubMessage<>(
-                RedisMessageType.PARTICIPANT_JOINED, payload);
+                PubSubMessageType.PARTICIPANT_JOINED, payload);
         eventPublisher.publish(message);
         log.info("Publishing PARTICIPANT_JOINED message for roomId: {} publish to redis",
                 event.roomId());
@@ -43,7 +43,7 @@ public class WaitingRoomEventListener {
 
         RoomStartedMessage payload = new RoomStartedMessage(waitingRoom.roomId());
         PubSubMessage<RoomStartedMessage> message = new PubSubMessage<>(
-                RedisMessageType.ROOM_STARTED, payload);
+                PubSubMessageType.ROOM_STARTED, payload);
         eventPublisher.publish(message);
         log.info("Publishing ROOM_STARTED message, participantIds: {} publish to redis",
                 event.getParticipantIds());

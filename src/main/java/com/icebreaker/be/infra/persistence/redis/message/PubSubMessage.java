@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PubSubMessage<T> {
 
-    private RedisMessageType type;
+    private PubSubMessageType type;
     private T message;
 }
