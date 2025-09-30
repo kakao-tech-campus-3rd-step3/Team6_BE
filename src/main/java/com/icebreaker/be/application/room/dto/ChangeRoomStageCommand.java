@@ -1,11 +1,13 @@
 package com.icebreaker.be.application.room.dto;
 
-import com.icebreaker.be.domain.room.entity.Stage;
+import com.icebreaker.be.domain.room.vo.Stage;
+import com.icebreaker.be.domain.room.vo.StageEventType;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 
 public record ChangeRoomStageCommand(
-        String stage
+        String stage,
+        String eventType
 ) {
 
     public Stage getStageEnum() {
@@ -13,6 +15,14 @@ public record ChangeRoomStageCommand(
             return Stage.valueOf(stage);
         } catch (IllegalArgumentException e) {
             throw new BusinessException(ErrorCode.INVALID_STAGE_VALUE);
+        }
+    }
+
+    public StageEventType getEventTypeEnum() {
+        try {
+            return StageEventType.valueOf(eventType);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE_VALUE);
         }
     }
 }
