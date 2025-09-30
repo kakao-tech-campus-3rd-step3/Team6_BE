@@ -17,7 +17,7 @@ public record RoomStageTransition(
     }
 
     public boolean isApplicable(Stage current, StageEvent event) {
-        return from == current && this.event == event
+        return from == current && this.event.equals(event)
                 && (guard == null || guard.canTransition(current, event));
     }
 }

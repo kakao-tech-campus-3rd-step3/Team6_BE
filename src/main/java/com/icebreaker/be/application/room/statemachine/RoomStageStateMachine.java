@@ -50,7 +50,7 @@ public class RoomStageStateMachine {
         RoomStageTransitionKey transitionKey = new RoomStageTransitionKey(currentStage, event);
         RoomStageTransition transition = transitionMap.get(transitionKey);
 
-        if (transition == null || transition.isApplicable(currentStage, event)) {
+        if (transition == null || !transition.isApplicable(currentStage, event)) {
             throw new BusinessException(ErrorCode.INVALID_STAGE_TRANSITION);
         }
 
