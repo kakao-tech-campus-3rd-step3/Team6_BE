@@ -1,6 +1,6 @@
 package com.icebreaker.be.application.room.event;
 
-import com.icebreaker.be.domain.room.entity.Stage;
+import com.icebreaker.be.domain.room.vo.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,9 +13,27 @@ public class RoomStageEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void publishStageChanged(String roomCode, Stage stage) {
+    public void publishStageInitialized(String roomCode) {
         applicationEventPublisher.publishEvent(
-                RoomStageChangeEvent.of(roomCode, stage)
+                RoomStageEvent.init(roomCode)
+        );
+    }
+
+    public void publishStageNext(String roomCode) {
+        applicationEventPublisher.publishEvent(
+                RoomStageEvent.next(roomCode)
+        );
+    }
+
+    public void publishStagePrevious(String roomCode) {
+        applicationEventPublisher.publishEvent(
+                RoomStageEvent.prev(roomCode)
+        );
+    }
+
+    public void publishStageSelected(String roomCode, Stage stage) {
+        applicationEventPublisher.publishEvent(
+                RoomStageEvent.select(roomCode, stage)
         );
     }
 }
