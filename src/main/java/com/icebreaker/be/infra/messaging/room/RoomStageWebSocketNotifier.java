@@ -1,14 +1,16 @@
 package com.icebreaker.be.infra.messaging.room;
 
 import com.icebreaker.be.application.room.messaging.RoomStageNotifier;
-import com.icebreaker.be.domain.room.entity.Stage;
+import com.icebreaker.be.domain.room.vo.Stage;
+import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 public class RoomStageWebSocketNotifier extends AbstractStompNotifier implements RoomStageNotifier {
 
     private static final String ROOM_STAGE_TOPIC_PREFIX = "/topic/room-stage/";
@@ -23,5 +25,13 @@ public class RoomStageWebSocketNotifier extends AbstractStompNotifier implements
         send(topic, new RoomStageChangedPayload(stage), "룸 스테이지가 변경되었습니다.");
 
         log.debug("Notified room stage change to topic {}: new stage {}", topic, stage);
+    }
+
+    @Override
+    public void notifyProfileViewStageStarted(String roomId, List<User> users) {
+        String topic = buildTopic(ROOM_STAGE_TOPIC_PREFIX, roomId);
+//        send(topic, new RoomStageChangedPayload(stage), "룸 스테이지가 변경되었습니다.");
+//
+//        log.debug("Notified room stage change to topic {}: new stage {}", topic, stage);
     }
 }
