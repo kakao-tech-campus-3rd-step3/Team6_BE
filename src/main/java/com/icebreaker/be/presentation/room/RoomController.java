@@ -39,3 +39,6 @@ public class RoomController {
         return ApiResponseFactory.success(roomTicket, "룸 티켓이 발급되었습니다.");
     }
 }
+
+
+
