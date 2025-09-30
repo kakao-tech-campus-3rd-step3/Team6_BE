@@ -7,7 +7,6 @@ import com.icebreaker.be.application.room.dto.RoomTicket;
 import com.icebreaker.be.application.room.dto.RoomTicketJwtClaims;
 import com.icebreaker.be.application.room.event.RoomStageEventPublisher;
 import com.icebreaker.be.domain.room.entity.Room;
-import com.icebreaker.be.domain.room.entity.Stage;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.room.vo.RoomParticipantRole;
 import com.icebreaker.be.domain.user.User;
@@ -39,8 +38,7 @@ public class RoomService {
         room.joinUsers(users);
         Room savedRoom = roomRepository.save(room);
 
-        publisher.publishStageChanged(room.getCode(), Stage.STAGE_1);
-
+        publisher.publishStageInitialized(room.getCode());
         return savedRoom;
     }
 
@@ -50,7 +48,13 @@ public class RoomService {
             throw new BusinessException(ErrorCode.ROOM_NOT_FOUND);
         }
 
-        publisher.publishStageChanged(roomCode, command.getStageEnum());
+        switch (command.getEventTypeEnum()) {
+            case INIT -> publisher.publishStageInitialized(roomCode);
+            case NEXT -> publisher.publishStageNext(roomCode);
+            case PREV -> publisher.publishStagePrevious(roomCode);
+            case SELECT -> publisher.publishStageSelected(roomCode, command.getStageEnum());
+            default -> throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
+        }
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -68,3 +72,4 @@ public class RoomService {
                 .getUserRole(userId);
     }
 }
+
