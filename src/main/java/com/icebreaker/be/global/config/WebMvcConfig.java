@@ -1,7 +1,7 @@
 package com.icebreaker.be.global.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,17 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private static final List<String> ALLOWED_ORIGINS = List.of(
-            "http://localhost:5173",
-            "https://localhost:8080"
-    );
+    @Value("${cors.allowed-origins}")
+    private String[] allowedOrigins;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
-                .allowedOrigins(ALLOWED_ORIGINS.toArray(new String[0]))
+                .allowedOrigins(allowedOrigins)
                 .allowCredentials(true)
                 .maxAge(3600);
     }
