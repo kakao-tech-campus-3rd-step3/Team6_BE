@@ -1,6 +1,6 @@
 package com.icebreaker.be.domain.room.repo;
 
-import com.icebreaker.be.domain.room.entity.RoomStage;
+import com.icebreaker.be.domain.room.vo.RoomStage;
 import java.util.Optional;
 
 public interface RoomStageRepository {
