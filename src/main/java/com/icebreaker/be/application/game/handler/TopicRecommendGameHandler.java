@@ -16,7 +16,7 @@ public class TopicRecommendGameHandler implements GameHandler {
 
     @Override
     public GameResult handle() {
-        log.info("TopicRecommendGameHandler handling game logic for category: {}", getCategory());
+        //TODO: 주제 추천 게임 로직 구현 필요
         return new GameResult();
     }
 }

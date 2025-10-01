@@ -16,7 +16,7 @@ public class ManittoGameHandler implements GameHandler {
 
     @Override
     public GameResult handle() {
-        log.info("ManittoGameHandler");
+        //TODO: 마니또 게임 로직 구현 필요
         return new GameResult();
     }
 }

@@ -16,7 +16,7 @@ public class RandomRouletteGameHandler implements GameHandler {
 
     @Override
     public GameResult handle() {
-        log.info("RandomRouletteGameHandler handling the game logic for RANDOM_ROULETTE_STAGE");
+        //TODO: 랜덤 룰렛 게임 로직 구현 필요
         return new GameResult();
     }
 }
