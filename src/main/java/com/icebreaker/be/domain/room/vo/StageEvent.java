@@ -19,14 +19,14 @@ public record StageEvent(StageEventType type, Stage target) {
     }
 
     public static StageEvent selectTopic() {
-        return new StageEvent(StageEventType.SELECT, Stage.TOPIC_RECOMMEND_STAGE);
+        return select(Stage.TOPIC_RECOMMEND_STAGE);
     }
 
     public static StageEvent selectRandom() {
-        return new StageEvent(StageEventType.SELECT, Stage.RANDOM_ROULETTE_STAGE);
+        return select(Stage.RANDOM_ROULETTE_STAGE);
     }
 
     public static StageEvent selectEnd() {
-        return new StageEvent(StageEventType.SELECT, Stage.ENDING_STAGE);
+        return select(Stage.ENDING_STAGE);
     }
 }
