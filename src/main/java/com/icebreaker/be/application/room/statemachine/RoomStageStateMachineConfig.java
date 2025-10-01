@@ -31,8 +31,9 @@ public class RoomStageStateMachineConfig {
     }
 
     @Bean
-    public Map<RoomStageTransitionKey, RoomStageTransition> transitionMap() {
-        return transitions().stream()
+    public Map<RoomStageTransitionKey, RoomStageTransition> transitionMap(
+            List<RoomStageTransition> transitions) {
+        return transitions.stream()
                 .collect(CollectorsUtils.toMapByKey(
                         t -> new RoomStageTransitionKey(t.from(), t.event())));
     }

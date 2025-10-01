@@ -5,7 +5,6 @@ import com.icebreaker.be.application.game.messaging.GameResultNotifier;
 import com.icebreaker.be.application.room.RoomService;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.global.common.resolver.Resolver;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class GameService {
 
     public void sendGameList(String roomCode, Long userId) {
         roomService.validateRoomOwner(roomCode, userId);
-        List<GameCategory> categories = Arrays.asList(GameCategory.values());
+        List<GameCategory> categories = List.of(GameCategory.values());
         notifier.notifyGameList(roomCode, categories);
     }
 }

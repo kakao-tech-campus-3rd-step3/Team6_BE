@@ -18,9 +18,6 @@ public class GameHandlerResolver implements Resolver<GameCategory, GameHandler> 
 
     @Override
     public GameHandler resolve(GameCategory category) {
-        if (!supports(category)) {
-            throw new IllegalArgumentException("해당 category 대한 Action이 없습니다: " + category);
-        }
         return registry.getHandler(category);
     }
 }
