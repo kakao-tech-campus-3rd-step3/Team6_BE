@@ -23,6 +23,7 @@ public class RoomStageStateMachineConfig {
                 .transition(PROFILE_VIEW_STAGE, GAME_LIST_STAGE, StageEvent.next())
                 .transition(GAME_LIST_STAGE, TOPIC_RECOMMEND_STAGE, StageEvent.selectTopic())
                 .transition(GAME_LIST_STAGE, RANDOM_ROULETTE_STAGE, StageEvent.selectRandom())
+                .transition(GAME_LIST_STAGE, MANITTO_STAGE, StageEvent.selectManitto())
                 .transition(GAME_LIST_STAGE, ENDING_STAGE, StageEvent.selectEnd())
                 .transition(MANITTO_STAGE, GAME_LIST_STAGE, StageEvent.prev())
                 .transition(TOPIC_RECOMMEND_STAGE, GAME_LIST_STAGE, StageEvent.prev())

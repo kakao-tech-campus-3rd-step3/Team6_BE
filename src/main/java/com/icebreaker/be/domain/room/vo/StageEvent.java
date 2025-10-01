@@ -26,6 +26,10 @@ public record StageEvent(StageEventType type, Stage target) {
         return select(Stage.RANDOM_ROULETTE_STAGE);
     }
 
+    public static StageEvent selectManitto() {
+        return select(Stage.MANITTO_STAGE);
+    }
+
     public static StageEvent selectEnd() {
         return select(Stage.ENDING_STAGE);
     }
