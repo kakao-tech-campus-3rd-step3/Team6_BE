@@ -27,6 +27,9 @@ public enum ErrorCode {
     INVALID_STAGE_EVENT_TYPE("유효하지 않은 스테이지 이벤트 타입입니다.", HttpStatus.BAD_REQUEST),
     INVALID_STAGE_TRANSITION("유효하지 않은 스테이지 전환입니다.", HttpStatus.BAD_REQUEST),
     ROOM_STAGE_NOT_FOUND("방의 현재 스테이지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    ROOM_OWNER_NOT_FOUND("방장이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    ROOM_OWNER_MISMATCH("방장이 아닙니다.", HttpStatus.FORBIDDEN),
+    INVALID_ROOM_STAGE("유효하지 않은 방 스테이지입니다.", HttpStatus.BAD_REQUEST),
     
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
