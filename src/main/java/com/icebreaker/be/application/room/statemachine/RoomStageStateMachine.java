@@ -1,7 +1,5 @@
 package com.icebreaker.be.application.room.statemachine;
 
-import com.icebreaker.be.application.room.statemachine.action.RoomStageActionHandler;
-import com.icebreaker.be.application.room.statemachine.action.RoomStageActionHandlerResolver;
 import com.icebreaker.be.domain.room.repo.RoomStageRepository;
 import com.icebreaker.be.domain.room.vo.RoomStage;
 import com.icebreaker.be.domain.room.vo.Stage;
@@ -19,9 +17,8 @@ public class RoomStageStateMachine {
 
     private final RoomStageRepository stageRepository;
     private final Map<RoomStageTransitionKey, RoomStageTransition> transitionMap;
-    private final RoomStageActionHandlerResolver resolver;
 
-    public void transitionStage(String roomCode, StageEvent event) {
+    public RoomStage transitionStage(String roomCode, StageEvent event) {
         RoomStage currentStage = loadOrInitCurrentStage(roomCode, event);
         RoomStage targetStage = currentStage;
 
@@ -29,15 +26,8 @@ public class RoomStageStateMachine {
             targetStage = applyTransition(currentStage, event);
             saveStage(targetStage);
         }
-
-        performAction(roomCode, targetStage);
+        return targetStage;
     }
-
-    private void performAction(String roomCode, RoomStage stage) {
-        RoomStageActionHandler handler = resolver.resolve(stage.stage());
-        handler.handle(roomCode, stage);
-    }
-
 
     private RoomStage applyTransition(RoomStage roomStage, StageEvent event) {
         RoomStageTransition transition = getTransition(roomStage.stage(), event);

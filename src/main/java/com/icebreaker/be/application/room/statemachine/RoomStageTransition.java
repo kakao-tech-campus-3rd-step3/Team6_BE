@@ -8,16 +8,10 @@ import lombok.Builder;
 public record RoomStageTransition(
         Stage from,
         Stage to,
-        StageEvent event,
-        RoomStageGuard guard
+        StageEvent event
 ) {
 
-    public RoomStageTransition(Stage from, Stage to, StageEvent event) {
-        this(from, to, event, null);
-    }
-
     public boolean isApplicable(Stage current, StageEvent event) {
-        return from == current && this.event.equals(event)
-                && (guard == null || guard.canTransition(current, event));
+        return from == current && this.event.equals(event);
     }
 }
