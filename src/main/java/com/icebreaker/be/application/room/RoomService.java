@@ -6,7 +6,6 @@ import com.icebreaker.be.application.room.dto.RoomParticipantCommand;
 import com.icebreaker.be.application.room.event.RoomStageEventPublisher;
 import com.icebreaker.be.application.room.messaging.RoomNotifier;
 import com.icebreaker.be.domain.room.entity.Room;
-import com.icebreaker.be.domain.room.repo.RoomOwnerRepository;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
@@ -26,12 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomService {
 
     private final RoomRepository roomRepository;
-
-    private final RoomOwnerRepository roomOwnerRepository;
     private final UserRepository userRepository;
 
     private final RoomStageEventPublisher publisher;
     private final RoomNotifier roomNotifier;
+    private final RoomOwnerService roomOwnerService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Room createRoom(WaitingRoom waitingRoom, List<Long> participantIds) {
@@ -41,7 +39,7 @@ public class RoomService {
         room.joinUsers(users);
 
         Room savedRoom = roomRepository.save(room);
-        saveRoomOwner(room);
+        roomOwnerService.create(room);
 
         publisher.publishStageInitialized(room.getCode());
         return savedRoom;
@@ -50,7 +48,8 @@ public class RoomService {
     @Transactional(readOnly = true)
     public void changeRoomStage(String roomCode, Long userId, ChangeRoomStageCommand command) {
         validateRoomExists(roomCode);
-        validateRoomOwner(roomCode, userId);
+
+        roomOwnerService.validateRoomOwner(roomCode, userId);
 
         publisher.publishStageChanged(
                 roomCode,
@@ -59,35 +58,24 @@ public class RoomService {
         );
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+    @Transactional(readOnly = true)
     public void sendRoomParticipants(String roomCode, Long userId) {
         validateRoomExists(roomCode);
-        validateRoomOwner(roomCode, userId);
+
+        roomOwnerService.validateRoomOwner(roomCode, userId);
 
         List<RoomParticipantCommand> participants = roomRepository.findUsersByRoomCode(roomCode)
                 .stream()
                 .map(RoomParticipantCommand::fromEntity)
                 .toList();
-        
+
         roomNotifier.notifyRoomParticipants(roomCode, participants);
-    }
-
-    public void validateRoomOwner(String roomCode, Long userId) {
-        Long ownerId = roomOwnerRepository.findOwnerByRoomCode(roomCode)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_OWNER_NOT_FOUND));
-
-        if (!ownerId.equals(userId)) {
-            throw new BusinessException(ErrorCode.ROOM_OWNER_MISMATCH);
-        }
     }
 
     private List<User> loadParticipants(List<Long> participantIds) {
         return userRepository.findAllById(participantIds);
     }
 
-    private void saveRoomOwner(Room room) {
-        roomOwnerRepository.save(room.getCode(), room.getHostId());
-    }
 
     private void validateRoomExists(String roomCode) {
         if (!roomRepository.existsByCode(roomCode)) {

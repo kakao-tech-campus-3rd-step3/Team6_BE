@@ -30,13 +30,16 @@ public enum ErrorCode {
     ROOM_OWNER_NOT_FOUND("방장이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     ROOM_OWNER_MISMATCH("방장이 아닙니다.", HttpStatus.FORBIDDEN),
     INVALID_ROOM_STAGE("유효하지 않은 방 스테이지입니다.", HttpStatus.BAD_REQUEST),
-    
+
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_QUESTION_TYPE("유효하지 않은 질문 타입입니다.", HttpStatus.BAD_REQUEST),
 
     // INTEREST ERROR
     INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
+
+    // GAME ERROR
+    INVALID_GAME_CATEGORY("유효하지 않은 게임 카테고리입니다.", HttpStatus.BAD_REQUEST),
 
     INVALID_JWT_PAYLOAD("유효하지 않은 JWT 페이로드입니다.", HttpStatus.UNAUTHORIZED),
     EXPIRED_JWT_TOKEN("만료된 JWT 토큰입니다.", HttpStatus.UNAUTHORIZED),

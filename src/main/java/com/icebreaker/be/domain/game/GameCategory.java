@@ -1,6 +1,8 @@
 package com.icebreaker.be.domain.game;
 
 import com.icebreaker.be.domain.room.vo.Stage;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public enum GameCategory {
     public static GameCategory fromStage(Stage stage) {
         GameCategory category = stageToGameCategory.get(stage);
         if (category == null) {
-            throw new IllegalArgumentException("Not a game stage: " + stage);
+            throw new BusinessException(ErrorCode.INVALID_GAME_CATEGORY);
         }
         return category;
     }

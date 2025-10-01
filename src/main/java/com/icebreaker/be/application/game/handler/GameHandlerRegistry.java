@@ -2,6 +2,8 @@ package com.icebreaker.be.application.game.handler;
 
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.global.common.util.CollectorsUtils;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,7 @@ public class GameHandlerRegistry {
     public GameHandler getHandler(GameCategory category) {
         GameHandler action = actionMap.get(category);
         if (action == null) {
-            throw new IllegalArgumentException("해당 category 대한 Action이 없습니다: " + category);
+            throw new BusinessException(ErrorCode.INVALID_GAME_CATEGORY);
         }
         return action;
     }

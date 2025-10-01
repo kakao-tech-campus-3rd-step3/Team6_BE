@@ -1,8 +1,6 @@
 package com.icebreaker.be.presentation.game;
 
 import com.icebreaker.be.application.game.GameService;
-import com.icebreaker.be.domain.game.GameCategory;
-import com.icebreaker.be.global.annotation.CurrentGameCategory;
 import com.icebreaker.be.global.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,9 +16,9 @@ public class GameController {
     @MessageMapping("/room/{roomCode}/start-game")
     public void handleGameStarted(
             @DestinationVariable String roomCode,
-            @CurrentGameCategory GameCategory category
+            @CurrentUser Long userId
     ) {
-        gameService.start(roomCode, category);
+        gameService.start(roomCode, userId);
     }
 
     @MessageMapping("/room/{roomCode}/game-list")
