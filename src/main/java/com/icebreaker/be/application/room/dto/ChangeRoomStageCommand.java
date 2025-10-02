@@ -18,7 +18,7 @@ public record ChangeRoomStageCommand(
         try {
             return Stage.valueOf(stage.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
+            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_VALUE);
         }
     }
 
@@ -26,7 +26,7 @@ public record ChangeRoomStageCommand(
         try {
             return StageEventType.valueOf(eventType.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
-            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
+            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_VALUE);
         }
     }
 }

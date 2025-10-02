@@ -23,7 +23,7 @@ public enum ErrorCode {
     ROOM_CAPACITY_EXCEEDED("방 정원을 초과했습니다.", HttpStatus.BAD_REQUEST),
     INVALID_STAGE_VALUE("유효하지 않은 스테이지 값입니다.", HttpStatus.BAD_REQUEST),
     USER_NOT_IN_ROOM("사용자가 방에 속해있지 않습니다.", HttpStatus.BAD_REQUEST),
-    INVALID_STAGE_EVENT_TYPE("유효하지 않은 스테이지 이벤트 타입입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_STAGE_EVENT_VALUE("유효하지 않은 스테이지 이벤트 타입입니다.", HttpStatus.BAD_REQUEST),
     INVALID_STAGE_TRANSITION("유효하지 않은 스테이지 전환입니다.", HttpStatus.BAD_REQUEST),
     ROOM_STAGE_NOT_FOUND("방의 현재 스테이지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ROOM_OWNER_NOT_FOUND("방장이 존재하지 않습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
