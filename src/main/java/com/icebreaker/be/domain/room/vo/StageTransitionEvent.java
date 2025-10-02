@@ -1,6 +1,11 @@
 package com.icebreaker.be.domain.room.vo;
 
-public record StageTransitionEvent(StageEventType type, Stage target) {
+import jakarta.annotation.Nullable;
+
+public record StageTransitionEvent(
+        StageEventType type,
+        @Nullable Stage target
+) {
 
     public static StageTransitionEvent init() {
         return new StageTransitionEvent(StageEventType.INIT, null);

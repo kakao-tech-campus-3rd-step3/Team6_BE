@@ -18,10 +18,10 @@ public class RoomStageEventListener {
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleRoomStageChangeEvent(RoomStageTransitionEvent event) {
-        StageTransitionEvent stageTransitionEvent = new StageTransitionEvent(event.type(),
-                event.target());
+        StageTransitionEvent stageTransitionEvent = new StageTransitionEvent(event.stageEventType(),
+                event.targetStage());
         roomStageService.changeStage(event.roomCode(), stageTransitionEvent);
         log.info("Handled RoomStageChangeEvent for roomCode: {}, new stage: {}", event.roomCode(),
-                event.target());
+                event.targetStage());
     }
 }

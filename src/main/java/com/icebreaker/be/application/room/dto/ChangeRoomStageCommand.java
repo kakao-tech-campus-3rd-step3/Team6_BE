@@ -4,16 +4,20 @@ import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.domain.room.vo.StageEventType;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
+import jakarta.annotation.Nullable;
 
 public record ChangeRoomStageCommand(
-        String stage,
-        String eventType
+        String eventType,
+        @Nullable String stage
 ) {
 
     public Stage getStageEnum() {
+        if (stage == null) {
+            return null;
+        }
         try {
             return Stage.valueOf(eventType.toUpperCase());
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
         }
     }

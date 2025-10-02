@@ -2,27 +2,34 @@ package com.icebreaker.be.application.room.event;
 
 import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.domain.room.vo.StageEventType;
-import jakarta.annotation.Nullable;
+import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 
 public record RoomStageTransitionEvent(
-        StageEventType type,
         String roomCode,
-        @Nullable Stage target
+        StageTransitionEvent stageEvent
 ) {
 
     public static RoomStageTransitionEvent init(String roomCode) {
-        return new RoomStageTransitionEvent(StageEventType.INIT, roomCode, null);
+        return new RoomStageTransitionEvent(roomCode, StageTransitionEvent.init());
     }
 
     public static RoomStageTransitionEvent next(String roomCode) {
-        return new RoomStageTransitionEvent(StageEventType.NEXT, roomCode, null);
+        return new RoomStageTransitionEvent(roomCode, StageTransitionEvent.next());
     }
 
     public static RoomStageTransitionEvent prev(String roomCode) {
-        return new RoomStageTransitionEvent(StageEventType.PREV, roomCode, null);
+        return new RoomStageTransitionEvent(roomCode, StageTransitionEvent.prev());
     }
 
     public static RoomStageTransitionEvent select(String roomCode, Stage stage) {
-        return new RoomStageTransitionEvent(StageEventType.SELECT, roomCode, stage);
+        return new RoomStageTransitionEvent(roomCode, StageTransitionEvent.select(stage));
+    }
+
+    public StageEventType stageEventType() {
+        return stageEvent.type();
+    }
+
+    public Stage targetStage() {
+        return stageEvent.target();
     }
 }
