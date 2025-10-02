@@ -73,7 +73,11 @@ public class RoomService {
     }
 
     private List<User> loadParticipants(List<Long> participantIds) {
-        return userRepository.findAllById(participantIds);
+        List<User> users = userRepository.findAllById(participantIds);
+        if (users.size() != participantIds.size()) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        return users;
     }
 
 
