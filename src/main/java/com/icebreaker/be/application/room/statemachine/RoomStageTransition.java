@@ -11,7 +11,4 @@ public record RoomStageTransition(
         StageEvent event
 ) {
 
-    public boolean isApplicable(Stage current, StageEvent event) {
-        return from == current && this.event.equals(event);
-    }
 }
