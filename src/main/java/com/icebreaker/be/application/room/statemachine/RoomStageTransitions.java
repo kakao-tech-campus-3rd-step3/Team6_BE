@@ -26,6 +26,18 @@ public class RoomStageTransitions {
         return this;
     }
 
+    public RoomStageTransitions selectTransition(Stage from, Stage to) {
+        return transition(from, to, StageEvent.select(to));
+    }
+
+    public RoomStageTransitions nextTransition(Stage from, Stage to) {
+        return transition(from, to, StageEvent.next());
+    }
+
+    public RoomStageTransitions prevTransition(Stage from, Stage to) {
+        return transition(from, to, StageEvent.prev());
+    }
+
     public List<RoomStageTransition> build() {
         return List.copyOf(transitions);
     }

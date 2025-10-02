@@ -7,7 +7,6 @@ import static com.icebreaker.be.domain.room.vo.Stage.PROFILE_VIEW_STAGE;
 import static com.icebreaker.be.domain.room.vo.Stage.RANDOM_ROULETTE_STAGE;
 import static com.icebreaker.be.domain.room.vo.Stage.TOPIC_RECOMMEND_STAGE;
 
-import com.icebreaker.be.domain.room.vo.StageEvent;
 import com.icebreaker.be.global.common.util.CollectorsUtils;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +19,14 @@ public class RoomStageStateMachineConfig {
     @Bean
     public List<RoomStageTransition> transitions() {
         return RoomStageTransitions.create()
-                .transition(PROFILE_VIEW_STAGE, GAME_LIST_STAGE, StageEvent.next())
-                .transition(GAME_LIST_STAGE, TOPIC_RECOMMEND_STAGE, StageEvent.selectTopic())
-                .transition(GAME_LIST_STAGE, RANDOM_ROULETTE_STAGE, StageEvent.selectRandom())
-                .transition(GAME_LIST_STAGE, MANITTO_STAGE, StageEvent.selectManitto())
-                .transition(GAME_LIST_STAGE, ENDING_STAGE, StageEvent.selectEnd())
-                .transition(MANITTO_STAGE, GAME_LIST_STAGE, StageEvent.prev())
-                .transition(TOPIC_RECOMMEND_STAGE, GAME_LIST_STAGE, StageEvent.prev())
-                .transition(RANDOM_ROULETTE_STAGE, GAME_LIST_STAGE, StageEvent.prev())
+                .nextTransition(PROFILE_VIEW_STAGE, GAME_LIST_STAGE)
+                .selectTransition(GAME_LIST_STAGE, TOPIC_RECOMMEND_STAGE)
+                .selectTransition(GAME_LIST_STAGE, RANDOM_ROULETTE_STAGE)
+                .selectTransition(GAME_LIST_STAGE, MANITTO_STAGE)
+                .selectTransition(GAME_LIST_STAGE, ENDING_STAGE)
+                .prevTransition(MANITTO_STAGE, GAME_LIST_STAGE)
+                .prevTransition(TOPIC_RECOMMEND_STAGE, GAME_LIST_STAGE)
+                .prevTransition(RANDOM_ROULETTE_STAGE, GAME_LIST_STAGE)
                 .build();
     }
 
