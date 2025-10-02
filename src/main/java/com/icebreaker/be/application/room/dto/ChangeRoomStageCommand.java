@@ -12,16 +12,16 @@ public record ChangeRoomStageCommand(
 
     public Stage getStageEnum() {
         try {
-            return Stage.valueOf(stage);
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_STAGE_VALUE);
+            return Stage.valueOf(eventType.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
         }
     }
 
     public StageEventType getEventTypeEnum() {
         try {
-            return StageEventType.valueOf(eventType);
-        } catch (IllegalArgumentException e) {
+            return StageEventType.valueOf(eventType.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
             throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
         }
     }
