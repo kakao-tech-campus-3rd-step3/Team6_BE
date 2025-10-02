@@ -11,5 +11,5 @@ public enum Stage {
     TOPIC_RECOMMEND_STAGE,
 
     //ENDING
-    ENDING_STAGE;
+    ENDING_STAGE
 }
