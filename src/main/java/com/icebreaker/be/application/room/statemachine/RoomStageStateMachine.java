@@ -3,8 +3,8 @@ package com.icebreaker.be.application.room.statemachine;
 import com.icebreaker.be.domain.room.repo.RoomStageRepository;
 import com.icebreaker.be.domain.room.vo.RoomStage;
 import com.icebreaker.be.domain.room.vo.Stage;
-import com.icebreaker.be.domain.room.vo.StageEvent;
 import com.icebreaker.be.domain.room.vo.StageEventType;
+import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class RoomStageStateMachine {
     private final RoomStageRepository stageRepository;
     private final Map<RoomStageTransitionKey, RoomStageTransition> transitionMap;
 
-    public RoomStage transitionStage(String roomCode, StageEvent event) {
+    public RoomStage transitionStage(String roomCode, StageTransitionEvent event) {
         RoomStage currentStage = loadOrInitCurrentStage(roomCode, event);
 
         if (event.type() == StageEventType.INIT) {
@@ -30,14 +30,14 @@ public class RoomStageStateMachine {
         return targetStage;
     }
 
-    private RoomStage loadOrInitCurrentStage(String roomCode, StageEvent event) {
+    private RoomStage loadOrInitCurrentStage(String roomCode, StageTransitionEvent event) {
         return stageRepository.findByRoomCode(roomCode)
                 .orElseGet(() -> initStageIfEventIsInit(roomCode, event));
     }
 
-    private RoomStage initStageIfEventIsInit(String roomCode, StageEvent event) {
+    private RoomStage initStageIfEventIsInit(String roomCode, StageTransitionEvent event) {
         if (event.type() != StageEventType.INIT) {
-            throw new BusinessException(ErrorCode.ROOM_STAGE_NOT_FOUND);
+            throw new BusinessException(ErrorCode.ROOM_STAGE_NOT_INITIALIZED);
         }
 
         RoomStage initialStage = new RoomStage(roomCode, Stage.PROFILE_VIEW_STAGE);
@@ -45,7 +45,7 @@ public class RoomStageStateMachine {
         return initialStage;
     }
 
-    private RoomStageTransition getTransition(Stage currentStage, StageEvent event) {
+    private RoomStageTransition getTransition(Stage currentStage, StageTransitionEvent event) {
 
         RoomStageTransitionKey transitionKey = new RoomStageTransitionKey(currentStage, event);
         RoomStageTransition transition = transitionMap.get(transitionKey);
@@ -57,7 +57,7 @@ public class RoomStageStateMachine {
         return transition;
     }
 
-    private RoomStage applyTransition(RoomStage roomStage, StageEvent event) {
+    private RoomStage applyTransition(RoomStage roomStage, StageTransitionEvent event) {
         RoomStageTransition transition = getTransition(roomStage.stage(), event);
 
         return new RoomStage(roomStage.roomCode(), transition.to());
