@@ -47,7 +47,7 @@ public class GameService {
     private GameCategory resolveCategory(String roomCode) {
         Stage currentStage = roomStageRepository.findByRoomCode(roomCode)
                 .map(RoomStage::stage)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_STAGE_NOT_FOUND));
 
         return GameCategory.fromStage(currentStage);
     }
