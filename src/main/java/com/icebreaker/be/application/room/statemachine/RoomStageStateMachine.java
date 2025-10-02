@@ -20,31 +20,14 @@ public class RoomStageStateMachine {
 
     public RoomStage transitionStage(String roomCode, StageEvent event) {
         RoomStage currentStage = loadOrInitCurrentStage(roomCode, event);
-        RoomStage targetStage = currentStage;
 
-        if (event.type() != StageEventType.INIT) {
-            targetStage = applyTransition(currentStage, event);
-            saveStage(targetStage);
+        if (event.type() == StageEventType.INIT) {
+            return currentStage;
         }
+
+        RoomStage targetStage = applyTransition(currentStage, event);
+        stageRepository.save(targetStage);
         return targetStage;
-    }
-
-    private RoomStage applyTransition(RoomStage roomStage, StageEvent event) {
-        RoomStageTransition transition = getTransition(roomStage.stage(), event);
-
-        return new RoomStage(roomStage.roomCode(), transition.to());
-    }
-
-    private RoomStageTransition getTransition(Stage currentStage, StageEvent event) {
-
-        RoomStageTransitionKey transitionKey = new RoomStageTransitionKey(currentStage, event);
-        RoomStageTransition transition = transitionMap.get(transitionKey);
-
-        if (transition == null) {
-            throw new BusinessException(ErrorCode.INVALID_STAGE_TRANSITION);
-        }
-
-        return transition;
     }
 
     private RoomStage loadOrInitCurrentStage(String roomCode, StageEvent event) {
@@ -62,7 +45,21 @@ public class RoomStageStateMachine {
         return initialStage;
     }
 
-    private void saveStage(RoomStage roomStage) {
-        stageRepository.save(roomStage);
+    private RoomStageTransition getTransition(Stage currentStage, StageEvent event) {
+
+        RoomStageTransitionKey transitionKey = new RoomStageTransitionKey(currentStage, event);
+        RoomStageTransition transition = transitionMap.get(transitionKey);
+
+        if (transition == null) {
+            throw new BusinessException(ErrorCode.INVALID_STAGE_TRANSITION);
+        }
+
+        return transition;
+    }
+
+    private RoomStage applyTransition(RoomStage roomStage, StageEvent event) {
+        RoomStageTransition transition = getTransition(roomStage.stage(), event);
+
+        return new RoomStage(roomStage.roomCode(), transition.to());
     }
 }

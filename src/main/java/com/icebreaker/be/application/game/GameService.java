@@ -49,12 +49,7 @@ public class GameService {
                 .map(RoomStage::stage)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND));
 
-        try {
-            return GameCategory.fromStage(currentStage);
-        } catch (BusinessException e) {
-            log.warn("RoomStage가 게임이 아님: roomCode={}, stage={}", roomCode, currentStage);
-            throw new BusinessException(ErrorCode.INVALID_ROOM_STAGE);
-        }
+        return GameCategory.fromStage(currentStage);
     }
 }
 
