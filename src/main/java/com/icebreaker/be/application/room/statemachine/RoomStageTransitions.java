@@ -2,8 +2,10 @@ package com.icebreaker.be.application.room.statemachine;
 
 import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.domain.room.vo.StageEvent;
+import com.icebreaker.be.global.common.util.CollectorsUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -38,7 +40,16 @@ public class RoomStageTransitions {
         return transition(from, to, StageEvent.prev());
     }
 
-    public List<RoomStageTransition> build() {
-        return List.copyOf(transitions);
+    public RoomStageTransitions build() {
+        return this;
+    }
+
+    /**
+     * Convert the list of transitions to a map for efficient lookup.
+     */
+    public Map<RoomStageTransitionKey, RoomStageTransition> toTransitionMap() {
+        return transitions.stream()
+                .collect(CollectorsUtils.toMapByKey(
+                        t -> new RoomStageTransitionKey(t.from(), t.event())));
     }
 }

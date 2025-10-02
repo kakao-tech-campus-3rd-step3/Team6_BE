@@ -7,8 +7,6 @@ import static com.icebreaker.be.domain.room.vo.Stage.PROFILE_VIEW_STAGE;
 import static com.icebreaker.be.domain.room.vo.Stage.RANDOM_ROULETTE_STAGE;
 import static com.icebreaker.be.domain.room.vo.Stage.TOPIC_RECOMMEND_STAGE;
 
-import com.icebreaker.be.global.common.util.CollectorsUtils;
-import java.util.List;
 import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class RoomStageStateMachineConfig {
 
     @Bean
-    public List<RoomStageTransition> transitions() {
+    public RoomStageTransitions transitions() {
         return RoomStageTransitions.create()
                 .nextTransition(PROFILE_VIEW_STAGE, GAME_LIST_STAGE)
                 .selectTransition(GAME_LIST_STAGE, TOPIC_RECOMMEND_STAGE)
@@ -32,9 +30,7 @@ public class RoomStageStateMachineConfig {
 
     @Bean
     public Map<RoomStageTransitionKey, RoomStageTransition> transitionMap(
-            List<RoomStageTransition> transitions) {
-        return transitions.stream()
-                .collect(CollectorsUtils.toMapByKey(
-                        t -> new RoomStageTransitionKey(t.from(), t.event())));
+            RoomStageTransitions transitions) {
+        return transitions.toTransitionMap();
     }
 }
