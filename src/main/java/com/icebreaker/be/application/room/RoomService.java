@@ -7,6 +7,7 @@ import com.icebreaker.be.application.room.event.RoomStageEventPublisher;
 import com.icebreaker.be.application.room.messaging.RoomNotifier;
 import com.icebreaker.be.domain.room.entity.Room;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
+import com.icebreaker.be.domain.room.vo.StageEventType;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
@@ -51,9 +52,15 @@ public class RoomService {
 
         roomOwnerService.validateRoomOwner(roomCode, userId);
 
+        StageEventType eventType = command.getEventTypeEnum();
+
+        if (eventType == StageEventType.INIT) {
+            throw new BusinessException(ErrorCode.INIT_STAGE_EVENT_NOT_ALLOWED);
+        }
+
         publisher.publishStageChanged(
                 roomCode,
-                command.getEventTypeEnum(),
+                eventType,
                 command.getStageEnum()
         );
     }

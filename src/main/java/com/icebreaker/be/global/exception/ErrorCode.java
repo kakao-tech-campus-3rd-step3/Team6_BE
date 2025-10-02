@@ -30,6 +30,7 @@ public enum ErrorCode {
     ROOM_OWNER_MISMATCH("멤버에게는 허용되지 않은 요청입니다.", HttpStatus.FORBIDDEN),
     INVALID_ROOM_STAGE("유효하지 않은 방 스테이지입니다.", HttpStatus.BAD_REQUEST),
     ROOM_STAGE_NOT_INITIALIZED("방 스테이지가 초기화되지 않았습니다.", HttpStatus.BAD_REQUEST),
+    INIT_STAGE_EVENT_NOT_ALLOWED("해당 요청에 INIT 이벤트는 허용되지 않습니다.", HttpStatus.BAD_REQUEST),
 
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
