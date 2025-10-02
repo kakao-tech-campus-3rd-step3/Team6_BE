@@ -27,7 +27,7 @@ public class RoomStageEventPublisherAdapter extends EventPublisherSupport implem
             case NEXT -> publishEvent(RoomStageTransitionEvent.next(roomCode));
             case PREV -> publishEvent(RoomStageTransitionEvent.prev(roomCode));
             case SELECT -> publishEvent(RoomStageTransitionEvent.select(roomCode, stage));
-            default -> throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
+            default -> throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_VALUE);
         }
     }
 }
