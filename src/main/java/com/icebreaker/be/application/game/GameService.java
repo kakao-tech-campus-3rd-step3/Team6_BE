@@ -1,5 +1,7 @@
 package com.icebreaker.be.application.game;
 
+import static com.icebreaker.be.domain.game.GameCategory.ALL_GAME_CATEGORIES;
+
 import com.icebreaker.be.application.game.handler.GameHandler;
 import com.icebreaker.be.application.game.messaging.GameResultNotifier;
 import com.icebreaker.be.application.room.RoomOwnerService;
@@ -10,7 +12,6 @@ import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.global.common.resolver.Resolver;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,7 @@ public class GameService {
     public void sendGameList(String roomCode, Long userId) {
         roomOwnerService.validateRoomOwner(roomCode, userId);
 
-        List<GameCategory> categories = List.of(GameCategory.values());
-        notifier.notifyGameList(roomCode, categories);
+        notifier.notifyGameList(roomCode, ALL_GAME_CATEGORIES);
     }
 
     private GameCategory resolveCategory(String roomCode) {
@@ -51,7 +51,7 @@ public class GameService {
 
         try {
             return GameCategory.fromStage(currentStage);
-        } catch (IllegalArgumentException e) {
+        } catch (BusinessException e) {
             log.warn("RoomStage가 게임이 아님: roomCode={}, stage={}", roomCode, currentStage);
             throw new BusinessException(ErrorCode.INVALID_ROOM_STAGE);
         }
