@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class GameResultWebsocketNotifier implements GameResultNotifier {
 
     @Override
-    public void notifyGameResult(String roomId, GameResult gameResult) {
+    public void notifyGameResult(String roomCode, GameResult gameResult) {
         //TODO: WebSocket으로 게임 결과 전송
     }
 

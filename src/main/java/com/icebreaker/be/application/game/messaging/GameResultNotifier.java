@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GameResultNotifier {
 
-    void notifyGameResult(String roomId, GameResult gameResult);
+    void notifyGameResult(String roomCode, GameResult gameResult);
 
     void notifyGameList(String roomCode, List<GameCategory> categories);
 }

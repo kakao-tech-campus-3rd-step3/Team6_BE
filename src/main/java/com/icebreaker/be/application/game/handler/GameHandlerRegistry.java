@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameHandlerRegistry {
 
-    private final Map<GameCategory, GameHandler> actionMap;
+    private final Map<GameCategory, GameHandler> handlerMap;
 
     public GameHandlerRegistry(List<GameHandler> actions) {
-        this.actionMap = actions.stream()
+        this.handlerMap = actions.stream()
                 .collect(CollectorsUtils.toMapByKey(GameHandler::getCategory));
     }
 
     public GameHandler getHandler(GameCategory category) {
-        GameHandler action = actionMap.get(category);
+        GameHandler action = handlerMap.get(category);
         if (action == null) {
             throw new BusinessException(ErrorCode.INVALID_GAME_CATEGORY);
         }
@@ -27,6 +27,6 @@ public class GameHandlerRegistry {
     }
 
     public boolean contains(GameCategory category) {
-        return actionMap.containsKey(category);
+        return handlerMap.containsKey(category);
     }
 }
