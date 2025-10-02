@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.room.statemachine;
 
 import com.icebreaker.be.domain.room.vo.Stage;
-import com.icebreaker.be.domain.room.vo.StageEvent;
+import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import com.icebreaker.be.global.common.util.CollectorsUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class RoomStageTransitions {
         return new RoomStageTransitions();
     }
 
-    public RoomStageTransitions transition(Stage from, Stage to, StageEvent event) {
+    public RoomStageTransitions transition(Stage from, Stage to, StageTransitionEvent event) {
         RoomStageTransition transition = RoomStageTransition.builder()
                 .from(from)
                 .to(to)
@@ -29,15 +29,15 @@ public class RoomStageTransitions {
     }
 
     public RoomStageTransitions selectTransition(Stage from, Stage to) {
-        return transition(from, to, StageEvent.select(to));
+        return transition(from, to, StageTransitionEvent.select(to));
     }
 
     public RoomStageTransitions nextTransition(Stage from, Stage to) {
-        return transition(from, to, StageEvent.next());
+        return transition(from, to, StageTransitionEvent.next());
     }
 
     public RoomStageTransitions prevTransition(Stage from, Stage to) {
-        return transition(from, to, StageEvent.prev());
+        return transition(from, to, StageTransitionEvent.prev());
     }
 
     public RoomStageTransitions build() {
