@@ -45,7 +45,7 @@ public class RoomService {
         return savedRoom;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void changeRoomStage(String roomCode, Long userId, ChangeRoomStageCommand command) {
         validateRoomExists(roomCode);
 
