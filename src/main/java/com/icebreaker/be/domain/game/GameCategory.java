@@ -4,6 +4,7 @@ import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public enum GameCategory {
@@ -11,6 +12,7 @@ public enum GameCategory {
     RANDOM_ROULETTE,
     TOPIC_RECOMMEND;
 
+    public static final List<GameCategory> ALL_GAME_CATEGORIES = List.of(GameCategory.values());
     private static final Map<Stage, GameCategory> stageToGameCategory = new EnumMap<>(Stage.class);
 
     static {
