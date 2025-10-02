@@ -22,7 +22,7 @@ public record ChangeRoomStageCommand(
         try {
             return StageEventType.valueOf(eventType);
         } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE_VALUE);
+            throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
         }
     }
 }
