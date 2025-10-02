@@ -2,7 +2,7 @@ package com.icebreaker.be.application.room.event;
 
 
 import com.icebreaker.be.application.room.RoomStageService;
-import com.icebreaker.be.domain.room.vo.StageEvent;
+import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import com.icebreaker.be.global.annotation.AsyncTransactionalEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,10 @@ public class RoomStageEventListener {
     private final RoomStageService roomStageService;
 
     @AsyncTransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleRoomStageChangeEvent(RoomStageEvent event) {
-        StageEvent stageEvent = new StageEvent(event.type(), event.target());
-        roomStageService.changeStage(event.roomCode(), stageEvent);
+    public void handleRoomStageChangeEvent(RoomStageTransitionEvent event) {
+        StageTransitionEvent stageTransitionEvent = new StageTransitionEvent(event.type(),
+                event.target());
+        roomStageService.changeStage(event.roomCode(), stageTransitionEvent);
         log.info("Handled RoomStageChangeEvent for roomCode: {}, new stage: {}", event.roomCode(),
                 event.target());
     }

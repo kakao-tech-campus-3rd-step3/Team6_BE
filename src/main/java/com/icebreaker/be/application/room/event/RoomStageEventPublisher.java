@@ -18,25 +18,7 @@ public class RoomStageEventPublisher {
 
     public void publishStageInitialized(String roomCode) {
         applicationEventPublisher.publishEvent(
-                RoomStageEvent.init(roomCode)
-        );
-    }
-
-    public void publishStageNext(String roomCode) {
-        applicationEventPublisher.publishEvent(
-                RoomStageEvent.next(roomCode)
-        );
-    }
-
-    public void publishStagePrevious(String roomCode) {
-        applicationEventPublisher.publishEvent(
-                RoomStageEvent.prev(roomCode)
-        );
-    }
-
-    public void publishStageSelected(String roomCode, Stage stage) {
-        applicationEventPublisher.publishEvent(
-                RoomStageEvent.select(roomCode, stage)
+                RoomStageTransitionEvent.init(roomCode)
         );
     }
 
@@ -47,5 +29,23 @@ public class RoomStageEventPublisher {
             case SELECT -> publishStageSelected(roomCode, stage);
             default -> throw new BusinessException(ErrorCode.INVALID_STAGE_EVENT_TYPE);
         }
+    }
+
+    private void publishStageNext(String roomCode) {
+        applicationEventPublisher.publishEvent(
+                RoomStageTransitionEvent.next(roomCode)
+        );
+    }
+
+    private void publishStagePrevious(String roomCode) {
+        applicationEventPublisher.publishEvent(
+                RoomStageTransitionEvent.prev(roomCode)
+        );
+    }
+
+    private void publishStageSelected(String roomCode, Stage stage) {
+        applicationEventPublisher.publishEvent(
+                RoomStageTransitionEvent.select(roomCode, stage)
+        );
     }
 }

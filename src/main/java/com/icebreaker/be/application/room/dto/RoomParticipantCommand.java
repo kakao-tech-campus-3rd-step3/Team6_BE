@@ -1,14 +1,16 @@
 package com.icebreaker.be.application.room.dto;
 
+import com.icebreaker.be.domain.user.Interest;
+import com.icebreaker.be.domain.user.MbtiType;
 import com.icebreaker.be.domain.user.User;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public record RoomParticipantCommand(
         Long id,
         String name,
         Integer age,
-        Set<String> interests
+        MbtiType mbtiType,
+        Set<Interest> interests
 ) {
 
     public static RoomParticipantCommand fromEntity(User user) {
@@ -16,9 +18,8 @@ public record RoomParticipantCommand(
                 user.getId(),
                 user.getName(),
                 user.getAge(),
-                user.getInterestsEnum().stream()
-                        .map(Enum::name)
-                        .collect(Collectors.toSet())
+                user.getMbti(),
+                user.getInterestsEnum()
         );
     }
 }
