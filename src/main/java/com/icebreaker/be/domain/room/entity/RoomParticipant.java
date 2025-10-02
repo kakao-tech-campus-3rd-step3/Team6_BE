@@ -45,7 +45,7 @@ public class RoomParticipant {
     public RoomParticipant(Room room, User user, RoomParticipantRole role) {
         this.room = room;
         this.user = user;
-        this.role = role != null ? role : RoomParticipantRole.MEMBER;
+        this.role = role;
     }
 
     public static RoomParticipant from(Room room, User user, RoomParticipantRole role) {
