@@ -1,21 +1,20 @@
-name: Vercel Deploy
+name: Docs Build & Deploy
 
 on:
-  workflow_run:
-    workflows: [ "docs build" ]
-    types:
-      - completed
+  push:
+    branches: [ feat/#52 ]
+  workflow_dispatch:
 
 jobs:
-  deploy-vercel:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
 
     steps:
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: gh-pages
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -23,8 +22,24 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install deps
+        run: npm ci
+        working-directory: docs
+
+      - name: Build VitePress site
+        run: npm run docs:build
+        working-directory: docs
+
+      - name: Publish to gh-pages
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: docs
+          build_dir: docs/.vitepress/dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm --cwd .
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm --cwd docs/.vitepress/dist
