@@ -1,3 +1,4 @@
+
 # Game WebSocket API
 
 ## 메시지 발행 (Client → Server)
@@ -6,7 +7,7 @@
 
 -   **Destination**: `/app/room/{roomCode}/start-game`
 -   **PathVariable**: `roomCode` (String)
--   **설명**: 게임 시작을 요청합니다. 방장만 호출할 수 있습니다.
+-   **설명**: 현재 스테이지에 맞는 게임 시작을 요청합니다. 방장만 호출할 수 있습니다.
 
 ### 게임 목록 요청
 
@@ -22,11 +23,12 @@
 
 -   **Topic**: `/topic/game-list/{roomCode}` (예상)
 -   **설명**: `game-list` 요청 시, 방장에게 선택 가능한 게임 목록을 전송합니다.
--   **Payload**: `List<GameCategory>`
 
-<details>
-<summary>Payload Example</summary>
+::: code-group
+```md [Payload]
+**Body**: `SuccessApiResponse<List<GameCategory>>`
 
+**Example**
 ```json
 {
   "status": "SUCCESS",
@@ -38,8 +40,8 @@
   "message": "게임 리스트를 정상적으로 전송했습니다."
 }
 ```
-
-</details>
+```
+:::
 
 ### 게임 결과 구독
 
