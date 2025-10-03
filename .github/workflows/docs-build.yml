@@ -1,0 +1,40 @@
+name: docs build
+
+on:
+  push:
+    branches: [ feat/#52 ]
+  workflow_dispatch:
+
+jobs:
+  docs:
+    permissions:
+      contents: write
+      pages: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install deps
+        run: npm install --frozen-lockfile
+        working-directory: docs
+
+      - name: Build vitepress site
+        run: npm run docs:build
+        working-directory: docs
+
+      - name: upload build file
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: gh-pages
+          build_dir: docs/.vitepress/dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
