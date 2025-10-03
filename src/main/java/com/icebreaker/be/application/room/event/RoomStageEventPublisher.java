@@ -1,21 +1,11 @@
 package com.icebreaker.be.application.room.event;
 
-import com.icebreaker.be.domain.room.entity.Stage;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
+import com.icebreaker.be.domain.room.vo.Stage;
+import com.icebreaker.be.domain.room.vo.StageEventType;
 
-@Slf4j
-@Component
-@RequiredArgsConstructor
-public class RoomStageEventPublisher {
+public interface RoomStageEventPublisher {
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+    void publishStageInitialized(String roomCode);
 
-    public void publishStageChanged(String roomCode, Stage stage) {
-        applicationEventPublisher.publishEvent(
-                RoomStageChangeEvent.of(roomCode, stage)
-        );
-    }
+    void publishStageChanged(String roomCode, StageEventType eventType, Stage stage);
 }

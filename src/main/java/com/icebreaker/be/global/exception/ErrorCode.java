@@ -23,13 +23,24 @@ public enum ErrorCode {
     ROOM_CAPACITY_EXCEEDED("방 정원을 초과했습니다.", HttpStatus.BAD_REQUEST),
     INVALID_STAGE_VALUE("유효하지 않은 스테이지 값입니다.", HttpStatus.BAD_REQUEST),
     USER_NOT_IN_ROOM("사용자가 방에 속해있지 않습니다.", HttpStatus.BAD_REQUEST),
-    
+    INVALID_STAGE_EVENT_VALUE("유효하지 않은 스테이지 이벤트 타입입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_STAGE_TRANSITION("유효하지 않은 스테이지 전환입니다.", HttpStatus.BAD_REQUEST),
+    ROOM_STAGE_NOT_FOUND("방의 현재 스테이지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    ROOM_OWNER_NOT_FOUND("방장이 존재하지 않습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    ROOM_OWNER_MISMATCH("멤버에게는 허용되지 않은 요청입니다.", HttpStatus.FORBIDDEN),
+    INVALID_ROOM_STAGE("유효하지 않은 방 스테이지입니다.", HttpStatus.BAD_REQUEST),
+    ROOM_STAGE_NOT_INITIALIZED("방 스테이지가 초기화되지 않았습니다.", HttpStatus.BAD_REQUEST),
+    INIT_STAGE_EVENT_NOT_ALLOWED("해당 요청에 INIT 이벤트는 허용되지 않습니다.", HttpStatus.BAD_REQUEST),
+
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_QUESTION_TYPE("유효하지 않은 질문 타입입니다.", HttpStatus.BAD_REQUEST),
 
     // INTEREST ERROR
     INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
+
+    // GAME ERROR
+    INVALID_GAME_CATEGORY("유효하지 않은 게임 카테고리입니다.", HttpStatus.BAD_REQUEST),
 
     INVALID_JWT_PAYLOAD("유효하지 않은 JWT 페이로드입니다.", HttpStatus.UNAUTHORIZED),
     EXPIRED_JWT_TOKEN("만료된 JWT 토큰입니다.", HttpStatus.UNAUTHORIZED),

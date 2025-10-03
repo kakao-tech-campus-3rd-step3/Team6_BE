@@ -44,7 +44,7 @@ public class User extends BaseEntity {
     @Column(name = "user_mbti", length = 4, nullable = false)
     private MbtiType mbti;
 
-    @Column(name = "user_introduction", length = 255, nullable = false)
+    @Column(name = "user_introduction", nullable = false)
     private String introduction;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

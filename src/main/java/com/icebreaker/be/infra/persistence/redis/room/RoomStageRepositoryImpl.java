@@ -1,8 +1,8 @@
 package com.icebreaker.be.infra.persistence.redis.room;
 
-import com.icebreaker.be.domain.room.entity.RoomStage;
-import com.icebreaker.be.domain.room.entity.Stage;
 import com.icebreaker.be.domain.room.repo.RoomStageRepository;
+import com.icebreaker.be.domain.room.vo.RoomStage;
+import com.icebreaker.be.domain.room.vo.Stage;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,10 @@ public class RoomStageRepositoryImpl implements RoomStageRepository {
     private final RedisTemplate<String, String> customStringRedisTemplate;
 
     @Override
-    public void save(RoomStage stage) {
-        String key = getStageKey(stage.roomCode());
-        customStringRedisTemplate.opsForValue().set(key, stage.currentStage().name());
-        log.debug("Saved stage {} for room {}", stage.currentStage(), stage.roomCode());
+    public void save(RoomStage roomStage) {
+        String key = getStageKey(roomStage.roomCode());
+        customStringRedisTemplate.opsForValue().set(key, roomStage.stage().name());
+        log.debug("Saved stage {} for room {}", roomStage.stage(), roomStage.roomCode());
     }
 
     @Override
@@ -34,9 +34,9 @@ public class RoomStageRepositoryImpl implements RoomStageRepository {
             return Optional.empty();
         }
         try {
-            RoomStage stage = new RoomStage(roomCode, Stage.valueOf(stageStr));
-            log.debug("Found stage {} for room {}", stage.currentStage(), roomCode);
-            return Optional.of(stage);
+            RoomStage roomStage = new RoomStage(roomCode, Stage.valueOf(stageStr));
+            log.debug("Found stage {} for room {}", roomStage.stage(), roomCode);
+            return Optional.of(roomStage);
         } catch (IllegalArgumentException e) {
             log.error("Invalid stage value '{}' found in Redis for roomCode '{}'", stageStr,
                     roomCode, e);

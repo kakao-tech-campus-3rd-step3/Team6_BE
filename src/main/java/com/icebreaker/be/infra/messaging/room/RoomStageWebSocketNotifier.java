@@ -1,14 +1,14 @@
 package com.icebreaker.be.infra.messaging.room;
 
 import com.icebreaker.be.application.room.messaging.RoomStageNotifier;
-import com.icebreaker.be.domain.room.entity.Stage;
+import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 public class RoomStageWebSocketNotifier extends AbstractStompNotifier implements RoomStageNotifier {
 
     private static final String ROOM_STAGE_TOPIC_PREFIX = "/topic/room-stage/";

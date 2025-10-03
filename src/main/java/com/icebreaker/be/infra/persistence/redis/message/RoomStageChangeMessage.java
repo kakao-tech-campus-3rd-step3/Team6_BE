@@ -1,6 +1,6 @@
 package com.icebreaker.be.infra.persistence.redis.message;
 
-import com.icebreaker.be.domain.room.entity.Stage;
+import com.icebreaker.be.domain.room.vo.Stage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

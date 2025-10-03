@@ -39,7 +39,7 @@ public class RoomParticipant {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private RoomParticipantRole role = RoomParticipantRole.MEMBER;
+    private RoomParticipantRole role;
 
     @Builder
     public RoomParticipant(Room room, User user, RoomParticipantRole role) {
@@ -52,7 +52,7 @@ public class RoomParticipant {
         return RoomParticipant.builder()
                 .room(room)
                 .user(user)
-                .role(role)
+                .role(role != null ? role : RoomParticipantRole.MEMBER)
                 .build();
     }
 
