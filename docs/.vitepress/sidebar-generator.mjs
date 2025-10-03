@@ -43,6 +43,12 @@ function getSidebarGroup(dirPath, groupText) {
 
 // 사이드바 설정을 동적으로 생성
 export const sidebar = [
+  {
+    text: 'Architecture',
+    items: [
+      { text: 'ER Diagram', link: '/er-diagram' }
+    ]
+  },
   getSidebarGroup('api/rest', 'REST APIs'),
   getSidebarGroup('api/websocket', 'WebSocket APIs')
 ];
