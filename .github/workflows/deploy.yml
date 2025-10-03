@@ -61,5 +61,6 @@ jobs:
           script: |
             cd /home/ubuntu/app
             echo "${{ secrets.APP_ENV }}" > .env
+            echo "CORS_ALLOWED_ORIGINS=${{ vars.CORS_ALLOWED_ORIGINS }}" >> .env
             chmod +x deploy.sh
             sudo ./deploy.sh ${{ github.sha }}
