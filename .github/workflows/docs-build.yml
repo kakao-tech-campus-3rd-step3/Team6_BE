@@ -21,10 +21,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Install deps
-        run: npm install --frozen-lockfile
+        run: npm ci
         working-directory: docs
 
       - name: Build vitepress site
