@@ -1,31 +1,30 @@
-name: Vercel Deploy on gh-pages
+name: Vercel Deploy
 
 on:
-  push:
-    branches: [ gh-pages ]
-  workflow_dispatch:
+  workflow_run:
+    workflows: [ "docs build" ]
+    types:
+      - completed
 
 jobs:
   deploy-vercel:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
-      # 1. repo checkout
-      - name: Checkout repository
+      - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
+          ref: gh-pages
           fetch-depth: 0
 
-      # 2. Node.js 설치 (VitePress 산출물 그대로라 빌드 필요 없으면 생략 가능)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Vercel CLI 설치
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      # 4. Vercel 배포
       - name: Deploy to Vercel
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm --cwd .
