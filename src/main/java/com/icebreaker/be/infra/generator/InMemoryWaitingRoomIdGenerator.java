@@ -1,6 +1,6 @@
 package com.icebreaker.be.infra.generator;
 
-import com.icebreaker.be.domain.room.service.WaitingRoomIdGenerator;
+import com.icebreaker.be.domain.waitingroom.WaitingRoomIdGenerator;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
