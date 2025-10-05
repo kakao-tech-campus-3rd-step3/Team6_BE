@@ -10,7 +10,8 @@ public record RoomParticipantCommand(
         String name,
         Integer age,
         MbtiType mbtiType,
-        Set<Interest> interests
+        Set<Interest> interests,
+        String introduction
 ) {
 
     public static RoomParticipantCommand fromEntity(User user) {
@@ -19,7 +20,8 @@ public record RoomParticipantCommand(
                 user.getName(),
                 user.getAge(),
                 user.getMbti(),
-                user.getInterestsEnum()
+                user.getInterestsEnum(),
+                user.getIntroduction()
         );
     }
 }
