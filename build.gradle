@@ -45,7 +45,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    
+
     // OpenAPI
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11"
 
@@ -71,9 +71,14 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
-configurations.configureEach {
-    resolutionStrategy {
-        force 'org.apache.commons:commons-lang3:3.18.0'
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:3.5.5"
+    }
+
+    dependencies {
+        dependency "org.apache.commons:commons-compress:1.26.0"
+        dependency "org.apache.commons:commons-lang3:3.18.0"
     }
 }
 
