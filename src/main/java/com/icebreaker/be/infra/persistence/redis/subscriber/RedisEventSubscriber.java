@@ -8,6 +8,7 @@ import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -27,7 +28,7 @@ public class RedisEventSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            String jsonMessage = new String(message.getBody());
+            String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
             PubSubMessage<?> pubSubMessage = objectMapper.readValue(jsonMessage,
                     PubSubMessage.class);
             log.info("Received redis message: {}", jsonMessage);
