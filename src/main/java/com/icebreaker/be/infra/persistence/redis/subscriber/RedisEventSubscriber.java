@@ -1,12 +1,10 @@
 package com.icebreaker.be.infra.persistence.redis.subscriber;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
-import com.icebreaker.be.infra.messaging.waitingroom.WaitingRoomWebSocketNotifier;
-import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
+import com.icebreaker.be.infra.persistence.redis.handler.MessageHandler;
+import com.icebreaker.be.infra.persistence.redis.handler.MessageHandlerRegistry;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
-import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
-import com.icebreaker.be.infra.persistence.redis.message.RoomStartedMessage;
+import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +18,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RedisEventSubscriber implements MessageListener {
 
-    private final WaitingRoomWebSocketNotifier waitingRoomWebSocketNotifier;
-    private final RoomStageWebSocketNotifier roomStageWebSocketNotifier;
     private final ObjectMapper objectMapper;
+    private final MessageHandlerRegistry registry;
 
     //Redis 채널로 들어온 메시지를 받아서, 최종적으로 사용자에게 보내야함
     @Override
@@ -31,28 +28,13 @@ public class RedisEventSubscriber implements MessageListener {
             String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
             PubSubMessage<?> pubSubMessage = objectMapper.readValue(jsonMessage,
                     PubSubMessage.class);
+            PubSubMessageType type = pubSubMessage.getType();
+            Object payload = pubSubMessage.getMessage();
             log.info("Received redis message: {}", jsonMessage);
-            switch (pubSubMessage.getType()) {
-                case PARTICIPANT_JOINED -> {
-                    ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(
-                            pubSubMessage.getMessage(), ParticipantJoinedMessage.class);
-                    waitingRoomWebSocketNotifier.notifyParticipantJoined(
-                            joinedPayload.getRoomId(),
-                            joinedPayload.getWaitingRoomWithParticipants());
-                }
-                case ROOM_STARTED -> {
-                    RoomStartedMessage startedPayload = objectMapper.convertValue(
-                            pubSubMessage.getMessage(), RoomStartedMessage.class);
-                    waitingRoomWebSocketNotifier.notifyRoomStarted(startedPayload.getRoomId());
-                }
-                case ROOM_STAGE_CHANGE -> {
-                    RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(
-                            pubSubMessage.getMessage(), RoomStageChangeMessage.class);
-                    roomStageWebSocketNotifier.notifyRoomStageChanged(
-                            stageChangePayload.getRoomCode(), stageChangePayload.getStage());
-                }
-                default -> log.info("Received unknown message type");
-            }
+
+            MessageHandler handler = registry.getHandler(pubSubMessage.getType());
+            handler.handleAndSend(pubSubMessage.getMessage());
+
             log.info("Successfully processed message for type: {}", pubSubMessage.getType());
         } catch (IOException e) {
             log.error("Failed to parse Redis message", e);
