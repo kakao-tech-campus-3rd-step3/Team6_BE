@@ -1,15 +1,13 @@
 package com.icebreaker.be.application.room;
 
 
-import com.icebreaker.be.application.jwt.JwtService;
 import com.icebreaker.be.application.room.dto.ChangeRoomStageCommand;
-import com.icebreaker.be.application.room.dto.RoomTicket;
-import com.icebreaker.be.application.room.dto.RoomTicketJwtClaims;
+import com.icebreaker.be.application.room.dto.RoomParticipantCommand;
 import com.icebreaker.be.application.room.event.RoomStageEventPublisher;
+import com.icebreaker.be.application.room.messaging.RoomNotifier;
 import com.icebreaker.be.domain.room.entity.Room;
-import com.icebreaker.be.domain.room.entity.Stage;
 import com.icebreaker.be.domain.room.repo.RoomRepository;
-import com.icebreaker.be.domain.room.vo.RoomParticipantRole;
+import com.icebreaker.be.domain.room.vo.StageEventType;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
 import com.icebreaker.be.domain.waitingroom.WaitingRoom;
@@ -29,42 +27,71 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+
     private final RoomStageEventPublisher publisher;
+    private final RoomNotifier roomNotifier;
+    private final RoomOwnerService roomOwnerService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Room createRoom(WaitingRoom waitingRoom, List<Long> participantIds) {
-        List<User> users = userRepository.findAllById(participantIds);
+        List<User> users = loadParticipants(participantIds);
+
         Room room = Room.from(waitingRoom);
         room.joinUsers(users);
+
         Room savedRoom = roomRepository.save(room);
+        roomOwnerService.create(room);
 
-        publisher.publishStageChanged(room.getCode(), Stage.STAGE_1);
-
+        publisher.publishStageInitialized(room.getCode());
         return savedRoom;
     }
 
+    @Transactional
+    public void changeRoomStage(String roomCode, Long userId, ChangeRoomStageCommand command) {
+        validateRoomExists(roomCode);
+
+        roomOwnerService.validateRoomOwner(roomCode, userId);
+
+        StageEventType eventType = command.getEventTypeEnum();
+
+        if (eventType == StageEventType.INIT) {
+            throw new BusinessException(ErrorCode.INIT_STAGE_EVENT_NOT_ALLOWED);
+        }
+
+        publisher.publishStageChanged(
+                roomCode,
+                eventType,
+                command.getStageEnum()
+        );
+    }
+
     @Transactional(readOnly = true)
-    public void changeRoomStage(String roomCode, ChangeRoomStageCommand command) {
+    public void sendRoomParticipants(String roomCode, Long userId) {
+        validateRoomExists(roomCode);
+
+        roomOwnerService.validateRoomOwner(roomCode, userId);
+
+        List<RoomParticipantCommand> participants = roomRepository.findUsersByRoomCode(roomCode)
+                .stream()
+                .map(RoomParticipantCommand::fromEntity)
+                .toList();
+
+        roomNotifier.notifyRoomParticipants(roomCode, participants);
+    }
+
+    private List<User> loadParticipants(List<Long> participantIds) {
+        List<User> users = userRepository.findAllById(participantIds);
+        if (users.size() != participantIds.size()) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+        return users;
+    }
+
+
+    private void validateRoomExists(String roomCode) {
         if (!roomRepository.existsByCode(roomCode)) {
             throw new BusinessException(ErrorCode.ROOM_NOT_FOUND);
         }
-
-        publisher.publishStageChanged(roomCode, command.getStageEnum());
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public RoomTicket issueRoomTicket(String roomCode, Long userId) {
-        RoomParticipantRole role = getUserRole(roomCode, userId);
-        RoomTicketJwtClaims claims = new RoomTicketJwtClaims(roomCode, role);
-        String token = jwtService.generateTokenWithClaims(String.valueOf(userId), claims);
-
-        return new RoomTicket(userId, role, token);
-    }
-
-    private RoomParticipantRole getUserRole(String roomCode, Long userId) {
-        return roomRepository.findByCode(roomCode)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ROOM_NOT_FOUND))
-                .getUserRole(userId);
     }
 }
+

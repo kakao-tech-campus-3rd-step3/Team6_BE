@@ -3,6 +3,7 @@ package com.icebreaker.be.global.interceptor;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import com.icebreaker.be.infra.jwt.JwtProvider;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -24,7 +25,7 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
     private final JwtProvider jwtProvider;
 
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    public Message<?> preSend(@Nullable Message<?> message, @Nullable MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {

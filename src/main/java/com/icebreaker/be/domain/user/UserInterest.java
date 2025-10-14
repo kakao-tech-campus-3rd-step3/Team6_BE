@@ -33,7 +33,7 @@ public class UserInterest {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "interest", length = 255, nullable = false)
+    @Column(name = "interest", nullable = false)
     private Interest interest;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

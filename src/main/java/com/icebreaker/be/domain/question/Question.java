@@ -25,7 +25,7 @@ public class Question {
     @Column(name = "question_id")
     private Long id;
 
-    @Column(name = "question_content", length = 255, nullable = false)
+    @Column(name = "question_content", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)

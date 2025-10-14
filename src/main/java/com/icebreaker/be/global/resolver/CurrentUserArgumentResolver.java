@@ -3,14 +3,14 @@ package com.icebreaker.be.global.resolver;
 import com.icebreaker.be.global.annotation.CurrentUser;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
+import jakarta.annotation.Nullable;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -25,7 +25,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, Message<?> message) {
+    public Object resolveArgument(@Nullable MethodParameter parameter,
+            @Nullable Message<?> message) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (accessor.getUser() != null) {

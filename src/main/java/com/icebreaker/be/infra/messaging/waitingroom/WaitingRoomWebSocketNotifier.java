@@ -5,10 +5,10 @@ import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 public class WaitingRoomWebSocketNotifier extends AbstractStompNotifier
         implements WaitingRoomNotifier {
 
