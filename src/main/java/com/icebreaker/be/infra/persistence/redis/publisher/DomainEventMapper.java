@@ -1,4 +1,4 @@
-package com.icebreaker.be.domain.publisher;
+package com.icebreaker.be.infra.persistence.redis.publisher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.application.waitingroom.event.WaitingRoomFullEvent;
