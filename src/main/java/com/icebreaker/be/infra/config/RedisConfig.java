@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
-    private final static String channelTopicName = "iceBreak";
+    private static final String CHANNEL_TOPIC_NAME = "iceBreak";
 
     @Bean
     public RedisTemplate<String, String> customStringRedisTemplate(
@@ -30,7 +30,7 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic channelTopic() {
-        return new ChannelTopic(channelTopicName);
+        return new ChannelTopic(CHANNEL_TOPIC_NAME);
     }
 
     @Bean
