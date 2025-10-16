@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomStartedMessage {
+public class RoomStartedMessage implements MessagePayload {
 
     private String roomId;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticipantJoinedMessage {
+public class ParticipantJoinedMessage implements MessagePayload {
 
     private String roomId;
     private WaitingRoomWithParticipants waitingRoomWithParticipants;

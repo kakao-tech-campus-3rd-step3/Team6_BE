@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomStageChangeMessage {
+public class RoomStageChangeMessage implements MessagePayload {
 
     private String roomCode;
     private Stage stage;
