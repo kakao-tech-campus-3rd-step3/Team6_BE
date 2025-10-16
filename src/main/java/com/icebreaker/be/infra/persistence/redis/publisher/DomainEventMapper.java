@@ -2,6 +2,7 @@ package com.icebreaker.be.infra.persistence.redis.publisher;
 
 import com.icebreaker.be.application.waitingroom.event.WaitingRoomFullEvent;
 import com.icebreaker.be.application.waitingroom.event.WaitingRoomParticipantJoinedEvent;
+import com.icebreaker.be.domain.publisher.DomainEvent;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DomainEventMapper {
 
-    public PubSubMessage<?> toPubSubMessage(Object event) {
+    public PubSubMessage<?> toPubSubMessage(DomainEvent event) {
         if (event instanceof WaitingRoomParticipantJoinedEvent joinedEvent) {
             ParticipantJoinedMessage payload = new ParticipantJoinedMessage(
                     joinedEvent.roomId(),
