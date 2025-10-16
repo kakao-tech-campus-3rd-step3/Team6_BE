@@ -3,6 +3,7 @@ package com.icebreaker.be.infra.persistence.redis.subscriber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.infra.persistence.redis.handler.MessageHandler;
 import com.icebreaker.be.infra.persistence.redis.handler.MessageHandlerRegistry;
+import com.icebreaker.be.infra.persistence.redis.message.MessagePayload;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,8 +26,10 @@ public class RedisEventSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String jsonMessage = new String(message.getBody(), StandardCharsets.UTF_8);
-            PubSubMessage<?> pubSubMessage = objectMapper.readValue(jsonMessage,
-                    PubSubMessage.class);
+            PubSubMessage<MessagePayload> pubSubMessage = objectMapper.readValue(jsonMessage,
+                    objectMapper.getTypeFactory().constructParametricType(
+                            PubSubMessage.class, MessagePayload.class)
+            );
             log.info("Received redis message: {}", jsonMessage);
 
             MessageHandler handler = registry.getHandler(pubSubMessage.getType());
