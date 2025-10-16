@@ -6,8 +6,10 @@ import com.icebreaker.be.infra.persistence.redis.message.MessagePayload;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RoomStageChangeMessageHandler implements MessageHandler {
@@ -22,9 +24,14 @@ public class RoomStageChangeMessageHandler implements MessageHandler {
 
     @Override
     public void handleAndSend(MessagePayload payload) {
-        RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(payload,
-                RoomStageChangeMessage.class);
-        roomStageWebSocketNotifier.notifyRoomStageChanged(
-                stageChangePayload.getRoomCode(), stageChangePayload.getStage());
+        try {
+
+            RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(payload,
+                    RoomStageChangeMessage.class);
+            roomStageWebSocketNotifier.notifyRoomStageChanged(
+                    stageChangePayload.getRoomCode(), stageChangePayload.getStage());
+        } catch (IllegalArgumentException e) {
+            log.error("Failed to convert payload to RoomStageChangeMessage: {}", payload, e);
+        }
     }
 }

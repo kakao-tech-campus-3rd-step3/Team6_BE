@@ -6,8 +6,10 @@ import com.icebreaker.be.infra.persistence.redis.message.MessagePayload;
 import com.icebreaker.be.infra.persistence.redis.message.ParticipantJoinedMessage;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ParticipantJoinedMessageHandler implements MessageHandler {
@@ -22,11 +24,16 @@ public class ParticipantJoinedMessageHandler implements MessageHandler {
 
     @Override
     public void handleAndSend(MessagePayload payload) {
-        ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(payload,
-                ParticipantJoinedMessage.class);
-        waitingRoomWebSocketNotifier.notifyParticipantJoined(
-                joinedPayload.getRoomId(),
-                joinedPayload.getWaitingRoomWithParticipants());
+        try {
+            ParticipantJoinedMessage joinedPayload = objectMapper.convertValue(payload,
+                    ParticipantJoinedMessage.class);
+            waitingRoomWebSocketNotifier.notifyParticipantJoined(
+                    joinedPayload.getRoomId(),
+                    joinedPayload.getWaitingRoomWithParticipants());
+        } catch (IllegalArgumentException e) {
+            log.error("Failed to convert payload to ParticipantJoinedMessage: {}", payload, e);
+        }
+
     }
 
 }
