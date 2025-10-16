@@ -2,6 +2,7 @@ package com.icebreaker.be.infra.persistence.redis.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icebreaker.be.infra.messaging.room.RoomStageWebSocketNotifier;
+import com.icebreaker.be.infra.persistence.redis.message.MessagePayload;
 import com.icebreaker.be.infra.persistence.redis.message.PubSubMessageType;
 import com.icebreaker.be.infra.persistence.redis.message.RoomStageChangeMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class RoomStageChangeMessageHandler implements MessageHandler {
     }
 
     @Override
-    public void handleAndSend(Object payload) {
+    public void handleAndSend(MessagePayload payload) {
         RoomStageChangeMessage stageChangePayload = objectMapper.convertValue(payload,
                 RoomStageChangeMessage.class);
         roomStageWebSocketNotifier.notifyRoomStageChanged(
