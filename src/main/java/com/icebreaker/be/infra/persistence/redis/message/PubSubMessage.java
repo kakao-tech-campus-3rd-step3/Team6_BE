@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PubSubMessage<T> {
+public class PubSubMessage<T extends MessagePayload> {
 
     private PubSubMessageType type;
     private T message;
