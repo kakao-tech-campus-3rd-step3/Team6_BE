@@ -26,7 +26,8 @@ public class DomainEventMapper {
             RoomStartedMessage payload = new RoomStartedMessage(roomId);
             return new PubSubMessage<>(PubSubMessageType.ROOM_STARTED, payload);
         } else {
-            throw new IllegalArgumentException("unsupported event type");
+            throw new IllegalArgumentException(
+                    "Unsupported event type: " + event.getClass().getName());
         }
     }
 }
