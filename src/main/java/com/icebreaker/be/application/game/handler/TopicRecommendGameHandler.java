@@ -1,13 +1,22 @@
 package com.icebreaker.be.application.game.handler;
 
-import com.icebreaker.be.application.game.GameResult;
+import com.icebreaker.be.application.game.messaging.GameNotifier;
 import com.icebreaker.be.domain.game.GameCategory;
+import com.icebreaker.be.domain.topic.Topic;
+import com.icebreaker.be.domain.topic.TopicRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TopicRecommendGameHandler implements GameHandler {
+
+    private final TopicRepository topicRepository;
+
+    private final GameNotifier notifier;
 
     @Override
     public GameCategory getCategory() {
@@ -15,8 +24,9 @@ public class TopicRecommendGameHandler implements GameHandler {
     }
 
     @Override
-    public GameResult handle() {
-        //TODO: 주제 추천 게임 로직 구현 필요
-        return new GameResult();
+    public void handle(String roomCode) {
+        List<Topic> topics = topicRepository.findAllByRoom(roomCode);
+
+//        notifier.notifyGameResult(roomCode, new GameResult<>(getCategory(), question));
     }
 }
