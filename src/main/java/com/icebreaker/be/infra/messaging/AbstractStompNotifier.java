@@ -23,6 +23,19 @@ public abstract class AbstractStompNotifier {
     }
 
     /**
+     * 특정 사용자에게 개인 메시지 전송
+     *
+     * @param userId      Principal userId
+     * @param destination User destination (예: /queue/match)
+     * @param payload     전송할 실제 데이터
+     * @param <T>         payload 타입
+     */
+    protected <T> void sendToUser(String userId, String destination, T payload, String message) {
+        SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
+        messagingTemplate.convertAndSendToUser(userId, destination, response);
+    }
+
+    /**
      * Topic 주소 생성
      *
      * @param prefix Topic prefix
