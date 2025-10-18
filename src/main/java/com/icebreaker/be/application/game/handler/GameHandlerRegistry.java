@@ -1,5 +1,6 @@
 package com.icebreaker.be.application.game.handler;
 
+import com.icebreaker.be.application.game.dto.GameContext;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.global.common.util.CollectorsUtils;
 import com.icebreaker.be.global.exception.BusinessException;
@@ -11,22 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameHandlerRegistry {
 
-    private final Map<GameCategory, GameHandler> handlerMap;
+    private final Map<GameCategory, GameHandler<? extends GameContext>> handlerMap;
 
-    public GameHandlerRegistry(List<GameHandler> actions) {
+    public GameHandlerRegistry(List<GameHandler<? extends GameContext>> actions) {
         this.handlerMap = actions.stream()
                 .collect(CollectorsUtils.toMapByKey(GameHandler::getCategory));
     }
 
-    public GameHandler getHandler(GameCategory category) {
-        GameHandler action = handlerMap.get(category);
-        if (action == null) {
+    public GameHandler<? extends GameContext> getHandler(GameCategory category) {
+        GameHandler<? extends GameContext> handler = handlerMap.get(category);
+        if (handler == null) {
             throw new BusinessException(ErrorCode.INVALID_GAME_CATEGORY);
         }
-        return action;
-    }
-
-    public boolean contains(GameCategory category) {
-        return handlerMap.containsKey(category);
+        return handler;
     }
 }

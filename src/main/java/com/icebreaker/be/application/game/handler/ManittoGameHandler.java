@@ -1,6 +1,8 @@
 package com.icebreaker.be.application.game.handler;
 
-import com.icebreaker.be.application.game.messaging.GameNotifier;
+import com.icebreaker.be.application.game.dto.GameResult;
+import com.icebreaker.be.application.game.dto.ManittoGameContext;
+import com.icebreaker.be.application.game.dto.UnicastGameResult;
 import com.icebreaker.be.application.game.util.MatchingUtils;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.domain.room.repo.RoomParticipantRepository;
@@ -14,10 +16,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ManittoGameHandler implements GameHandler {
+public class ManittoGameHandler implements GameHandler<ManittoGameContext> {
 
     private final RoomParticipantRepository roomParticipantRepository;
-    private final GameNotifier notifier;
 
     @Override
     public GameCategory getCategory() {
@@ -25,15 +26,18 @@ public class ManittoGameHandler implements GameHandler {
     }
 
     @Override
-    public void handle(String roomCode) {
+    public GameResult handle(ManittoGameContext ctx) {
+        String roomCode = ctx.getRoomCode();
+
         List<User> participants = roomParticipantRepository.findUsersByRoomCode(roomCode);
         Map<User, User> pairs = MatchingUtils.generateDerangementPairs(participants);
-        pairs.keySet().parallelStream().forEach((giver) -> {
-            User receiver = pairs.get(giver);
-            notifier.notifyGameResultToUser(
-                    receiver.getId().toString(),
-                    new GameResult<>(getCategory(), giver)
-            );
-        });
+
+        List<UnicastGameResult.UserResult<User>> userResults = pairs.entrySet().stream()
+                .map(entry -> new UnicastGameResult.UserResult<>(
+                        entry.getKey().getId().toString(),
+                        entry.getValue()
+                )).toList();
+
+        return UnicastGameResult.of(userResults);
     }
 }

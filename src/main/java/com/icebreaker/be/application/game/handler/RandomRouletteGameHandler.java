@@ -1,6 +1,8 @@
 package com.icebreaker.be.application.game.handler;
 
-import com.icebreaker.be.application.game.messaging.GameNotifier;
+import com.icebreaker.be.application.game.dto.BroadcastGameResult;
+import com.icebreaker.be.application.game.dto.GameResult;
+import com.icebreaker.be.application.game.dto.RandomRouletteGameContext;
 import com.icebreaker.be.application.question.QuestionPoolService;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.domain.question.Question;
@@ -17,13 +19,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RandomRouletteGameHandler implements GameHandler {
+public class RandomRouletteGameHandler implements GameHandler<RandomRouletteGameContext> {
 
     private final RoomParticipantRepository roomParticipantRepository;
     private final TopicRepository topicRepository;
     private final QuestionPoolService questionPoolService;
-
-    private final GameNotifier notifier;
 
     @Override
     public GameCategory getCategory() {
@@ -31,15 +31,19 @@ public class RandomRouletteGameHandler implements GameHandler {
     }
 
     @Override
-    public void handle(String roomCode) {
+    public GameResult handle(RandomRouletteGameContext ctx) {
+        String roomCode = ctx.getRoomCode();
+
         List<User> participants = roomParticipantRepository.findUsersByRoomCode(roomCode);
         User randomUser = findRandomUser(participants);
         List<Topic> topics = topicRepository.findByRoomAndUser(roomCode, randomUser.getId());
         Topic randomTopic = findRandomTopic(topics);
 
         Question question = questionPoolService.getQuestion(randomTopic);
+        UserWithQuestion userWithQuestion = new UserWithQuestion(randomUser.getName(), question);
+
         log.info("[{}][{}] 랜덤 룰렛 게임 질문 생성 완료: {}", roomCode, getCategory(), question.content());
-        notifier.notifyGameResult(roomCode, new GameResult<>(getCategory(), question));
+        return BroadcastGameResult.of(userWithQuestion);
     }
 
     private User findRandomUser(List<User> participants) {
@@ -50,5 +54,9 @@ public class RandomRouletteGameHandler implements GameHandler {
     private Topic findRandomTopic(List<Topic> topics) {
         int randomIndex = ThreadLocalRandom.current().nextInt(topics.size());
         return topics.get(randomIndex);
+    }
+
+    public record UserWithQuestion(String userName, Question question) {
+
     }
 }
