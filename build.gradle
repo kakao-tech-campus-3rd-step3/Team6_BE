@@ -46,7 +46,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.redisson:redisson-spring-boot-starter:3.26.0'
-    
+
     // QueryDSL
     implementation 'io.github.openfeign.querydsl:querydsl-jpa:6.10.1'
     annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:6.10.1:jpa'
@@ -78,6 +78,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // ETC
+    implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
 }
 
 dependencyManagement {
@@ -89,6 +92,10 @@ dependencyManagement {
         dependency "org.apache.commons:commons-compress:1.26.0"
         dependency "org.apache.commons:commons-lang3:3.18.0"
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-parameters"
 }
 
 tasks.named('test') {
