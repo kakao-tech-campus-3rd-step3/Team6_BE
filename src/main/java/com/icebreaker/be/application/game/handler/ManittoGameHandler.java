@@ -32,10 +32,10 @@ public class ManittoGameHandler implements GameHandler<ManittoGameContext> {
         List<User> participants = roomParticipantRepository.findUsersByRoomCode(roomCode);
         Map<User, User> pairs = MatchingUtils.generateDerangementPairs(participants);
 
-        List<UnicastGameResult.UserResult<User>> userResults = pairs.entrySet().stream()
+        List<UnicastGameResult.UserResult<String>> userResults = pairs.entrySet().stream()
                 .map(entry -> new UnicastGameResult.UserResult<>(
                         entry.getKey().getId().toString(),
-                        entry.getValue()
+                        entry.getValue().getName()
                 )).toList();
 
         return UnicastGameResult.of(userResults);

@@ -69,13 +69,4 @@ public class User extends BaseEntity {
         UserInterest userInterest = new UserInterest(this, interest);
         this.interests.add(userInterest);
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "mbti=" + mbti +
-                ", introduction='" + introduction + '\'' +
-                ", interests=" + interests +
-                '}';
-    }
 }

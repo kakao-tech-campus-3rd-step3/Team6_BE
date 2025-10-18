@@ -31,7 +31,7 @@ public class TopicRecommendGameHandler implements GameHandler<TopicRecommendGame
     @Override
     public GameResult handle(TopicRecommendGameContext ctx) {
         String roomCode = ctx.getRoomCode();
-        String topicName = ctx.getGetTopicName();
+        String topicName = ctx.getTopicName();
 
         return isBlank(topicName)
                 ? handleWithoutTopic(roomCode)
@@ -40,7 +40,9 @@ public class TopicRecommendGameHandler implements GameHandler<TopicRecommendGame
 
     private GameResult handleWithoutTopic(String roomCode) {
         List<Topic> topics = topicRepository.findAllByRoom(roomCode);
-
+        if (topics == null || topics.isEmpty()) {
+            throw new IllegalArgumentException("사전 로드된 주제가 없습니다.");
+        }
         Topic mainTopic = topics.getFirst();
         List<Question> questions = questionPoolService.getQuestions(mainTopic, QUESTION_LIMIT);
 

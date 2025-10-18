@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public final class TopicRecommendGameContext extends GameContext {
 
-    private final String getTopicName;
+    private final String TopicName;
 
     public TopicRecommendGameContext(String roomCode, String getTopicName) {
         super(roomCode);
-        this.getTopicName = getTopicName;
+        this.TopicName = getTopicName;
     }
 }

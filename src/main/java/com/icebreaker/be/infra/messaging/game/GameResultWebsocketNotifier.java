@@ -17,7 +17,7 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
     public GameResultWebsocketNotifier(SimpMessagingTemplate messagingTemplate) {
         super(messagingTemplate);
     }
-    
+
     @Async
     @Override
     public void notifyGameResultToUser(UnicastGameResult<?> gameResult) {
@@ -34,7 +34,7 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
     @Async
     @Override
     public void notifyGameResult(String roomCode, BroadcastGameResult<?> gameResult) {
-        send(roomCode, gameResult.payload(), "게임 목록을 정상적으로 전송했습니다.");
+        send(roomCode, gameResult.payload(), "게임 결과를 정상적으로 전송했습니다.");
     }
 
     @Async
