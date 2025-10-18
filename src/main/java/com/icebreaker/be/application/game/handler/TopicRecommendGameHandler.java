@@ -8,6 +8,8 @@ import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.domain.question.Question;
 import com.icebreaker.be.domain.topic.Topic;
 import com.icebreaker.be.domain.topic.TopicRepository;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +43,7 @@ public class TopicRecommendGameHandler implements GameHandler<TopicRecommendGame
     private GameResult handleWithoutTopic(String roomCode) {
         List<Topic> topics = topicRepository.findAllByRoom(roomCode);
         if (topics == null || topics.isEmpty()) {
-            throw new IllegalArgumentException("사전 로드된 주제가 없습니다.");
+            throw new BusinessException(ErrorCode.TOPIC_NOT_PRELOADED);
         }
         Topic mainTopic = topics.getFirst();
         List<Question> questions = questionPoolService.getQuestions(mainTopic, QUESTION_LIMIT);
