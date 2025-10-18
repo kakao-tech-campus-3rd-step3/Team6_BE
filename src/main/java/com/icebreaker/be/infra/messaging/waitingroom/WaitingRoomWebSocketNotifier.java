@@ -5,6 +5,7 @@ import com.icebreaker.be.domain.waitingroom.WaitingRoomWithParticipants;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class WaitingRoomWebSocketNotifier extends AbstractStompNotifier
         super(messagingTemplate);
     }
 
+    @Async
     @Override
     public void notifyParticipantJoined(
             String roomId,
