@@ -1,9 +1,9 @@
 package com.icebreaker.be.application.room;
 
+import com.icebreaker.be.application.room.event.StageTransitionEvent;
 import com.icebreaker.be.application.room.messaging.RoomStageNotifier;
 import com.icebreaker.be.application.room.statemachine.RoomStageStateMachine;
 import com.icebreaker.be.domain.room.vo.RoomStage;
-import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
