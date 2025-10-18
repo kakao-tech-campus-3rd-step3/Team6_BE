@@ -1,5 +1,7 @@
-package com.icebreaker.be.domain.room.vo;
+package com.icebreaker.be.application.room.event;
 
+import com.icebreaker.be.domain.room.vo.Stage;
+import com.icebreaker.be.domain.room.vo.StageEventType;
 import jakarta.annotation.Nullable;
 
 public record StageTransitionEvent(

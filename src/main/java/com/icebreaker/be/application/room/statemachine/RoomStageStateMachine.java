@@ -1,12 +1,14 @@
 package com.icebreaker.be.application.room.statemachine;
 
+import com.icebreaker.be.application.room.event.StageTransitionEvent;
+import com.icebreaker.be.application.room.statemachine.callback.RoomStageInitCallback;
 import com.icebreaker.be.domain.room.repo.RoomStageRepository;
 import com.icebreaker.be.domain.room.vo.RoomStage;
 import com.icebreaker.be.domain.room.vo.Stage;
 import com.icebreaker.be.domain.room.vo.StageEventType;
-import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,17 +18,24 @@ import org.springframework.stereotype.Component;
 public class RoomStageStateMachine {
 
     private final RoomStageRepository stageRepository;
+    private final List<RoomStageInitCallback> initCallbacks;
     private final Map<RoomStageTransitionKey, RoomStageTransition> transitionMap;
 
     public RoomStage transitionStage(String roomCode, StageTransitionEvent event) {
         RoomStage currentStage = loadOrInitCurrentStage(roomCode, event);
 
         if (event.type() == StageEventType.INIT) {
+            initCallbacks.forEach(cb -> cb.onRoomStageInitialized(roomCode));
             return currentStage;
         }
-
         RoomStage targetStage = applyTransition(currentStage, event);
-        stageRepository.save(targetStage);
+
+        if (targetStage.stage() == Stage.ENDING_STAGE) {
+            stageRepository.delete(roomCode);
+        } else {
+            stageRepository.save(targetStage);
+        }
+
         return targetStage;
     }
 
