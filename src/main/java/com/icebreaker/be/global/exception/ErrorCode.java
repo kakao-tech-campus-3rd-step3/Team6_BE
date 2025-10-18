@@ -13,7 +13,7 @@ public enum ErrorCode {
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MBTI_TYPE("유효하지 않은 MBTI 타입입니다.", HttpStatus.BAD_REQUEST),
     USER_NOT_AUTHENTICATED("사용자가 인증되지 않았습니다.", HttpStatus.UNAUTHORIZED),
-
+    INVALID_ROOM_CODE("유효하지 않은 방 코드입니다.", HttpStatus.BAD_REQUEST),
     //ROOM ERROR
     ROOM_NOT_FOUND("방을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ROOM_ALREADY_EXISTS("방이 이미 존재합니다.", HttpStatus.CONFLICT),
