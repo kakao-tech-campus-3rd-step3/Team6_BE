@@ -45,4 +45,11 @@ public class UserInterest {
         this.user = user;
         this.interest = interest;
     }
+
+    @Override
+    public String toString() {
+        return "UserInterest{" +
+                "interest=" + interest +
+                '}';
+    }
 }
