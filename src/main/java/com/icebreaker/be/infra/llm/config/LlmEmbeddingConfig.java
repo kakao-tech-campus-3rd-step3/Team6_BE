@@ -1,4 +1,4 @@
-package com.icebreaker.be.infra.config;
+package com.icebreaker.be.infra.llm.config;
 
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -17,7 +17,7 @@ public class LlmEmbeddingConfig {
     }
 
     @Bean
-    public EmbeddingStore<TextSegment> embeddingStore(EmbeddingModel embeddingModel) {
+    public EmbeddingStore<TextSegment> embeddingStore() {
         return MilvusEmbeddingStore.builder()
                 .host("localhost")
                 .port(19530)
