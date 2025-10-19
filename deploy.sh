@@ -38,7 +38,6 @@ docker run -d \
   --env-file .env \
   --network $NETWORK_NAME \
   kangtaehyun1107/$APP_NAME:"$IMAGE_TAG"
- docker network connect backend milvus-standalone
 
 # 4. 상태 확인
 echo "Deployment finished. Container status:"
