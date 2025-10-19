@@ -28,6 +28,7 @@ function getSidebarGroup(dirPath, groupText) {
 
     const items = files
     .filter(file => file.endsWith('.md'))
+    .sort((a, b) => a.localeCompare(b)) // Add sorting
     .map(file => {
       const link = `/${dirPath}/${file.replace(/\.md$/, '')}`;
       return {text: toTitleCase(file), link};
@@ -46,7 +47,10 @@ export const sidebar = [
   {
     text: 'Architecture',
     items: [
-      { text: 'ER Diagram', link: '/er-diagram' }
+      { text: 'ER Diagram', link: '/er-diagram' },
+      { text: 'Room State Machine', link: '/architecture/room-state-machine' },
+      { text: 'Question Generation Pipeline', link: '/architecture/question-generation' },
+      { text: 'Dynamic DTO Binding', link: '/architecture/dynamic-dto-binding' }
     ]
   },
   getSidebarGroup('api/rest', 'REST APIs'),
