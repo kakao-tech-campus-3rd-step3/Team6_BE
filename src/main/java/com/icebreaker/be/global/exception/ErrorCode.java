@@ -13,7 +13,7 @@ public enum ErrorCode {
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MBTI_TYPE("유효하지 않은 MBTI 타입입니다.", HttpStatus.BAD_REQUEST),
     USER_NOT_AUTHENTICATED("사용자가 인증되지 않았습니다.", HttpStatus.UNAUTHORIZED),
-
+    INVALID_ROOM_CODE("유효하지 않은 방 코드입니다.", HttpStatus.BAD_REQUEST),
     //ROOM ERROR
     ROOM_NOT_FOUND("방을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ROOM_ALREADY_EXISTS("방이 이미 존재합니다.", HttpStatus.CONFLICT),
@@ -34,13 +34,14 @@ public enum ErrorCode {
 
     // QUESTION ERROR
     QUESTION_NOT_FOUND("질문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    QUESTION_GENERATION_FAILED("질문 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_QUESTION_TYPE("유효하지 않은 질문 타입입니다.", HttpStatus.BAD_REQUEST),
-
     // INTEREST ERROR
     INVALID_INTEREST_TYPE("유효하지 않은 관심사 타입입니다.", HttpStatus.BAD_REQUEST),
 
     // GAME ERROR
     INVALID_GAME_CATEGORY("유효하지 않은 게임 카테고리입니다.", HttpStatus.BAD_REQUEST),
+    TOPIC_NOT_PRELOADED("토픽이 사전 로드되지 않았습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     INVALID_JWT_PAYLOAD("유효하지 않은 JWT 페이로드입니다.", HttpStatus.UNAUTHORIZED),
     EXPIRED_JWT_TOKEN("만료된 JWT 토큰입니다.", HttpStatus.UNAUTHORIZED),

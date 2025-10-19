@@ -1,10 +1,12 @@
 package com.icebreaker.be.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.icebreaker.be.domain.topic.Topic;
 import com.icebreaker.be.global.common.util.CollectorsUtils;
 import com.icebreaker.be.global.exception.BusinessException;
 import com.icebreaker.be.global.exception.ErrorCode;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +48,18 @@ public enum Interest {
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INTEREST_TYPE));
     }
 
+    public static List<String> getAllDisplayNames() {
+        return Arrays.stream(values())
+                .map(Interest::getDisplayName)
+                .toList();
+    }
+
     @JsonValue
     public String getDisplayName() {
         return displayName;
+    }
+
+    public Topic toTopic() {
+        return new Topic(displayName);
     }
 }

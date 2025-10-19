@@ -53,3 +53,8 @@ websocket:
   heartbeat:
     server-interval: 10000
     client-interval: 10000
+
+milvus:
+  host: ${MILVUS_HOST:localhost}
+  port: ${MILVUS_PORT:19530}
+  collection-name: ${MILVUS_COLLECTION_NAME:questions}

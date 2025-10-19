@@ -1,6 +1,5 @@
 package com.icebreaker.be.infra.llm.config;
 
-import com.icebreaker.be.infra.llm.assistant.KeywordsExtractorAssistant;
 import com.icebreaker.be.infra.llm.assistant.QuestionsGeneratorAssistant;
 import dev.langchain4j.model.chat.Capability;
 import dev.langchain4j.model.chat.ChatModel;
@@ -24,13 +23,6 @@ public class LlmConfig {
                 .supportedCapabilities(Capability.RESPONSE_FORMAT_JSON_SCHEMA)
                 .responseFormat(ResponseFormat.JSON)
                 .modelName(modelName)
-                .build();
-    }
-
-    @Bean
-    public KeywordsExtractorAssistant keywordsExtractorAssistant(ChatModel chatModel) {
-        return AiServices.builder(KeywordsExtractorAssistant.class)
-                .chatModel(chatModel)
                 .build();
     }
 

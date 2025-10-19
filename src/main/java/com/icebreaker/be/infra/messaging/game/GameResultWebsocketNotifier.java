@@ -1,21 +1,45 @@
 package com.icebreaker.be.infra.messaging.game;
 
-import com.icebreaker.be.application.game.GameResult;
-import com.icebreaker.be.application.game.messaging.GameResultNotifier;
+import com.icebreaker.be.application.game.dto.BroadcastGameResult;
+import com.icebreaker.be.application.game.dto.UnicastGameResult;
+import com.icebreaker.be.application.game.messaging.GameNotifier;
 import com.icebreaker.be.domain.game.GameCategory;
+import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import java.util.List;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GameResultWebsocketNotifier implements GameResultNotifier {
+public class GameResultWebsocketNotifier extends AbstractStompNotifier implements
+        GameNotifier {
 
-    @Override
-    public void notifyGameResult(String roomCode, GameResult gameResult) {
-        //TODO: WebSocket으로 게임 결과 전송
+    public GameResultWebsocketNotifier(SimpMessagingTemplate messagingTemplate) {
+        super(messagingTemplate);
     }
 
+    @Async
+    @Override
+    public void notifyGameResultToUser(UnicastGameResult<?> gameResult) {
+        gameResult.payload().parallelStream()
+                .forEach(unicastGameResult -> {
+                    sendToUser(
+                            unicastGameResult.userId(),
+                            "/queue/game-result",
+                            unicastGameResult.payload(),
+                            "게임 결과를 정상적으로 전송했습니다.");
+                });
+    }
+
+    @Async
+    @Override
+    public void notifyGameResult(String roomCode, BroadcastGameResult<?> gameResult) {
+        send(roomCode, gameResult.payload(), "게임 결과를 정상적으로 전송했습니다.");
+    }
+
+    @Async
     @Override
     public void notifyGameList(String roomCode, List<GameCategory> categories) {
-        //TODO: WebSocket으로 게임 리스트 전송
+        send(roomCode, categories, "게임 목록을 정상적으로 전송했습니다.");
     }
 }
