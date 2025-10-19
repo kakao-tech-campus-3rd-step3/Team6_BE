@@ -48,4 +48,4 @@ stateDiagram-v2
 - **`PREV`**: 이전 단계로 돌아갑니다. (예: 게임 진행 → 게임 목록)
 - **`SELECT`**: 특정 상태(주로 게임)를 선택하여 직접 해당 상태로 이동합니다.
 
-이러한 상태 관리는 `/app/room/{roomCode}/change-stage` WebSocket API를 통해 이루어지며, 자세한 내용은 [Room WebSocket API 문서](./api/websocket/room.md)에서 확인할 수 있습니다.
+이러한 상태 관리는 `/app/room/{roomCode}/change-stage` WebSocket API를 통해 이루어지며, 자세한 내용은 [Room WebSocket API 문서](../api/websocket/room.md)에서 확인할 수 있습니다.
