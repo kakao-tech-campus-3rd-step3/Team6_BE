@@ -1,7 +1,6 @@
 package com.icebreaker.be.global.config;
 
 import com.icebreaker.be.global.interceptor.JwtChannelInterceptor;
-import com.icebreaker.be.global.interceptor.JwtHandshakeHandler;
 import com.icebreaker.be.global.resolver.CurrentUserArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final CurrentUserArgumentResolver currentUserArgumentResolver;
     private final JwtChannelInterceptor jwtChannelInterceptor;
-    private final JwtHandshakeHandler jwtHandshakeHandler;
     private final WebSocketHeartbeatProperties properties;
 
     @Override
@@ -37,7 +35,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setHandshakeHandler(jwtHandshakeHandler)
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
