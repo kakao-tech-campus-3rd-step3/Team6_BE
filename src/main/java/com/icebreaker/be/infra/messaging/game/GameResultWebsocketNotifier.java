@@ -51,6 +51,6 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
     public void notifyGameList(String roomCode, List<GameCategory> categories) {
         String topic = buildTopic(GAME_LIST_TOPIC_PREFIX, roomCode);
         send(topic, categories, "게임 목록을 정상적으로 전송했습니다.");
-        log.info("Sent game list to roomCode: {}", roomCode);
+        log.info("Sent game categories to topic: {}", categories);
     }
 }
