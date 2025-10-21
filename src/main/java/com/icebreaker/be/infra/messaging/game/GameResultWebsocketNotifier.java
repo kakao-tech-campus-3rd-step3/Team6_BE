@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 public class GameResultWebsocketNotifier extends AbstractStompNotifier implements
         GameNotifier {
 
+    private static final String GAME_LIST_TOPIC_PREFIX = "/topic/game-list";
+    private static final String GAME_RESULT_TOPIC_PREFIX = "/topic/game-result";
+
     public GameResultWebsocketNotifier(SimpMessagingTemplate messagingTemplate) {
         super(messagingTemplate);
     }
@@ -38,12 +41,14 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
     @Async
     @Override
     public void notifyGameResult(String roomCode, BroadcastGameResult<?> gameResult) {
-        send(roomCode, gameResult.payload(), "게임 결과를 정상적으로 전송했습니다.");
+        String topic = buildTopic(GAME_RESULT_TOPIC_PREFIX, roomCode);
+        send(topic, gameResult.payload(), "게임 결과를 정상적으로 전송했습니다.");
     }
 
     @Async
     @Override
     public void notifyGameList(String roomCode, List<GameCategory> categories) {
-        send(roomCode, categories, "게임 목록을 정상적으로 전송했습니다.");
+        String topic = buildTopic(GAME_LIST_TOPIC_PREFIX, roomCode);
+        send(topic, categories, "게임 목록을 정상적으로 전송했습니다.");
     }
 }
