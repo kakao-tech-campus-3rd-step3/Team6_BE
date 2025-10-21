@@ -3,8 +3,10 @@ package com.icebreaker.be.infra.messaging;
 import com.icebreaker.be.global.common.response.ApiResponseFactory;
 import com.icebreaker.be.global.common.response.SuccessApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractStompNotifier {
 
@@ -18,8 +20,13 @@ public abstract class AbstractStompNotifier {
      * @param <T>         payload 타입
      */
     protected <T> void send(String destination, T payload, String message) {
-        SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
-        messagingTemplate.convertAndSend(destination, response);
+        try {
+            SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
+            messagingTemplate.convertAndSend(destination, response);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -31,8 +38,13 @@ public abstract class AbstractStompNotifier {
      * @param <T>         payload 타입
      */
     protected <T> void sendToUser(String userId, String destination, T payload, String message) {
-        SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
-        messagingTemplate.convertAndSendToUser(userId, destination, response);
+        try {
+            SuccessApiResponse<T> response = ApiResponseFactory.success(payload, message);
+            messagingTemplate.convertAndSendToUser(userId, destination, response);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     /**

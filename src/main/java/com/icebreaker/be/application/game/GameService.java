@@ -20,7 +20,7 @@ public class GameService {
 
     public void start(GameContext gameContext, Long userId) {
         String roomCode = gameContext.getRoomCode();
-//        roomOwnerService.validateRoomOwner(roomCode, userId);
+        roomOwnerService.validateRoomOwner(roomCode, userId);
         if (!topicService.isTopicPreloaded(roomCode)) {
             throw new BusinessException(ErrorCode.TOPIC_NOT_PRELOADED);
         }
@@ -28,7 +28,7 @@ public class GameService {
     }
 
     public void sendGameList(String roomCode, Long userId) {
-//        roomOwnerService.validateRoomOwner(roomCode, userId);
+        roomOwnerService.validateRoomOwner(roomCode, userId);
         gameManager.sendGameList(roomCode);
     }
 }

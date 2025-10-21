@@ -6,11 +6,13 @@ import com.icebreaker.be.application.game.messaging.GameNotifier;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class GameResultWebsocketNotifier extends AbstractStompNotifier implements
         GameNotifier {
 
@@ -28,6 +30,8 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
                             "/queue/game-result",
                             unicastGameResult.payload(),
                             "게임 결과를 정상적으로 전송했습니다.");
+                    log.info("Sent game result to userId: {}", unicastGameResult.userId());
+                    log.info("Payload: {}", unicastGameResult.payload());
                 });
     }
 
