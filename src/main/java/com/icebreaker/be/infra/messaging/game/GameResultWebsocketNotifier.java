@@ -6,10 +6,8 @@ import com.icebreaker.be.application.game.messaging.GameNotifier;
 import com.icebreaker.be.domain.game.GameCategory;
 import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import java.util.List;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -34,21 +32,6 @@ public class GameResultWebsocketNotifier extends AbstractStompNotifier implement
     public void notifyGameResultToUser(UnicastGameResult<?> gameResult) {
         gameResult.payload().parallelStream()
                 .forEach(unicastGameResult -> {
-                    // 현재 연결된 모든 유저 확인
-                    Set<SimpUser> connectedUsers = simpUserRegistry.getUsers();
-
-                    // Principal 목록
-                    List<String> connectedUserNames = connectedUsers.stream()
-                            .map(SimpUser::getName)
-                            .toList();
-
-                    // 특정 유저 존재 여부 확인
-                    boolean userConnected = connectedUserNames.contains(unicastGameResult.userId());
-
-                    log.info("[SEND_TO_USER] Currently connected users: {}", connectedUserNames);
-                    log.info("[SEND_TO_USER] Target user connected? {}",
-                            userConnected ? "✅ YES" : "❌ NO");
-
                     sendToUser(
                             unicastGameResult.userId(),
                             "/queue/game-result",
