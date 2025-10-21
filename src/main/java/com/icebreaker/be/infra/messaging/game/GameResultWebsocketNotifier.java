@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 public class GameResultWebsocketNotifier extends AbstractStompNotifier implements
         GameNotifier {
 
-    private static final String GAME_LIST_TOPIC_PREFIX = "/topic/game-list";
-    private static final String GAME_RESULT_TOPIC_PREFIX = "/topic/game-result";
+    private static final String GAME_LIST_TOPIC_PREFIX = "/topic/game-list/";
+    private static final String GAME_RESULT_TOPIC_PREFIX = "/topic/game-result/";
 
     public GameResultWebsocketNotifier(SimpMessagingTemplate messagingTemplate) {
         super(messagingTemplate);
