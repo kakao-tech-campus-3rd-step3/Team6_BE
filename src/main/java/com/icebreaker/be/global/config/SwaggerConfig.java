@@ -10,9 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+    private static final String LOCAL_SERVER_URL = "http://localhost:8080";
+    private static final String RELEASE_URL = "https://icebreak.click";
+
     private final List<Server> servers = List.of(
-            new Server().url("http://localhost:8080").description("로컬 개발 서버"),
-            new Server().url("http://3.37.95.91").description("EC2 배포 서버")
+            new Server().url(LOCAL_SERVER_URL).description("로컬 개발 서버"),
+            new Server().url(RELEASE_URL).description("서비스 배포 서버")
     );
 
     @Bean
