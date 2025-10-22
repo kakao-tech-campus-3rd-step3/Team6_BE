@@ -14,7 +14,7 @@ public class QuestionScheduler {
 
     private final QuestionAsyncExecutor asyncExecutor;
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "${scheduler.question.cron}", zone = "${scheduler.question.timezone}")
     public void run() {
         log.info("[QuestionScheduler] 질문 생성 스케줄 시작");
 
