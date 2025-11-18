@@ -19,6 +19,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionEmbeddingStore implements QuestionStore {
 
+    private static final double SIMILARITY_THRESHOLD = 0.719; // 경험적 설정 하이퍼파라미터 값
+    private static final double EQUALITY_THRESHOLD = 1.0;
+
     private final EmbeddingStore<TextSegment> embeddingStore;
     private final EmbeddingModel embeddingModel;
 
@@ -76,7 +79,7 @@ public class QuestionEmbeddingStore implements QuestionStore {
         return embeddingStore.search(searchRequest)
                 .matches()
                 .stream()
-                .filter(m -> m.score() > 0.719)
+                .filter(m -> m.score() > SIMILARITY_THRESHOLD)
                 .map(m -> new Question(m.embedded().text()))
                 .toList();
     }
@@ -97,6 +100,6 @@ public class QuestionEmbeddingStore implements QuestionStore {
         return embeddingStore.search(searchRequest)
                 .matches()
                 .stream()
-                .anyMatch(m -> m.score() >= 1.0);
+                .anyMatch(m -> m.score() >= EQUALITY_THRESHOLD);
     }
 }

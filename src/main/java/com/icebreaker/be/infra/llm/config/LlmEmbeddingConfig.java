@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LlmEmbeddingConfig {
 
+    private static final int EMBEDDING_DIMENSION = 384; // Dimension for AllMiniLmL6V2 model
+
     @Value("${milvus.host}")
     private String milvusHost;
 
@@ -32,7 +34,7 @@ public class LlmEmbeddingConfig {
                 .host(milvusHost)
                 .port(milvusPort)
                 .collectionName(collectionName)
-                .dimension(384)
+                .dimension(EMBEDDING_DIMENSION)
                 .build();
     }
 }

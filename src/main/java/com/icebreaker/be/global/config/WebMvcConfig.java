@@ -13,6 +13,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${cors.allowed-origins}")
     private String[] allowedOrigins;
 
+    @Value("${cors.max-age}")
+    private long maxAge;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -20,6 +23,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowedOrigins(allowedOrigins)
                 .allowCredentials(true)
-                .maxAge(3600);
+                .maxAge(maxAge);
     }
 }
