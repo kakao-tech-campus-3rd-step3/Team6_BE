@@ -1,7 +1,7 @@
 package com.icebreaker.be.application.room.statemachine;
 
+import com.icebreaker.be.application.room.event.StageTransitionEvent;
 import com.icebreaker.be.domain.room.vo.Stage;
-import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 import lombok.Builder;
 
 @Builder

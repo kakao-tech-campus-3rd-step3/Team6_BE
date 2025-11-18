@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "type" // JSON에 여전히 구분자로 찍힘
+        property = "type"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = RoomStartedPayload.class, name = "ROOM_STARTED"),

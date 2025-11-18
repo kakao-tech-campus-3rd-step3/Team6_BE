@@ -1,8 +1,6 @@
 package com.icebreaker.be.application.room.event;
 
 import com.icebreaker.be.domain.room.vo.Stage;
-import com.icebreaker.be.domain.room.vo.StageEventType;
-import com.icebreaker.be.domain.room.vo.StageTransitionEvent;
 
 public record RoomStageTransitionEvent(
         String roomCode,
@@ -23,10 +21,6 @@ public record RoomStageTransitionEvent(
 
     public static RoomStageTransitionEvent select(String roomCode, Stage stage) {
         return new RoomStageTransitionEvent(roomCode, StageTransitionEvent.select(stage));
-    }
-
-    public StageEventType stageEventType() {
-        return stageEvent.type();
     }
 
     public Stage targetStage() {

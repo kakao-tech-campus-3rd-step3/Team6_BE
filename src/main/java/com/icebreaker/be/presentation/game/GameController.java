@@ -1,10 +1,14 @@
 package com.icebreaker.be.presentation.game;
 
 import com.icebreaker.be.application.game.GameService;
+import com.icebreaker.be.application.game.dto.GameContext;
 import com.icebreaker.be.global.annotation.CurrentUser;
+import com.icebreaker.be.global.exception.BusinessException;
+import com.icebreaker.be.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,9 +20,13 @@ public class GameController {
     @MessageMapping("/room/{roomCode}/start-game")
     public void handleGameStarted(
             @DestinationVariable String roomCode,
+            @Payload GameContext gameContext,
             @CurrentUser Long userId
     ) {
-        gameService.start(roomCode, userId);
+        if (!roomCode.equals(gameContext.getRoomCode())) {
+            throw new BusinessException(ErrorCode.INVALID_ROOM_CODE);
+        }
+        gameService.start(gameContext, userId);
     }
 
     @MessageMapping("/room/{roomCode}/game-list")

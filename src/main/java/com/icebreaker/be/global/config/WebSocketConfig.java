@@ -19,6 +19,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    private static final int DEFAULT_BROKER_TASK_POOL_SIZE = 1;
 
     private final CurrentUserArgumentResolver currentUserArgumentResolver;
     private final JwtChannelInterceptor jwtChannelInterceptor;
@@ -52,7 +53,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Bean
     public ThreadPoolTaskScheduler brokerTaskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(1);
+        scheduler.setPoolSize(DEFAULT_BROKER_TASK_POOL_SIZE);
         scheduler.setThreadNamePrefix("wss-heartbeat-");
         scheduler.initialize();
         return scheduler;

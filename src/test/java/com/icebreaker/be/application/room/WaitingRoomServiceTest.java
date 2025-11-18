@@ -63,7 +63,7 @@ class WaitingRoomServiceTest {
     void setUp() {
         testUser = User.builder()
                 .name("테스트 유저")
-                .phone("010-1234-5678")
+                .phone("01012345678")
                 .age(25)
                 .mbti(MbtiType.ENFJ)
                 .introduction("테스트용 유저입니다.")

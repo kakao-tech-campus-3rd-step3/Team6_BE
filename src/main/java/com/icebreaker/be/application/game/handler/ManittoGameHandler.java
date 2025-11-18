@@ -1,13 +1,24 @@
 package com.icebreaker.be.application.game.handler;
 
-import com.icebreaker.be.application.game.GameResult;
+import com.icebreaker.be.application.game.dto.GameResult;
+import com.icebreaker.be.application.game.dto.ManittoGameContext;
+import com.icebreaker.be.application.game.dto.UnicastGameResult;
+import com.icebreaker.be.application.game.util.MatchingUtils;
 import com.icebreaker.be.domain.game.GameCategory;
+import com.icebreaker.be.domain.room.repo.RoomParticipantRepository;
+import com.icebreaker.be.domain.user.User;
+import java.util.List;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ManittoGameHandler implements GameHandler {
+@RequiredArgsConstructor
+public class ManittoGameHandler implements GameHandler<ManittoGameContext> {
+
+    private final RoomParticipantRepository roomParticipantRepository;
 
     @Override
     public GameCategory getCategory() {
@@ -15,8 +26,18 @@ public class ManittoGameHandler implements GameHandler {
     }
 
     @Override
-    public GameResult handle() {
-        //TODO: 마니또 게임 로직 구현 필요
-        return new GameResult();
+    public GameResult handle(ManittoGameContext ctx) {
+        String roomCode = ctx.getRoomCode();
+
+        List<User> participants = roomParticipantRepository.findUsersByRoomCode(roomCode);
+        Map<User, User> pairs = MatchingUtils.generateDerangementPairs(participants);
+
+        List<UnicastGameResult.UserResult<String>> userResults = pairs.entrySet().stream()
+                .map(entry -> new UnicastGameResult.UserResult<>(
+                        entry.getKey().getId().toString(),
+                        entry.getValue().getName()
+                )).toList();
+
+        return UnicastGameResult.of(userResults);
     }
 }

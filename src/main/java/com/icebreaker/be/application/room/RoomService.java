@@ -6,7 +6,7 @@ import com.icebreaker.be.application.room.dto.RoomParticipantCommand;
 import com.icebreaker.be.application.room.event.RoomStageEventPublisher;
 import com.icebreaker.be.application.room.messaging.RoomNotifier;
 import com.icebreaker.be.domain.room.entity.Room;
-import com.icebreaker.be.domain.room.repo.RoomRepository;
+import com.icebreaker.be.domain.room.repo.RoomParticipantRepository;
 import com.icebreaker.be.domain.room.vo.StageEventType;
 import com.icebreaker.be.domain.user.User;
 import com.icebreaker.be.domain.user.UserRepository;
@@ -25,10 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RoomService {
 
-    private final RoomRepository roomRepository;
+    private final RoomParticipantRepository roomRepository;
     private final UserRepository userRepository;
 
-    private final RoomStageEventPublisher publisher;
+    private final RoomStageEventPublisher stageEventPublisher;
     private final RoomNotifier roomNotifier;
     private final RoomOwnerService roomOwnerService;
 
@@ -42,7 +42,7 @@ public class RoomService {
         Room savedRoom = roomRepository.save(room);
         roomOwnerService.create(room);
 
-        publisher.publishStageInitialized(room.getCode());
+        stageEventPublisher.publishStageInitialized(room.getCode());
         return savedRoom;
     }
 
@@ -58,7 +58,7 @@ public class RoomService {
             throw new BusinessException(ErrorCode.INIT_STAGE_EVENT_NOT_ALLOWED);
         }
 
-        publisher.publishStageChanged(
+        stageEventPublisher.publishStageChanged(
                 roomCode,
                 eventType,
                 command.getStageEnum()

@@ -69,5 +69,4 @@ public class User extends BaseEntity {
         UserInterest userInterest = new UserInterest(this, interest);
         this.interests.add(userInterest);
     }
-
 }

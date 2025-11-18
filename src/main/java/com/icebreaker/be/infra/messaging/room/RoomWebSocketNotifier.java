@@ -6,6 +6,7 @@ import com.icebreaker.be.infra.messaging.AbstractStompNotifier;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +19,7 @@ public class RoomWebSocketNotifier extends AbstractStompNotifier implements Room
         super(messagingTemplate);
     }
 
+    @Async
     @Override
     public void notifyRoomParticipants(String roomId, List<RoomParticipantCommand> participants) {
         String topic = buildTopic(ROOM_PARTICIPANT_TOPIC_PREFIX, roomId);
